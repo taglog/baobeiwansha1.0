@@ -16,6 +16,7 @@
 @property (nonatomic,retain) NSString *descriptionString;
 @property (nonatomic,assign) CGRect aframe;
 @end
+
 @implementation HomePageAbilityViewCell
 -(id)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
@@ -28,7 +29,6 @@
 }
 
 -(void)initViews{
-    self.backgroundColor = [UIColor colorWithRed:255.0/255.0f green:76.0/255.0f blue:162.0/255.0f alpha:1.0f];
     
     self.titleLabel = [[UILabel alloc]init];
     self.descriptionView = [[UIView alloc]init];
@@ -41,9 +41,12 @@
 }
 
 -(void)setDict:(NSDictionary *)dict{
-    
-    self.title = [dict valueForKey:@"tag_name"];
-    self.descriptionString = [dict valueForKey:@"tag_description"];
+    if([dict valueForKey:@"tag_name"]){
+        self.title = [dict valueForKey:@"tag_name"];
+    }
+    if([dict valueForKey:@"tag_description"]){
+        self.descriptionString = [dict valueForKey:@"tag_description"];
+    }
     [self setNeedsLayout];
     
 }
@@ -59,11 +62,11 @@
     self.titleLabel.textAlignment = NSTextAlignmentCenter;
     
     
-    self.descriptionView.frame = CGRectMake(5, 30,self.aframe.size.width - 10, 50);
+    self.descriptionView.frame = CGRectMake(5, 30,self.aframe.size.width - 10, 55);
     self.descriptionView.backgroundColor = [UIColor whiteColor];
     self.descriptionView.layer.cornerRadius = 3;
     
-    self.descriptionLabel.frame = CGRectMake(12, 0, 70, 50);
+    self.descriptionLabel.frame = CGRectMake(12, 3, 70, 50);
     self.descriptionLabel.font = [UIFont systemFontOfSize:14.0f];
     self.descriptionLabel.numberOfLines = 2;
     self.descriptionLabel.text = self.descriptionString;

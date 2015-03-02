@@ -11,21 +11,25 @@
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>D2DC6CF03982348F7D8DA612FA25D3B48826BB8B</key>
-		<string>github.com:taglog/baobeiwansha3.git</string>
+		<string>github.com:taglog/baobeiwansha1.0.git</string>
+		<key>E46E474A4AE8097564A35A7EAB0D4F9C148CEDE3</key>
+		<string>github.com:taglog/baobeiwansha1.0.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>baobeiwansha1.0/baobeiwansha1.0.xcodeproj</string>
+	<string>baobeiwansha1.0.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>D2DC6CF03982348F7D8DA612FA25D3B48826BB8B</key>
 		<string>../../..</string>
+		<key>E46E474A4AE8097564A35A7EAB0D4F9C148CEDE3</key>
+		<string>../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>github.com:taglog/baobeiwansha3.git</string>
+	<string>github.com:taglog/baobeiwansha1.0.git</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>D2DC6CF03982348F7D8DA612FA25D3B48826BB8B</string>
+	<string>E46E474A4AE8097564A35A7EAB0D4F9C148CEDE3</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
@@ -34,7 +38,15 @@
 			<key>IDESourceControlWCCIdentifierKey</key>
 			<string>D2DC6CF03982348F7D8DA612FA25D3B48826BB8B</string>
 			<key>IDESourceControlWCCName</key>
-			<string>work</string>
+			<string></string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>E46E474A4AE8097564A35A7EAB0D4F9C148CEDE3</string>
+			<key>IDESourceControlWCCName</key>
+			<string>baobeiwansha1.0</string>
 		</dict>
 	</array>
 </dict>

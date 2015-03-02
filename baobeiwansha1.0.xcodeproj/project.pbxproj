@@ -7,11 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4B0C849C1AA475BA00E5E9D0 /* PostTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B0C849B1AA475BA00E5E9D0 /* PostTableViewCell.m */; };
+		4B0C84A01AA48CCB00E5E9D0 /* PostView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B0C849F1AA48CCB00E5E9D0 /* PostView.m */; };
+		4B0C84A61AA490E000E5E9D0 /* PostTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B0C84A51AA490E000E5E9D0 /* PostTableViewController.m */; };
 		4B4920621A9DA6BD00B1D692 /* upArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 4B4920611A9DA6BD00B1D692 /* upArrow.png */; };
 		4B4920651A9DEC2900B1D692 /* HomePageAbilityViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B4920641A9DEC2900B1D692 /* HomePageAbilityViewCell.m */; };
 		4B4920681A9DEC4400B1D692 /* HomePageLocationViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B4920671A9DEC4400B1D692 /* HomePageLocationViewCell.m */; };
 		4B49206B1A9DF37000B1D692 /* HomePageTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B49206A1A9DF37000B1D692 /* HomePageTableViewCell.m */; };
 		4B6705401A9E161000A6E6A0 /* rightarrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 4B67053F1A9E161000A6E6A0 /* rightarrow.png */; };
+		4B6705471AA3F8FD00A6E6A0 /* HomePageAbilityView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B6705461AA3F8FD00A6E6A0 /* HomePageAbilityView.m */; };
+		4B67054A1AA408C800A6E6A0 /* HomePageLocationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B6705491AA408C800A6E6A0 /* HomePageLocationView.m */; };
+		4B67054D1AA408E500A6E6A0 /* HomePageTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B67054C1AA408E500A6E6A0 /* HomePageTableView.m */; };
 		4B6CF58B1A9C129600556135 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B6CF58A1A9C129600556135 /* main.m */; };
 		4B6CF58E1A9C129600556135 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B6CF58D1A9C129600556135 /* AppDelegate.m */; };
 		4B6CF5961A9C129600556135 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4B6CF5951A9C129600556135 /* Images.xcassets */; };
@@ -26,6 +32,10 @@
 		4B6CF5C61A9D912300556135 /* boy.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4B6CF5C51A9D912300556135 /* boy.jpg */; };
 		4B6CF5C81A9D96E300556135 /* navigationbar.png in Resources */ = {isa = PBXBuildFile; fileRef = 4B6CF5C71A9D96E300556135 /* navigationbar.png */; };
 		4B6CF5CA1A9D986100556135 /* topbackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 4B6CF5C91A9D986100556135 /* topbackground.png */; };
+		4BA0C3371AA436B000CFD20E /* TagPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BA0C3361AA436B000CFD20E /* TagPageViewController.m */; };
+		4BA0C33B1AA4374100CFD20E /* book2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4BA0C33A1AA4374100CFD20E /* book2@2x.png */; };
+		4BA0C33F1AA44CA700CFD20E /* TagPageCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BA0C33E1AA44CA700CFD20E /* TagPageCollectionViewCell.m */; };
+		4BA0C3461AA44EBB00CFD20E /* TagPageCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BA0C3451AA44EBB00CFD20E /* TagPageCollectionView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,6 +49,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4B0C849A1AA475BA00E5E9D0 /* PostTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PostTableViewCell.h; path = ../PostTableViewCell.h; sourceTree = "<group>"; };
+		4B0C849B1AA475BA00E5E9D0 /* PostTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PostTableViewCell.m; path = ../PostTableViewCell.m; sourceTree = "<group>"; };
+		4B0C849E1AA48CCB00E5E9D0 /* PostView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PostView.h; sourceTree = "<group>"; };
+		4B0C849F1AA48CCB00E5E9D0 /* PostView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PostView.m; sourceTree = "<group>"; };
+		4B0C84A41AA490E000E5E9D0 /* PostTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PostTableViewController.h; path = ../PostTableViewController.h; sourceTree = "<group>"; };
+		4B0C84A51AA490E000E5E9D0 /* PostTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PostTableViewController.m; path = ../PostTableViewController.m; sourceTree = "<group>"; };
 		4B4920611A9DA6BD00B1D692 /* upArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = upArrow.png; path = Resources/upArrow.png; sourceTree = "<group>"; };
 		4B4920631A9DEC2900B1D692 /* HomePageAbilityViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomePageAbilityViewCell.h; sourceTree = "<group>"; };
 		4B4920641A9DEC2900B1D692 /* HomePageAbilityViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomePageAbilityViewCell.m; sourceTree = "<group>"; };
@@ -47,6 +63,12 @@
 		4B4920691A9DF37000B1D692 /* HomePageTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomePageTableViewCell.h; sourceTree = "<group>"; };
 		4B49206A1A9DF37000B1D692 /* HomePageTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomePageTableViewCell.m; sourceTree = "<group>"; };
 		4B67053F1A9E161000A6E6A0 /* rightarrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = rightarrow.png; path = Resources/rightarrow.png; sourceTree = "<group>"; };
+		4B6705451AA3F8FD00A6E6A0 /* HomePageAbilityView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomePageAbilityView.h; sourceTree = "<group>"; };
+		4B6705461AA3F8FD00A6E6A0 /* HomePageAbilityView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomePageAbilityView.m; sourceTree = "<group>"; };
+		4B6705481AA408C800A6E6A0 /* HomePageLocationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomePageLocationView.h; sourceTree = "<group>"; };
+		4B6705491AA408C800A6E6A0 /* HomePageLocationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomePageLocationView.m; sourceTree = "<group>"; };
+		4B67054B1AA408E500A6E6A0 /* HomePageTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomePageTableView.h; sourceTree = "<group>"; };
+		4B67054C1AA408E500A6E6A0 /* HomePageTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomePageTableView.m; sourceTree = "<group>"; };
 		4B6CF5851A9C129600556135 /* baobeiwansha1.0.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = baobeiwansha1.0.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B6CF5891A9C129600556135 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4B6CF58A1A9C129600556135 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -71,6 +93,13 @@
 		4B6CF5C51A9D912300556135 /* boy.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = boy.jpg; path = Resources/boy.jpg; sourceTree = "<group>"; };
 		4B6CF5C71A9D96E300556135 /* navigationbar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = navigationbar.png; path = Resources/navigationbar.png; sourceTree = "<group>"; };
 		4B6CF5C91A9D986100556135 /* topbackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = topbackground.png; path = Resources/topbackground.png; sourceTree = "<group>"; };
+		4BA0C3351AA436B000CFD20E /* TagPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagPageViewController.h; sourceTree = "<group>"; };
+		4BA0C3361AA436B000CFD20E /* TagPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagPageViewController.m; sourceTree = "<group>"; };
+		4BA0C33A1AA4374100CFD20E /* book2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "book2@2x.png"; path = "Resources/book2@2x.png"; sourceTree = "<group>"; };
+		4BA0C33D1AA44CA700CFD20E /* TagPageCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagPageCollectionViewCell.h; sourceTree = "<group>"; };
+		4BA0C33E1AA44CA700CFD20E /* TagPageCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagPageCollectionViewCell.m; sourceTree = "<group>"; };
+		4BA0C3441AA44EBB00CFD20E /* TagPageCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagPageCollectionView.h; sourceTree = "<group>"; };
+		4BA0C3451AA44EBB00CFD20E /* TagPageCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagPageCollectionView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,6 +120,77 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4B0C849D1AA475CD00E5E9D0 /* PostView */ = {
+			isa = PBXGroup;
+			children = (
+				4B0C84A71AA491C000E5E9D0 /* View */,
+				4B0C84A81AA491C500E5E9D0 /* Controller */,
+			);
+			name = PostView;
+			sourceTree = "<group>";
+		};
+		4B0C84A71AA491C000E5E9D0 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				4B0C849E1AA48CCB00E5E9D0 /* PostView.h */,
+				4B0C849F1AA48CCB00E5E9D0 /* PostView.m */,
+				4B0C849A1AA475BA00E5E9D0 /* PostTableViewCell.h */,
+				4B0C849B1AA475BA00E5E9D0 /* PostTableViewCell.m */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		4B0C84A81AA491C500E5E9D0 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				4B0C84A41AA490E000E5E9D0 /* PostTableViewController.h */,
+				4B0C84A51AA490E000E5E9D0 /* PostTableViewController.m */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
+		4B6705411AA3F7BE00A6E6A0 /* AbilitySection */ = {
+			isa = PBXGroup;
+			children = (
+				4B6705451AA3F8FD00A6E6A0 /* HomePageAbilityView.h */,
+				4B6705461AA3F8FD00A6E6A0 /* HomePageAbilityView.m */,
+				4B4920631A9DEC2900B1D692 /* HomePageAbilityViewCell.h */,
+				4B4920641A9DEC2900B1D692 /* HomePageAbilityViewCell.m */,
+			);
+			name = AbilitySection;
+			sourceTree = "<group>";
+		};
+		4B6705421AA3F7CB00A6E6A0 /* ProfileSection */ = {
+			isa = PBXGroup;
+			children = (
+				4B6CF5B51A9C151400556135 /* HomePageProfileView.h */,
+				4B6CF5B61A9C151400556135 /* HomePageProfileView.m */,
+			);
+			name = ProfileSection;
+			sourceTree = "<group>";
+		};
+		4B6705431AA3F7E400A6E6A0 /* LocationSection */ = {
+			isa = PBXGroup;
+			children = (
+				4B6705481AA408C800A6E6A0 /* HomePageLocationView.h */,
+				4B6705491AA408C800A6E6A0 /* HomePageLocationView.m */,
+				4B4920661A9DEC4400B1D692 /* HomePageLocationViewCell.h */,
+				4B4920671A9DEC4400B1D692 /* HomePageLocationViewCell.m */,
+			);
+			name = LocationSection;
+			sourceTree = "<group>";
+		};
+		4B6705441AA3F7EE00A6E6A0 /* TableSection */ = {
+			isa = PBXGroup;
+			children = (
+				4B67054B1AA408E500A6E6A0 /* HomePageTableView.h */,
+				4B67054C1AA408E500A6E6A0 /* HomePageTableView.m */,
+				4B4920691A9DF37000B1D692 /* HomePageTableViewCell.h */,
+				4B49206A1A9DF37000B1D692 /* HomePageTableViewCell.m */,
+			);
+			name = TableSection;
+			sourceTree = "<group>";
+		};
 		4B6CF57C1A9C129500556135 = {
 			isa = PBXGroup;
 			children = (
@@ -114,7 +214,9 @@
 			children = (
 				4B6CF58C1A9C129600556135 /* AppDelegate.h */,
 				4B6CF58D1A9C129600556135 /* AppDelegate.m */,
+				4B0C849D1AA475CD00E5E9D0 /* PostView */,
 				4B6CF5B11A9C136C00556135 /* HomePage */,
+				4BA0C3381AA436B900CFD20E /* TagPage */,
 				4B6CF5C01A9D789A00556135 /* PlayPage */,
 				4B6CF5C41A9D78C500556135 /* ProfilePage */,
 				4B6CF5881A9C129600556135 /* Supporting Files */,
@@ -154,8 +256,8 @@
 		4B6CF5B11A9C136C00556135 /* HomePage */ = {
 			isa = PBXGroup;
 			children = (
-				4B6CF5B81A9C151A00556135 /* VIew */,
 				4B6CF5B91A9C153100556135 /* Controller */,
+				4B6CF5B81A9C151A00556135 /* VIew */,
 			);
 			name = HomePage;
 			sourceTree = "<group>";
@@ -163,16 +265,8 @@
 		4B6CF5B81A9C151A00556135 /* VIew */ = {
 			isa = PBXGroup;
 			children = (
-				4B6CF5B51A9C151400556135 /* HomePageProfileView.h */,
-				4B6CF5B61A9C151400556135 /* HomePageProfileView.m */,
-				4B6CF5B21A9C14FD00556135 /* HomePageModuleView.h */,
-				4B6CF5B31A9C14FD00556135 /* HomePageModuleView.m */,
-				4B4920631A9DEC2900B1D692 /* HomePageAbilityViewCell.h */,
-				4B4920641A9DEC2900B1D692 /* HomePageAbilityViewCell.m */,
-				4B4920661A9DEC4400B1D692 /* HomePageLocationViewCell.h */,
-				4B4920671A9DEC4400B1D692 /* HomePageLocationViewCell.m */,
-				4B4920691A9DF37000B1D692 /* HomePageTableViewCell.h */,
-				4B49206A1A9DF37000B1D692 /* HomePageTableViewCell.m */,
+				4B6705421AA3F7CB00A6E6A0 /* ProfileSection */,
+				4BA0C33C1AA4376C00CFD20E /* ModuleSection */,
 			);
 			name = VIew;
 			sourceTree = "<group>";
@@ -189,6 +283,7 @@
 		4B6CF5BC1A9C1B0400556135 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				4BA0C33A1AA4374100CFD20E /* book2@2x.png */,
 				4B67053F1A9E161000A6E6A0 /* rightarrow.png */,
 				4B6CF5BA1A9C1AF700556135 /* home.png */,
 				4B4920611A9DA6BD00B1D692 /* upArrow.png */,
@@ -215,6 +310,47 @@
 				4B6CF5C21A9D78B800556135 /* ProfilePageViewController.m */,
 			);
 			name = ProfilePage;
+			sourceTree = "<group>";
+		};
+		4BA0C3381AA436B900CFD20E /* TagPage */ = {
+			isa = PBXGroup;
+			children = (
+				4BA0C3401AA44CDF00CFD20E /* View */,
+				4BA0C3391AA436C400CFD20E /* Controller */,
+			);
+			name = TagPage;
+			sourceTree = "<group>";
+		};
+		4BA0C3391AA436C400CFD20E /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				4BA0C3351AA436B000CFD20E /* TagPageViewController.h */,
+				4BA0C3361AA436B000CFD20E /* TagPageViewController.m */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
+		4BA0C33C1AA4376C00CFD20E /* ModuleSection */ = {
+			isa = PBXGroup;
+			children = (
+				4B6CF5B21A9C14FD00556135 /* HomePageModuleView.h */,
+				4B6CF5B31A9C14FD00556135 /* HomePageModuleView.m */,
+				4B6705411AA3F7BE00A6E6A0 /* AbilitySection */,
+				4B6705431AA3F7E400A6E6A0 /* LocationSection */,
+				4B6705441AA3F7EE00A6E6A0 /* TableSection */,
+			);
+			name = ModuleSection;
+			sourceTree = "<group>";
+		};
+		4BA0C3401AA44CDF00CFD20E /* View */ = {
+			isa = PBXGroup;
+			children = (
+				4BA0C3441AA44EBB00CFD20E /* TagPageCollectionView.h */,
+				4BA0C3451AA44EBB00CFD20E /* TagPageCollectionView.m */,
+				4BA0C33D1AA44CA700CFD20E /* TagPageCollectionViewCell.h */,
+				4BA0C33E1AA44CA700CFD20E /* TagPageCollectionViewCell.m */,
+			);
+			name = View;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -297,6 +433,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4BA0C33B1AA4374100CFD20E /* book2@2x.png in Resources */,
 				4B6705401A9E161000A6E6A0 /* rightarrow.png in Resources */,
 				4B4920621A9DA6BD00B1D692 /* upArrow.png in Resources */,
 				4B6CF5CA1A9D986100556135 /* topbackground.png in Resources */,
@@ -322,14 +459,23 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4BA0C3371AA436B000CFD20E /* TagPageViewController.m in Sources */,
 				4B4920681A9DEC4400B1D692 /* HomePageLocationViewCell.m in Sources */,
+				4B0C84A01AA48CCB00E5E9D0 /* PostView.m in Sources */,
 				4B6CF58E1A9C129600556135 /* AppDelegate.m in Sources */,
 				4B6CF5BF1A9D788E00556135 /* PlayPageViewController.m in Sources */,
+				4B67054A1AA408C800A6E6A0 /* HomePageLocationView.m in Sources */,
 				4B49206B1A9DF37000B1D692 /* HomePageTableViewCell.m in Sources */,
+				4BA0C3461AA44EBB00CFD20E /* TagPageCollectionView.m in Sources */,
 				4B6CF58B1A9C129600556135 /* main.m in Sources */,
+				4B0C849C1AA475BA00E5E9D0 /* PostTableViewCell.m in Sources */,
 				4B4920651A9DEC2900B1D692 /* HomePageAbilityViewCell.m in Sources */,
+				4B0C84A61AA490E000E5E9D0 /* PostTableViewController.m in Sources */,
 				4B6CF5C31A9D78B800556135 /* ProfilePageViewController.m in Sources */,
+				4B6705471AA3F8FD00A6E6A0 /* HomePageAbilityView.m in Sources */,
 				4B6CF5B41A9C14FD00556135 /* HomePageModuleView.m in Sources */,
+				4BA0C33F1AA44CA700CFD20E /* TagPageCollectionViewCell.m in Sources */,
+				4B67054D1AA408E500A6E6A0 /* HomePageTableView.m in Sources */,
 				4B6CF5B01A9C136600556135 /* HomePageViewController.m in Sources */,
 				4B6CF5B71A9C151400556135 /* HomePageProfileView.m in Sources */,
 			);

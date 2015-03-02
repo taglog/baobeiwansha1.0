@@ -10,6 +10,6 @@
 
 @interface HomePageModuleView : UIView
 
--(void)setContentView:(UIScrollView *)contentView title:(NSString *)title;
+@property (nonatomic,retain) NSString *title;
 
 @end

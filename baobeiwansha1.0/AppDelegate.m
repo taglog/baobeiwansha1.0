@@ -11,6 +11,8 @@
 #import "PlayPageViewController.h"
 #import "ProfilePageViewController.h"
 
+#import "PostTableViewController.h"
+
 @interface AppDelegate ()
 @property (nonatomic,retain) UITabBarController *mainTabBarController;
 @end
@@ -21,9 +23,14 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     self.window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
-    [self initViewControllers];
-    self.window.rootViewController = self.mainTabBarController;
+    
+    //初始化TabViewController
+    //[self initViewControllers];
+    PostTableViewController *tagPage = [[PostTableViewController alloc]init];
+    UINavigationController *tag = [[UINavigationController alloc]initWithRootViewController:tagPage];
+    self.window.rootViewController = tag;
     [self.window makeKeyAndVisible];
+    
     return YES;
 }
 
@@ -51,8 +58,10 @@
 
 -(void)initViewControllers{
     
-    self.mainTabBarController = [[UITabBarController alloc]init];
-
+    if(!self.mainTabBarController){
+        self.mainTabBarController = [[UITabBarController alloc]init];
+    }
+    self.mainTabBarController.tabBar.translucent = NO;
     UITabBarItem *mainTabFirst = [[UITabBarItem alloc]initWithTitle:@"首页" image:[UIImage imageNamed:@"home"] tag:0];
     UITabBarItem *mainTabSecond = [[UITabBarItem alloc]initWithTitle:@"玩啥" image:[UIImage imageNamed:@"home"] tag:1];
     UITabBarItem *mainTabThird = [[UITabBarItem alloc]initWithTitle:@"我的" image:[UIImage imageNamed:@"home"] tag:2];

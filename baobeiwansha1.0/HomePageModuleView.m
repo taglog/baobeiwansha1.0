@@ -7,14 +7,14 @@
 //
 
 #import "HomePageModuleView.h"
+
 @interface HomePageModuleView()
 
 @property (nonatomic,retain) UIButton *titleView;
 @property (nonatomic,retain) UILabel *titleLabel;
 @property (nonatomic,retain) UIImageView *titleIcon;
-@property (nonatomic,retain) UIScrollView *contentView;
-@property (nonatomic,retain) NSString *title;
 @property (nonatomic,assign) CGRect aframe;
+
 @end
 @implementation HomePageModuleView
 
@@ -23,38 +23,52 @@
     if(self){
         self.backgroundColor = [UIColor whiteColor];
         self.aframe = frame;
-        [self initViews];
+        [self initTitleView];
     }
     return self;
 }
 
 
--(void)initViews{
+-(void)initTitleView{
     
-    self.titleView = [[UIButton alloc]init];
-    self.titleLabel = [[UILabel alloc]init];
-    self.contentView = [[UIScrollView alloc]init];
-    self.titleIcon = [[UIImageView alloc]init];
+    if(!self.titleView){
+        self.titleView = [[UIButton alloc]init];
+        [self addSubview:self.titleView];
+    }
     
-    [self addSubview:self.titleView];
-    [self.titleView addSubview:self.titleLabel];
-    [self.titleView addSubview:self.titleIcon];
+    if(!self.titleLabel){
+        self.titleLabel = [[UILabel alloc]init];
+        [self.titleView addSubview:self.titleLabel];
+    }
     
-}
-
-
--(void)setContentView:(UIScrollView *)contentView title:(NSString *)title{
+    if(!self.titleIcon){
+        self.titleIcon = [[UIImageView alloc]init];
+        [self.titleView addSubview:self.titleIcon];
+    }
     
-    self.title = title;
-    self.contentView = contentView;
     
-    [self addSubview:self.contentView];
+    
     [self setNeedsLayout];
+
 }
+
 
 -(void)layoutSubviews{
+    
     [super layoutSubviews];
-
+    
+    CALayer *titleViewTopBorder = [CALayer layer];
+    titleViewTopBorder.frame = CGRectMake(0.0f, 0.0f, self.aframe.size.width, 0.5f);
+    titleViewTopBorder.backgroundColor = [UIColor colorWithWhite:0.8f
+                                                           alpha:1.0f].CGColor;
+    [self.layer addSublayer:titleViewTopBorder];
+    
+    CALayer *titleViewBottomBorder = [CALayer layer];
+    titleViewBottomBorder.frame = CGRectMake(0.0f, self.aframe.size.height, self.aframe.size.width, 0.5f);
+    titleViewBottomBorder.backgroundColor = [UIColor colorWithWhite:0.8f
+                                                              alpha:1.0f].CGColor;
+    [self.layer addSublayer:titleViewBottomBorder];
+    
     self.titleView.frame = CGRectMake(0, 0 ,self.aframe.size.width, 45);
     
     self.titleLabel.frame = CGRectMake(15, 0, self.aframe.size.width, 45);

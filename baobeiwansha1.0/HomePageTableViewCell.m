@@ -17,6 +17,7 @@
 @end
 
 @implementation HomePageTableViewCell
+
 -(id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if(self){
@@ -48,6 +49,8 @@
     
     self.iconView.frame = CGRectMake(15, 10, 40, 40);
     self.iconView.image = [UIImage imageNamed:@"boy.jpg"];
+    self.iconView.layer.cornerRadius = 3;
+    self.iconView.layer.masksToBounds = YES;
     
     self.titleLabel.frame = CGRectMake(65, 0, self.aframe.size.width - 80, 60);
     self.titleLabel.text = @"游戏是幼儿最爱的活动~";

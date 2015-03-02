@@ -32,23 +32,44 @@
     return self;
     
 }
--(void)initViews{
-    self.backgroundView = [[UIImageView alloc]init];
-    self.headImageButton = [[UIButton alloc]init];
-    self.genderIcon = [[UIImageView alloc]init];
-    self.babyName = [[UILabel alloc]init];
-    self.babyAge = [[UILabel alloc]init];
-    self.babyCondition = [[UIView alloc]init];
-    self.babyConditionTextView = [[UITextView alloc]init];
-    
-    [self addSubview:self.backgroundView];
-    [self addSubview:self.headImageButton];
-    [self addSubview:self.genderIcon];
-    [self addSubview:self.babyName];
-    [self addSubview:self.babyAge];
-    [self addSubview:self.babyCondition];
-    [self.babyCondition addSubview:self.babyConditionTextView];
 
+-(void)initViews{
+    
+    if(!self.backgroundView){
+        self.backgroundView = [[UIImageView alloc]init];
+        [self addSubview:self.backgroundView];
+
+    }
+    if(!self.headImageButton){
+        self.headImageButton = [[UIButton alloc]init];
+        [self addSubview:self.headImageButton];
+
+    }
+    if(!self.genderIcon){
+        self.genderIcon = [[UIImageView alloc]init];
+        [self addSubview:self.genderIcon];
+
+    }
+    if(!self.babyName){
+        self.babyName = [[UILabel alloc]init];
+        [self addSubview:self.babyName];
+
+    }
+    if(!self.babyAge){
+        self.babyAge = [[UILabel alloc]init];
+        [self addSubview:self.babyAge];
+
+    }
+    if(!self.babyCondition){
+        self.babyCondition = [[UIView alloc]init];
+        [self addSubview:self.babyCondition];
+
+    }
+    if(!self.babyConditionTextView){
+        self.babyConditionTextView = [[UITextView alloc]init];
+        [self.babyCondition addSubview:self.babyConditionTextView];
+    }
+    
     
 
 }
@@ -102,6 +123,7 @@
     self.babyConditionTextView.frame = CGRectMake(8, 5, self.babyCondition.frame.size.width - 10,self.babyCondition.frame.size.height - 10);
     self.babyConditionTextView.font = [UIFont systemFontOfSize:14.0f];
     self.babyConditionTextView.scrollEnabled = NO;
+    self.babyConditionTextView.editable = NO;
     self.babyConditionTextView.text = @"好奇又好动，孩子太调皮，新买来的漂亮花瓶，他拿榜头敲出声音，西去哦汽车开不动了，他把汽车拆的七零八落，听见外面声音嘈杂，他马上跑出去看热闹。他把汽车拆的啊"
     ;
     self.babyConditionTextView.textColor = [UIColor colorWithRed:103.0/255.0f green:103.0/255.0f blue:103.0/255.0f alpha:1.0f];

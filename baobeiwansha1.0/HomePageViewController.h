@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface HomePageViewController : UIViewController<UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout,UITableViewDelegate,UITableViewDataSource>
+@interface HomePageViewController : UIViewController <UIScrollViewDelegate>
 
 @end
