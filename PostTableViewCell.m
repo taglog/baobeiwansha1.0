@@ -99,8 +99,8 @@
     
     self.title.frame = CGRectMake(self.image.frame.size.width + 2*paddingLeft, 10, self.aframe.size.width - self.image.frame.size.width - 2*paddingLeft - paddingRight, 45);
     self.title.numberOfLines = 2;
-    self.title.font = [UIFont fontWithName:@"STHeitiSC-Medium" size:17.0f];
-    self.title.textColor = [UIColor blackColor];
+    self.title.font = [UIFont fontWithName:@"STHeitiSC-Medium" size:16.0f];
+    self.title.textColor = [UIColor colorWithRed:23.0f/255.0f green:23.0f/255.0f blue:23.0f/255.0f alpha:1.0f];
     
     self.introduction.frame = CGRectMake(self.image.frame.size.width + 2*paddingLeft, paddingTop + self.title.frame.size.height, self.aframe.size.width - self.image.frame.size.width - 2*paddingLeft - paddingRight, 15);
     self.introduction.font = [UIFont systemFontOfSize:13.0f];
@@ -110,9 +110,9 @@
     self.age.font = [UIFont systemFontOfSize:13.0f];
     self.age.textColor = [UIColor colorWithRed:153.0f/255.0f green:153.0f/255.0f blue:153.0f/255.0f alpha:1.0f];
 
-    self.collectionIcon.frame = CGRectMake(self.aframe.size.width - 39, paddingTop + self.image.frame.size.height + 13, 24, 24);
+    self.collectionIcon.frame = CGRectMake(self.aframe.size.width - 35, paddingTop + self.image.frame.size.height + 15, 20, 20);
     
-    self.collectionNumber.frame = CGRectMake(self.aframe.size.width - 125, paddingTop + self.image.frame.size.height + paddingBottom, 80, 20);
+    self.collectionNumber.frame = CGRectMake(self.aframe.size.width - 122, paddingTop + self.image.frame.size.height + paddingBottom, 80, 20);
     self.collectionNumber.font = [UIFont fontWithName:@"Thonburi" size:15.0f];
     self.collectionNumber.textColor = [UIColor colorWithRed:153.0f/255.0f green:153.0f/255.0f blue:153.0f/255.0f alpha:1.0f];
     self.collectionNumber.textAlignment = NSTextAlignmentRight;

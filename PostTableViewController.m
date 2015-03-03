@@ -7,7 +7,7 @@
 //
 
 #import "PostTableViewController.h"
-#import "PostView.h"
+#import "PostTableView.h"
 
 @implementation PostTableViewController
 
@@ -18,13 +18,14 @@
     self.title = @"PostList";
     NSDictionary * dict=[NSDictionary dictionaryWithObject:[UIColor whiteColor] forKey:NSForegroundColorAttributeName];
     self.navigationController.navigationBar.titleTextAttributes = dict;
-    
+    self.automaticallyAdjustsScrollViewInsets = NO;
     [self initViews];
 }
 
 -(void)initViews{
-    PostView *postView = [[PostView alloc]initWithFrame:CGRectMake(0, 64, self.view.frame.size.width, self.view.frame.size.height - 64)];
-    [self.view addSubview:postView];
+    
+    PostTableView *postTableView = [[PostTableView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
+    [self.view addSubview:postTableView];
 }
 
 @end

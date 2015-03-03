@@ -26,7 +26,7 @@
     
     //初始化TabViewController
     //[self initViewControllers];
-    PostTableViewController *tagPage = [[PostTableViewController alloc]init];
+    PlayPageViewController *tagPage = [[PlayPageViewController alloc]init];
     UINavigationController *tag = [[UINavigationController alloc]initWithRootViewController:tagPage];
     self.window.rootViewController = tag;
     [self.window makeKeyAndVisible];
