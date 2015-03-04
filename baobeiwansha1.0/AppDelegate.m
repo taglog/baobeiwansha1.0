@@ -25,10 +25,9 @@
     self.window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
     
     //初始化TabViewController
-    //[self initViewControllers];
-    PlayPageViewController *tagPage = [[PlayPageViewController alloc]init];
-    UINavigationController *tag = [[UINavigationController alloc]initWithRootViewController:tagPage];
-    self.window.rootViewController = tag;
+    [self initViewControllers];
+    
+    self.window.rootViewController = self.mainTabBarController;
     [self.window makeKeyAndVisible];
     
     return YES;

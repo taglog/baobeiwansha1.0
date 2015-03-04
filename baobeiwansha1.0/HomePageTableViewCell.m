@@ -13,7 +13,7 @@
 @property (nonatomic,retain) UILabel *titleLabel;
 @property (nonatomic,retain) NSString *title;
 @property (nonatomic,assign) CGRect aframe;
-
+@property (nonatomic,retain) NSDictionary *dict;
 @end
 
 @implementation HomePageTableViewCell
@@ -39,7 +39,12 @@
 }
 
 -(void)setDict:(NSDictionary *)dict frame:(CGRect)frame{
+    
     self.aframe = frame;
+    self.dict = dict;
+    
+    self.titleLabel.text = @"游戏是幼儿最爱的活动~";
+
     [self setNeedsLayout];
     
 }
@@ -53,8 +58,9 @@
     self.iconView.layer.masksToBounds = YES;
     
     self.titleLabel.frame = CGRectMake(65, 0, self.aframe.size.width - 80, 60);
-    self.titleLabel.text = @"游戏是幼儿最爱的活动~";
     self.titleLabel.textColor = [UIColor colorWithRed:103.0/255.0f green:103.0/255.0f blue:103.0/255.0f alpha:1.0f];
+    self.titleLabel.font = [UIFont systemFontOfSize:14.0f];
+    
 }
 
 @end

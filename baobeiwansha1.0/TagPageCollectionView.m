@@ -60,7 +60,7 @@
     self.tagCollectionView.contentSize = CGSizeMake(800, self.frame.size.height - 40);
     
     [self.tagCollectionView registerClass:[TagPageCollectionViewCell class] forCellWithReuseIdentifier:@"tagcell"];
-    
+    self.tagCollectionView.showsHorizontalScrollIndicator = NO;
     self.tagCollectionView.backgroundColor = [UIColor whiteColor];
     self.tagCollectionView.delegate = self;
     self.tagCollectionView.dataSource = self;

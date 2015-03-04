@@ -9,9 +9,13 @@
 #import <UIKit/UIKit.h>
 
 @interface TabView : UIView
-@property (nonatomic,retain) NSString *tabTitle;
 
+@property (nonatomic,retain) NSString *tabTitle;
 @property (nonatomic,retain) UIImageView *tabIcon;
 @property (nonatomic,retain) UILabel *tabLabel;
+
 -(void)setNormalIcon:(UIImage *)normalIcon highlightIcon:(UIImage *)highlightIcon tabTitle:(NSString *)tabTitle;
+-(void)setTabToNormal;
+-(void)setTabToHighlight;
+
 @end

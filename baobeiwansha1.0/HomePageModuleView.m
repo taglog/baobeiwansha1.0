@@ -10,7 +10,6 @@
 
 @interface HomePageModuleView()
 
-@property (nonatomic,retain) UIButton *titleView;
 @property (nonatomic,retain) UILabel *titleLabel;
 @property (nonatomic,retain) UIImageView *titleIcon;
 @property (nonatomic,assign) CGRect aframe;
@@ -33,6 +32,9 @@
     
     if(!self.titleView){
         self.titleView = [[UIButton alloc]init];
+        
+        [self.titleView addTarget:self action:@selector(titleViewClicked:) forControlEvents:UIControlEventTouchUpInside];
+        
         [self addSubview:self.titleView];
     }
     
@@ -52,11 +54,16 @@
 
 }
 
+-(void)titleViewClicked:(id)sender{
+    
+    [self.delegate titleViewSelect:sender];
 
+}
 -(void)layoutSubviews{
     
     [super layoutSubviews];
     
+    //module的上下边界
     CALayer *titleViewTopBorder = [CALayer layer];
     titleViewTopBorder.frame = CGRectMake(0.0f, 0.0f, self.aframe.size.width, 0.5f);
     titleViewTopBorder.backgroundColor = [UIColor colorWithWhite:0.8f
@@ -69,12 +76,13 @@
                                                               alpha:1.0f].CGColor;
     [self.layer addSublayer:titleViewBottomBorder];
     
+    //module的titleview
     self.titleView.frame = CGRectMake(0, 0 ,self.aframe.size.width, 45);
     
     self.titleLabel.frame = CGRectMake(15, 0, self.aframe.size.width, 45);
     self.titleLabel.text = self.title;
     self.titleLabel.textColor = [UIColor colorWithRed:103.0/255.0f green:103.0/255.0f blue:103.0/255.0f alpha:1.0f];
-    self.titleLabel.font = [UIFont fontWithName:@"STHeitiSC-Medium" size:16.0f];
+    self.titleLabel.font = [UIFont fontWithName:@"STHeitiSC-Medium" size:15.0f];
     
     CALayer *bottomBorder = [CALayer layer];
     bottomBorder.frame = CGRectMake(0.0f, 44.5f, self.titleView.frame.size.width, 0.5f);

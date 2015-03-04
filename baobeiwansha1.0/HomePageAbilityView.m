@@ -41,6 +41,7 @@
     self.abilityCollectionView.dataSource = self;
     
     [self addSubview:self.abilityCollectionView];
+    
 }
 
 
@@ -97,7 +98,7 @@
 
 -(UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {
-    return UIEdgeInsetsMake(15, 15, 15, 15);
+    return UIEdgeInsetsMake(17, 15, 17, 15);
 }
 
 
@@ -105,7 +106,7 @@
 
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    CGSize size = CGSizeMake((self.frame.size.width - 50)/3,90);
+    CGSize size = CGSizeMake((self.frame.size.width - 50)/3,80);
     return size;
 }
 

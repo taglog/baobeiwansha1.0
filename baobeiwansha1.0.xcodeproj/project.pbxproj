@@ -7,12 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4B0C849C1AA475BA00E5E9D0 /* PostTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B0C849B1AA475BA00E5E9D0 /* PostTableViewCell.m */; };
 		4B0C84A01AA48CCB00E5E9D0 /* PostTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B0C849F1AA48CCB00E5E9D0 /* PostTableView.m */; };
-		4B0C84A61AA490E000E5E9D0 /* PostTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B0C84A51AA490E000E5E9D0 /* PostTableViewController.m */; };
 		4B4920621A9DA6BD00B1D692 /* upArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 4B4920611A9DA6BD00B1D692 /* upArrow.png */; };
 		4B4920651A9DEC2900B1D692 /* HomePageAbilityViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B4920641A9DEC2900B1D692 /* HomePageAbilityViewCell.m */; };
-		4B4920681A9DEC4400B1D692 /* HomePageLocationViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B4920671A9DEC4400B1D692 /* HomePageLocationViewCell.m */; };
 		4B49206B1A9DF37000B1D692 /* HomePageTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B49206A1A9DF37000B1D692 /* HomePageTableViewCell.m */; };
 		4B6705401A9E161000A6E6A0 /* rightarrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 4B67053F1A9E161000A6E6A0 /* rightarrow.png */; };
 		4B6705471AA3F8FD00A6E6A0 /* HomePageAbilityView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B6705461AA3F8FD00A6E6A0 /* HomePageAbilityView.m */; };
@@ -20,7 +17,6 @@
 		4B67054D1AA408E500A6E6A0 /* HomePageTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B67054C1AA408E500A6E6A0 /* HomePageTableView.m */; };
 		4B6CF58B1A9C129600556135 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B6CF58A1A9C129600556135 /* main.m */; };
 		4B6CF58E1A9C129600556135 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B6CF58D1A9C129600556135 /* AppDelegate.m */; };
-		4B6CF5961A9C129600556135 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4B6CF5951A9C129600556135 /* Images.xcassets */; };
 		4B6CF5991A9C129600556135 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B6CF5971A9C129600556135 /* LaunchScreen.xib */; };
 		4B6CF5A51A9C129600556135 /* baobeiwansha1_0Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B6CF5A41A9C129600556135 /* baobeiwansha1_0Tests.m */; };
 		4B6CF5B01A9C136600556135 /* HomePageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B6CF5AF1A9C136600556135 /* HomePageViewController.m */; };
@@ -37,10 +33,21 @@
 		4B97B9C11AA54C0F00EFDEAC /* CommentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B97B9C01AA54C0F00EFDEAC /* CommentView.m */; };
 		4B97B9CC1AA5588300EFDEAC /* SlidePagerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B97B9CB1AA5588300EFDEAC /* SlidePagerView.m */; };
 		4B97B9D01AA55D5E00EFDEAC /* TabView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B97B9CF1AA55D5E00EFDEAC /* TabView.m */; };
+		4B97B9D21AA6A78300EFDEAC /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4B97B9D11AA6A78300EFDEAC /* Images.xcassets */; };
 		4BA0C3371AA436B000CFD20E /* TagPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BA0C3361AA436B000CFD20E /* TagPageViewController.m */; };
 		4BA0C33B1AA4374100CFD20E /* book2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4BA0C33A1AA4374100CFD20E /* book2@2x.png */; };
 		4BA0C33F1AA44CA700CFD20E /* TagPageCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BA0C33E1AA44CA700CFD20E /* TagPageCollectionViewCell.m */; };
 		4BA0C3461AA44EBB00CFD20E /* TagPageCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BA0C3451AA44EBB00CFD20E /* TagPageCollectionView.m */; };
+		4BD1FDC01AA6EFC3003AC096 /* PostTableViewCell.h in Sources */ = {isa = PBXBuildFile; fileRef = 4BD1FDBE1AA6EFC3003AC096 /* PostTableViewCell.h */; };
+		4BD1FDC11AA6EFC3003AC096 /* PostTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BD1FDBF1AA6EFC3003AC096 /* PostTableViewCell.m */; };
+		4BD1FDC41AA6EFF9003AC096 /* HomePageLocationViewCell.h in Sources */ = {isa = PBXBuildFile; fileRef = 4BD1FDC21AA6EFF9003AC096 /* HomePageLocationViewCell.h */; };
+		4BD1FDC51AA6EFF9003AC096 /* HomePageLocationViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BD1FDC31AA6EFF9003AC096 /* HomePageLocationViewCell.m */; };
+		4BD1FDC81AA6F023003AC096 /* PostTableViewController.h in Sources */ = {isa = PBXBuildFile; fileRef = 4BD1FDC61AA6F023003AC096 /* PostTableViewController.h */; };
+		4BD1FDC91AA6F023003AC096 /* PostTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BD1FDC71AA6F023003AC096 /* PostTableViewController.m */; };
+		4BD1FDD41AA6FC22003AC096 /* EGORefreshView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BD1FDD31AA6FC22003AC096 /* EGORefreshView.m */; };
+		4BD1FDDB1AA707B6003AC096 /* RefreshScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BD1FDDA1AA707B6003AC096 /* RefreshScrollView.m */; };
+		4BD1FDE01AA72A66003AC096 /* PlayPageContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BD1FDDF1AA72A66003AC096 /* PlayPageContentViewController.m */; };
+		5B36410A84B5B16892AFD573 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 98A8DF510BEEA430D7CA0D52 /* libPods.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,17 +61,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		4B0C849A1AA475BA00E5E9D0 /* PostTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PostTableViewCell.h; path = ../PostTableViewCell.h; sourceTree = "<group>"; };
-		4B0C849B1AA475BA00E5E9D0 /* PostTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PostTableViewCell.m; path = ../PostTableViewCell.m; sourceTree = "<group>"; };
+		41676D5DFA347185CD641A3F /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		4B0C849E1AA48CCB00E5E9D0 /* PostTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PostTableView.h; sourceTree = "<group>"; };
 		4B0C849F1AA48CCB00E5E9D0 /* PostTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PostTableView.m; sourceTree = "<group>"; };
-		4B0C84A41AA490E000E5E9D0 /* PostTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PostTableViewController.h; path = ../PostTableViewController.h; sourceTree = "<group>"; };
-		4B0C84A51AA490E000E5E9D0 /* PostTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = PostTableViewController.m; path = ../PostTableViewController.m; sourceTree = "<group>"; };
 		4B4920611A9DA6BD00B1D692 /* upArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = upArrow.png; path = Resources/upArrow.png; sourceTree = "<group>"; };
 		4B4920631A9DEC2900B1D692 /* HomePageAbilityViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomePageAbilityViewCell.h; sourceTree = "<group>"; };
 		4B4920641A9DEC2900B1D692 /* HomePageAbilityViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomePageAbilityViewCell.m; sourceTree = "<group>"; };
-		4B4920661A9DEC4400B1D692 /* HomePageLocationViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HomePageLocationViewCell.h; path = ../HomePageLocationViewCell.h; sourceTree = "<group>"; };
-		4B4920671A9DEC4400B1D692 /* HomePageLocationViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HomePageLocationViewCell.m; path = ../HomePageLocationViewCell.m; sourceTree = "<group>"; };
 		4B4920691A9DF37000B1D692 /* HomePageTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomePageTableViewCell.h; sourceTree = "<group>"; };
 		4B49206A1A9DF37000B1D692 /* HomePageTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomePageTableViewCell.m; sourceTree = "<group>"; };
 		4B67053F1A9E161000A6E6A0 /* rightarrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = rightarrow.png; path = Resources/rightarrow.png; sourceTree = "<group>"; };
@@ -79,7 +81,6 @@
 		4B6CF58A1A9C129600556135 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		4B6CF58C1A9C129600556135 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		4B6CF58D1A9C129600556135 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		4B6CF5951A9C129600556135 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		4B6CF5981A9C129600556135 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		4B6CF59E1A9C129600556135 /* baobeiwansha1.0Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = baobeiwansha1.0Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B6CF5A31A9C129600556135 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -92,7 +93,7 @@
 		4B6CF5B61A9C151400556135 /* HomePageProfileView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomePageProfileView.m; sourceTree = "<group>"; };
 		4B6CF5BA1A9C1AF700556135 /* home.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = home.png; path = Resources/home.png; sourceTree = "<group>"; };
 		4B6CF5BD1A9D788E00556135 /* PlayPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayPageViewController.h; sourceTree = "<group>"; };
-		4B6CF5BE1A9D788E00556135 /* PlayPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayPageViewController.m; sourceTree = "<group>"; };
+		4B6CF5BE1A9D788E00556135 /* PlayPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayPageViewController.m; sourceTree = "<group>"; wrapsLines = 1; };
 		4B6CF5C11A9D78B800556135 /* ProfilePageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfilePageViewController.h; sourceTree = "<group>"; };
 		4B6CF5C21A9D78B800556135 /* ProfilePageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfilePageViewController.m; sourceTree = "<group>"; };
 		4B6CF5C51A9D912300556135 /* boy.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = boy.jpg; path = Resources/boy.jpg; sourceTree = "<group>"; };
@@ -107,6 +108,7 @@
 		4B97B9CB1AA5588300EFDEAC /* SlidePagerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SlidePagerView.m; sourceTree = "<group>"; };
 		4B97B9CE1AA55D5E00EFDEAC /* TabView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TabView.h; sourceTree = "<group>"; };
 		4B97B9CF1AA55D5E00EFDEAC /* TabView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TabView.m; sourceTree = "<group>"; };
+		4B97B9D11AA6A78300EFDEAC /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		4BA0C3351AA436B000CFD20E /* TagPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagPageViewController.h; sourceTree = "<group>"; };
 		4BA0C3361AA436B000CFD20E /* TagPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagPageViewController.m; sourceTree = "<group>"; };
 		4BA0C33A1AA4374100CFD20E /* book2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "book2@2x.png"; path = "Resources/book2@2x.png"; sourceTree = "<group>"; };
@@ -114,6 +116,20 @@
 		4BA0C33E1AA44CA700CFD20E /* TagPageCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagPageCollectionViewCell.m; sourceTree = "<group>"; };
 		4BA0C3441AA44EBB00CFD20E /* TagPageCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagPageCollectionView.h; sourceTree = "<group>"; };
 		4BA0C3451AA44EBB00CFD20E /* TagPageCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagPageCollectionView.m; sourceTree = "<group>"; };
+		4BD1FDBE1AA6EFC3003AC096 /* PostTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PostTableViewCell.h; sourceTree = "<group>"; };
+		4BD1FDBF1AA6EFC3003AC096 /* PostTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PostTableViewCell.m; sourceTree = "<group>"; };
+		4BD1FDC21AA6EFF9003AC096 /* HomePageLocationViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HomePageLocationViewCell.h; sourceTree = "<group>"; };
+		4BD1FDC31AA6EFF9003AC096 /* HomePageLocationViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HomePageLocationViewCell.m; sourceTree = "<group>"; };
+		4BD1FDC61AA6F023003AC096 /* PostTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PostTableViewController.h; sourceTree = "<group>"; };
+		4BD1FDC71AA6F023003AC096 /* PostTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PostTableViewController.m; sourceTree = "<group>"; };
+		4BD1FDD21AA6FC22003AC096 /* EGORefreshView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGORefreshView.h; sourceTree = "<group>"; };
+		4BD1FDD31AA6FC22003AC096 /* EGORefreshView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGORefreshView.m; sourceTree = "<group>"; };
+		4BD1FDD91AA707B6003AC096 /* RefreshScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RefreshScrollView.h; sourceTree = "<group>"; };
+		4BD1FDDA1AA707B6003AC096 /* RefreshScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RefreshScrollView.m; sourceTree = "<group>"; };
+		4BD1FDDE1AA72A66003AC096 /* PlayPageContentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayPageContentViewController.h; sourceTree = "<group>"; };
+		4BD1FDDF1AA72A66003AC096 /* PlayPageContentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayPageContentViewController.m; sourceTree = "<group>"; };
+		641A70DF395618D18B958B99 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		98A8DF510BEEA430D7CA0D52 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -121,6 +137,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5B36410A84B5B16892AFD573 /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -134,6 +151,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0B53E6DEBE0F559C56AEE2B1 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				98A8DF510BEEA430D7CA0D52 /* libPods.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		4B0C849D1AA475CD00E5E9D0 /* PostTableView */ = {
 			isa = PBXGroup;
 			children = (
@@ -148,8 +173,8 @@
 			children = (
 				4B0C849E1AA48CCB00E5E9D0 /* PostTableView.h */,
 				4B0C849F1AA48CCB00E5E9D0 /* PostTableView.m */,
-				4B0C849A1AA475BA00E5E9D0 /* PostTableViewCell.h */,
-				4B0C849B1AA475BA00E5E9D0 /* PostTableViewCell.m */,
+				4BD1FDBE1AA6EFC3003AC096 /* PostTableViewCell.h */,
+				4BD1FDBF1AA6EFC3003AC096 /* PostTableViewCell.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -157,8 +182,8 @@
 		4B0C84A81AA491C500E5E9D0 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				4B0C84A41AA490E000E5E9D0 /* PostTableViewController.h */,
-				4B0C84A51AA490E000E5E9D0 /* PostTableViewController.m */,
+				4BD1FDC61AA6F023003AC096 /* PostTableViewController.h */,
+				4BD1FDC71AA6F023003AC096 /* PostTableViewController.m */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -188,8 +213,8 @@
 			children = (
 				4B6705481AA408C800A6E6A0 /* HomePageLocationView.h */,
 				4B6705491AA408C800A6E6A0 /* HomePageLocationView.m */,
-				4B4920661A9DEC4400B1D692 /* HomePageLocationViewCell.h */,
-				4B4920671A9DEC4400B1D692 /* HomePageLocationViewCell.m */,
+				4BD1FDC21AA6EFF9003AC096 /* HomePageLocationViewCell.h */,
+				4BD1FDC31AA6EFF9003AC096 /* HomePageLocationViewCell.m */,
 			);
 			name = LocationSection;
 			sourceTree = "<group>";
@@ -211,6 +236,8 @@
 				4B6CF5871A9C129600556135 /* baobeiwansha1.0 */,
 				4B6CF5A11A9C129600556135 /* baobeiwansha1.0Tests */,
 				4B6CF5861A9C129600556135 /* Products */,
+				907D041D6F2C91FABE787F46 /* Pods */,
+				0B53E6DEBE0F559C56AEE2B1 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -229,8 +256,7 @@
 				4B6CF58C1A9C129600556135 /* AppDelegate.h */,
 				4B6CF58D1A9C129600556135 /* AppDelegate.m */,
 				4B97B9CD1AA5589000EFDEAC /* Lib */,
-				4B97B9B91AA54B3E00EFDEAC /* PostView */,
-				4B0C849D1AA475CD00E5E9D0 /* PostTableView */,
+				4BD1FDDC1AA707D1003AC096 /* Global */,
 				4BA0C3381AA436B900CFD20E /* TagPage */,
 				4B6CF5B11A9C136C00556135 /* HomePage */,
 				4B6CF5C01A9D789A00556135 /* PlayPage */,
@@ -244,7 +270,6 @@
 			isa = PBXGroup;
 			children = (
 				4B6CF5BC1A9C1B0400556135 /* Resources */,
-				4B6CF5951A9C129600556135 /* Images.xcassets */,
 				4B6CF5891A9C129600556135 /* Info.plist */,
 				4B6CF5971A9C129600556135 /* LaunchScreen.xib */,
 				4B6CF58A1A9C129600556135 /* main.m */,
@@ -307,6 +332,7 @@
 				4B6CF5C91A9D986100556135 /* topbackground.png */,
 				4B6CF5C71A9D96E300556135 /* navigationbar.png */,
 				4B6CF5C51A9D912300556135 /* boy.jpg */,
+				4B97B9D11AA6A78300EFDEAC /* Images.xcassets */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -316,6 +342,8 @@
 			children = (
 				4B6CF5BD1A9D788E00556135 /* PlayPageViewController.h */,
 				4B6CF5BE1A9D788E00556135 /* PlayPageViewController.m */,
+				4BD1FDDE1AA72A66003AC096 /* PlayPageContentViewController.h */,
+				4BD1FDDF1AA72A66003AC096 /* PlayPageContentViewController.m */,
 			);
 			name = PlayPage;
 			sourceTree = "<group>";
@@ -359,12 +387,20 @@
 		4B97B9CD1AA5589000EFDEAC /* Lib */ = {
 			isa = PBXGroup;
 			children = (
+				4BD1FDD51AA6FC63003AC096 /* EGORefreshView */,
+			);
+			name = Lib;
+			sourceTree = "<group>";
+		};
+		4B97B9D31AA6AEF600EFDEAC /* SlidePagerView */ = {
+			isa = PBXGroup;
+			children = (
 				4B97B9CE1AA55D5E00EFDEAC /* TabView.h */,
 				4B97B9CF1AA55D5E00EFDEAC /* TabView.m */,
 				4B97B9CA1AA5588300EFDEAC /* SlidePagerView.h */,
 				4B97B9CB1AA5588300EFDEAC /* SlidePagerView.m */,
 			);
-			name = Lib;
+			name = SlidePagerView;
 			sourceTree = "<group>";
 		};
 		4BA0C3381AA436B900CFD20E /* TagPage */ = {
@@ -408,6 +444,44 @@
 			name = View;
 			sourceTree = "<group>";
 		};
+		4BD1FDD51AA6FC63003AC096 /* EGORefreshView */ = {
+			isa = PBXGroup;
+			children = (
+				4BD1FDD21AA6FC22003AC096 /* EGORefreshView.h */,
+				4BD1FDD31AA6FC22003AC096 /* EGORefreshView.m */,
+			);
+			name = EGORefreshView;
+			sourceTree = "<group>";
+		};
+		4BD1FDDC1AA707D1003AC096 /* Global */ = {
+			isa = PBXGroup;
+			children = (
+				4BD1FDDD1AA729E9003AC096 /* RefreshScrollView */,
+				4B97B9D31AA6AEF600EFDEAC /* SlidePagerView */,
+				4B0C849D1AA475CD00E5E9D0 /* PostTableView */,
+				4B97B9B91AA54B3E00EFDEAC /* PostView */,
+			);
+			name = Global;
+			sourceTree = "<group>";
+		};
+		4BD1FDDD1AA729E9003AC096 /* RefreshScrollView */ = {
+			isa = PBXGroup;
+			children = (
+				4BD1FDD91AA707B6003AC096 /* RefreshScrollView.h */,
+				4BD1FDDA1AA707B6003AC096 /* RefreshScrollView.m */,
+			);
+			name = RefreshScrollView;
+			sourceTree = "<group>";
+		};
+		907D041D6F2C91FABE787F46 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				641A70DF395618D18B958B99 /* Pods.debug.xcconfig */,
+				41676D5DFA347185CD641A3F /* Pods.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -415,9 +489,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4B6CF5A81A9C129600556135 /* Build configuration list for PBXNativeTarget "baobeiwansha1.0" */;
 			buildPhases = (
+				A9F6D2DECD919B1097D8A2FE /* Check Pods Manifest.lock */,
 				4B6CF5811A9C129600556135 /* Sources */,
 				4B6CF5821A9C129600556135 /* Frameworks */,
 				4B6CF5831A9C129600556135 /* Resources */,
+				4B20142A1E0A47AF2DD22323 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -488,6 +564,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4B97B9D21AA6A78300EFDEAC /* Images.xcassets in Resources */,
 				4B97B9B51AA49D0800EFDEAC /* heart.png in Resources */,
 				4BA0C33B1AA4374100CFD20E /* book2@2x.png in Resources */,
 				4B6705401A9E161000A6E6A0 /* rightarrow.png in Resources */,
@@ -497,7 +574,6 @@
 				4B6CF5C61A9D912300556135 /* boy.jpg in Resources */,
 				4B6CF5BB1A9C1AF700556135 /* home.png in Resources */,
 				4B6CF5991A9C129600556135 /* LaunchScreen.xib in Resources */,
-				4B6CF5961A9C129600556135 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -510,27 +586,66 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		4B20142A1E0A47AF2DD22323 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A9F6D2DECD919B1097D8A2FE /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		4B6CF5811A9C129600556135 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4BD1FDC81AA6F023003AC096 /* PostTableViewController.h in Sources */,
+				4BD1FDC91AA6F023003AC096 /* PostTableViewController.m in Sources */,
+				4BD1FDC41AA6EFF9003AC096 /* HomePageLocationViewCell.h in Sources */,
+				4BD1FDE01AA72A66003AC096 /* PlayPageContentViewController.m in Sources */,
+				4BD1FDC51AA6EFF9003AC096 /* HomePageLocationViewCell.m in Sources */,
+				4BD1FDC01AA6EFC3003AC096 /* PostTableViewCell.h in Sources */,
+				4BD1FDC11AA6EFC3003AC096 /* PostTableViewCell.m in Sources */,
 				4BA0C3371AA436B000CFD20E /* TagPageViewController.m in Sources */,
-				4B4920681A9DEC4400B1D692 /* HomePageLocationViewCell.m in Sources */,
 				4B97B9CC1AA5588300EFDEAC /* SlidePagerView.m in Sources */,
+				4BD1FDD41AA6FC22003AC096 /* EGORefreshView.m in Sources */,
 				4B97B9BD1AA54B8100EFDEAC /* PostView.m in Sources */,
 				4B0C84A01AA48CCB00E5E9D0 /* PostTableView.m in Sources */,
 				4B6CF58E1A9C129600556135 /* AppDelegate.m in Sources */,
 				4B6CF5BF1A9D788E00556135 /* PlayPageViewController.m in Sources */,
 				4B67054A1AA408C800A6E6A0 /* HomePageLocationView.m in Sources */,
 				4B49206B1A9DF37000B1D692 /* HomePageTableViewCell.m in Sources */,
+				4BD1FDDB1AA707B6003AC096 /* RefreshScrollView.m in Sources */,
 				4BA0C3461AA44EBB00CFD20E /* TagPageCollectionView.m in Sources */,
 				4B6CF58B1A9C129600556135 /* main.m in Sources */,
-				4B0C849C1AA475BA00E5E9D0 /* PostTableViewCell.m in Sources */,
 				4B97B9C11AA54C0F00EFDEAC /* CommentView.m in Sources */,
 				4B4920651A9DEC2900B1D692 /* HomePageAbilityViewCell.m in Sources */,
 				4B97B9D01AA55D5E00EFDEAC /* TabView.m in Sources */,
-				4B0C84A61AA490E000E5E9D0 /* PostTableViewController.m in Sources */,
 				4B6CF5C31A9D78B800556135 /* ProfilePageViewController.m in Sources */,
 				4B6705471AA3F8FD00A6E6A0 /* HomePageAbilityView.m in Sources */,
 				4B6CF5B41A9C14FD00556135 /* HomePageModuleView.m in Sources */,
@@ -649,8 +764,10 @@
 		};
 		4B6CF5A91A9C129600556135 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 641A70DF395618D18B958B99 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				INFOPLIST_FILE = baobeiwansha1.0/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -660,8 +777,10 @@
 		};
 		4B6CF5AA1A9C129600556135 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 41676D5DFA347185CD641A3F /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				INFOPLIST_FILE = baobeiwansha1.0/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

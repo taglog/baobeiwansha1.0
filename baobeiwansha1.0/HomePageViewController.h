@@ -7,7 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "HomePageProfileView.h"
+#import "HomePageAbilityView.h"
+#import "HomePageLocationView.h"
+#import "HomePageTableView.h"
 
-@interface HomePageViewController : UIViewController <UIScrollViewDelegate>
+@interface HomePageViewController : UIViewController <UIScrollViewDelegate,HomePageModuleViewDelegate>
 
 @end

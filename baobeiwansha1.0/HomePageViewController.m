@@ -7,10 +7,7 @@
 //
 
 #import "HomePageViewController.h"
-#import "HomePageProfileView.h"
-#import "HomePageAbilityView.h"
-#import "HomePageLocationView.h"
-#import "HomePageTableView.h"
+#import "TagPageViewController.h"
 
 @interface HomePageViewController ()
 @property (nonatomic,retain) UIScrollView *homeScrollView;
@@ -18,13 +15,34 @@
 
 @implementation HomePageViewController
 
+-(void)viewWillAppear:(BOOL)animated{
+    
+    [super viewWillAppear:animated];
+    
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"navigationbar.png"] forBarMetrics:UIBarMetricsDefault];
+    self.navigationController.navigationBar.shadowImage = [UIImage new];
+    self.navigationController.navigationBar.barStyle = UIBarStyleBlackTranslucent;
+    NSDictionary * dict=[NSDictionary dictionaryWithObject:[UIColor whiteColor] forKey:NSForegroundColorAttributeName];
+    self.navigationController.navigationBar.titleTextAttributes = dict;
+
+    
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    
+    [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
+    self.navigationController.navigationBar.barTintColor = [UIColor whiteColor];
+    self.navigationController.navigationBar.barStyle = UIBarStyleDefault;
+    
+
+
+    
+}
 -(void)viewDidLoad{
     [super viewDidLoad];
     
     self.navigationItem.title = @"宝贝玩啥";
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"navigationbar.png"] forBarMetrics:UIBarMetricsDefault];
-    self.navigationController.navigationBar.shadowImage = [UIImage new];
-    self.navigationController.navigationBar.barStyle = UIBarStyleBlackTranslucent;
     self.automaticallyAdjustsScrollViewInsets = NO;
 
     [self initViews];
@@ -51,6 +69,7 @@
         self.homeScrollView.contentSize = CGSizeMake(self.view.frame.size.width, 900);
         self.homeScrollView.delegate = self;
     }
+    
 }
 -(void)initProfileView{
     
@@ -60,34 +79,69 @@
     
 
 }
+
 -(void)initViewSection1{
     
     
     HomePageAbilityView *homePageAbilityView = [[HomePageAbilityView alloc]initWithFrame:CGRectMake(0, 260, self.view.frame.size.width, 160)];
-
+    
     homePageAbilityView.title = @"这些潜能要大发展啦，快抓住时机跟我玩吧~";
+    homePageAbilityView.tag = 0;
+    homePageAbilityView.delegate = self;
+
     [self.homeScrollView addSubview:homePageAbilityView];
 
 }
 
 -(void)initViewSection2{
     
-    HomePageLocationView *homePageLocationView = [[HomePageLocationView alloc]initWithFrame:CGRectMake(0, 435, self.view.frame.size.width, 175)];
+    HomePageLocationView *homePageLocationView = [[HomePageLocationView alloc]initWithFrame:CGRectMake(0, 430, self.view.frame.size.width, 175)];
+    
+    homePageLocationView.tag = 1;
+    homePageLocationView.delegate = self;
     
     [self.homeScrollView addSubview:homePageLocationView];
     
     homePageLocationView.title = @"不同的场合，我要有不一样的玩法~";
     
-    
 }
 
 -(void)initViewSection3{
     
-    HomePageTableView *homePageTableView = [[HomePageTableView alloc]initWithFrame:CGRectMake(0, 620, self.view.frame.size.width, 225)];
+    HomePageTableView *homePageTableView = [[HomePageTableView alloc]initWithFrame:CGRectMake(0, 615, self.view.frame.size.width, 225)];
+    
+    homePageTableView.tag = 2;
+    homePageTableView.delegate = self;
+    
     [self.homeScrollView addSubview:homePageTableView];
     
     
     homePageTableView.title = @"寓教于乐可没那么简单，父母也来学习吧~";
+    
+}
+
+#pragma mark - sectionDelegateMethod
+
+-(void)titleViewSelect:(id)sender{
+    
+    TagPageViewController *tagPageViewController = [[TagPageViewController alloc]init];
+    tagPageViewController.hidesBottomBarWhenPushed = YES;
+    
+    switch ([[sender superview] tag]) {
+        case 0:
+            [self.navigationController pushViewController:tagPageViewController animated:YES];
+            break;
+        case 1:
+            
+            [self.navigationController pushViewController:tagPageViewController animated:YES];
+            break;
+        case 2:
+            
+            break;
+        default:
+            break;
+    }
+    
 }
 
 #pragma mark - scrollViewDelegate

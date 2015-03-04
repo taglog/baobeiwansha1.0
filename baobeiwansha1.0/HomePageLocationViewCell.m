@@ -63,7 +63,7 @@
     self.titleLabel.text = self.tag;
     self.titleLabel.textColor = [UIColor colorWithRed:103.0/255.0f green:103.0/255.0f blue:103.0/255.0f alpha:1.0f];
     self.titleLabel.textAlignment = NSTextAlignmentCenter;
-    self.titleLabel.font = [UIFont systemFontOfSize:14.0f];
+    self.titleLabel.font = [UIFont systemFontOfSize:13.0f];
     
     
 }

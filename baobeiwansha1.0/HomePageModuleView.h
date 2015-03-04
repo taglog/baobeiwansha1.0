@@ -7,9 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
+@protocol HomePageModuleViewDelegate <NSObject>
 
+-(void)titleViewSelect:(id)sender;
+
+@end
 @interface HomePageModuleView : UIView
 
+@property (nonatomic,retain) UIButton *titleView;
 @property (nonatomic,retain) NSString *title;
 
+@property (nonatomic,weak) id<HomePageModuleViewDelegate> delegate;
 @end

@@ -44,5 +44,6 @@ typedef NS_ENUM(NSUInteger, SlidePagerOption) {
 @protocol SlidePagerViewDelegate <NSObject>
 @required
 - (CGFloat)slidePager:(SlidePagerView *)slidePager valueForOption:(SlidePagerOption)option withDefault:(CGFloat)value;
-
+@optional
+-(void)slidePager:(SlidePagerView *)slidePager didChangeTabToIndex:(NSUInteger)index;
 @end

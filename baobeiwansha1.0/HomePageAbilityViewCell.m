@@ -55,22 +55,23 @@
     [super layoutSubviews];
     self.layer.cornerRadius = 5;
     
-    self.titleLabel.frame = CGRectMake(0, 5,self.aframe.size.width, 20);
-    self.titleLabel.font = [UIFont fontWithName:@"STHeitiSC-Medium" size:16.0f];
+    self.titleLabel.frame = CGRectMake(0, 3,self.aframe.size.width, 20);
+    self.titleLabel.font = [UIFont fontWithName:@"STHeitiSC-Medium" size:17.0f];
     self.titleLabel.text = self.title;
     self.titleLabel.textColor = [UIColor whiteColor];
     self.titleLabel.textAlignment = NSTextAlignmentCenter;
     
     
-    self.descriptionView.frame = CGRectMake(5, 30,self.aframe.size.width - 10, 55);
+    self.descriptionView.frame = CGRectMake(3, 25,self.aframe.size.width - 6, 52);
     self.descriptionView.backgroundColor = [UIColor whiteColor];
     self.descriptionView.layer.cornerRadius = 3;
     
-    self.descriptionLabel.frame = CGRectMake(12, 3, 70, 50);
+    self.descriptionLabel.frame = CGRectMake(0, 0, self.aframe.size.width - 10, 52);
     self.descriptionLabel.font = [UIFont systemFontOfSize:14.0f];
     self.descriptionLabel.numberOfLines = 2;
     self.descriptionLabel.text = self.descriptionString;
     self.descriptionLabel.textColor = [UIColor colorWithRed:103.0/255.0f green:103.0/255.0f blue:103.0/255.0f alpha:1.0f];
+    self.descriptionLabel.textAlignment = NSTextAlignmentCenter;
     
 }
 @end

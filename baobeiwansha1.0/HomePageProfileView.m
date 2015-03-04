@@ -111,7 +111,7 @@
     self.babyAge.textColor = [UIColor whiteColor];
     self.babyAge.font = [UIFont systemFontOfSize:15.0f];
     
-    self.babyCondition.frame = CGRectMake(15, 140, self.aframe.size.width - 40, 90)
+    self.babyCondition.frame = CGRectMake(15, 140, self.aframe.size.width - 30, 90)
     ;
     self.babyCondition.backgroundColor = [UIColor whiteColor];
     self.babyCondition.layer.cornerRadius = 8;

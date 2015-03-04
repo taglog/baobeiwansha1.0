@@ -19,17 +19,26 @@
 -(void)viewDidLoad{
     [super viewDidLoad];
     
-    self.view.backgroundColor = [UIColor colorWithRed:242.0/255.0f green:242.0/255.0f blue:242.0/255.0f alpha:1.0f];
-    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:255.0/255.0f green:78.0/255.0f blue:162.0/255.0f alpha:1.0f];
-    self.title = @"tag页";
-    NSDictionary * dict=[NSDictionary dictionaryWithObject:[UIColor whiteColor] forKey:NSForegroundColorAttributeName];
-    self.navigationController.navigationBar.titleTextAttributes = dict;
+    [self defaultSettings];
     [self initViews];
+    
 }
+
+-(void)defaultSettings{
+    
+    self.view.backgroundColor = [UIColor colorWithRed:242.0/255.0f green:242.0/255.0f blue:242.0/255.0f alpha:1.0f];
+    self.navigationController.navigationBar.barTintColor = [UIColor whiteColor];
+    NSDictionary * dict=[NSDictionary dictionaryWithObject:[UIColor colorWithRed:255.0/255.0f green:78.0/255.0f blue:162.0/255.0f alpha:1.0f] forKey:NSForegroundColorAttributeName];
+    self.navigationController.navigationBar.titleTextAttributes = dict;
+    self.title = @"tag页";
+}
+
+
+
 
 -(void)initViews{
     
-        TagPageCollectionView *tagPageCollectionView = [[TagPageCollectionView alloc]initWithFrame:CGRectMake(0, 64, self.view.frame.size.width, (self.view.frame.size.height - 64)/2)];
+    TagPageCollectionView *tagPageCollectionView = [[TagPageCollectionView alloc]initWithFrame:CGRectMake(0, 64, self.view.frame.size.width, (self.view.frame.size.height - 64)/2)];
     tagPageCollectionView.headerLabel.text = @"潜能";
     
     [self.view addSubview:tagPageCollectionView];
