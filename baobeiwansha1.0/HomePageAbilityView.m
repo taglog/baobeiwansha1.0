@@ -41,6 +41,7 @@
         [self.ability addObject:@{@"tag_name":[dict valueForKey:@"capability_title_3"],@"tag_description":[dict valueForKey:@"capability_content_3"]}];
         
     }
+
     [self.abilityCollectionView reloadData];
 
 }

@@ -103,7 +103,6 @@
 
 -(void)getInfoFromServer{
     
-    
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
     
@@ -112,18 +111,19 @@
     NSString *postRouter = @"index/home";
     NSString *postRequestUrl = [self.appDelegate.rootURL stringByAppendingString:postRouter];
     NSString *urlString = [postRequestUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    
+    NSLog(@"%@",urlString);
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     manager.requestSerializer.timeoutInterval = 20;
     [manager POST:urlString parameters:requestParam success:^(AFHTTPRequestOperation *operation,id responseObject) {
-        
         NSLog(@"%@",responseObject);
-        self.responseDict = [NSDictionary dictionaryWithDictionary:[responseObject valueForKey:@"data"]];
+        if(responseObject != nil){
+            self.responseDict = [NSDictionary dictionaryWithDictionary:[responseObject valueForKey:@"data"]];
 
-        [self.homePageAbilityView setDict:self.responseDict];
-        [self.userInfoDict setObject:[self.responseDict valueForKey:@"days_message"] forKey:@"days_message"];
+            [self.homePageAbilityView setDict:self.responseDict];
+            [self.userInfoDict setObject:[self.responseDict valueForKey:@"days_message"] forKey:@"days_message"];
         [self.homePageProfileView setDict:self.userInfoDict frame:self.view.frame];
-
+            
+        }
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         
     }
