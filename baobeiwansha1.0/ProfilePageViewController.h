@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ProfilePageModuleView.h"
 
-@interface ProfilePageViewController : UIViewController
+@interface ProfilePageViewController : UIViewController <ProfilePageModuleViewDelegate,UITableViewDataSource,UITableViewDelegate>
 
 @end

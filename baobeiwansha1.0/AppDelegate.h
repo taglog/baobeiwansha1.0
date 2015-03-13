@@ -7,11 +7,18 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "UserInfoSettingViewController.h"
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate>
+@interface AppDelegate : UIResponder <UIApplicationDelegate,UserInfoSettingViewDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 
+@property (nonatomic,strong) NSString *rootURL;
+
+@property (nonatomic, retain) NSString *generatedUserID;
+
++(NSString *)dataFilePath;
++(NSString *)birthdayMonthToString:(NSInteger)month;
 
 @end
 

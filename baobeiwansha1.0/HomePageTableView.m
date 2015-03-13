@@ -11,11 +11,13 @@
 
 @implementation HomePageTableView
 -(id)initWithFrame:(CGRect)frame{
+    
     self = [super initWithFrame:frame];
     if(self){
         [self initContentView];
     }
     return self;
+    
 }
 
 -(void)initContentView{
@@ -49,9 +51,15 @@
     
     return cell;
 }
+
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
 
     return  60;
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    [self.delegate pushViewControllerWithSender:[NSNumber numberWithInt:1] moduleView:self];
 }
 
 @end

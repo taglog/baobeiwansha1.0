@@ -7,7 +7,28 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "EGORefreshView.h"
+#import "PostViewController.h"
 
-@interface PostTableViewController : UIViewController
+
+@protocol PostTableViewDelegate
+
+-(void)showHUD:(NSString *)text;
+-(void)dismissHUD;
+
+
+@end
+
+@interface PostTableViewController : UIViewController<UITableViewDelegate,UITableViewDataSource,EGORefreshViewDelegate,PostViewDelegate>
+@property (nonatomic,assign) NSInteger p;
+@property (nonatomic,assign) NSInteger type;
+@property (nonatomic,strong) NSDictionary *requestURL;
+@property (nonatomic,assign) NSInteger ageChoosen;
+@property (nonatomic,assign) BOOL isAgeSet;
+
+@property(nonatomic,retain)id<PostTableViewDelegate> delegate;
+
+-(id)initWithURL:(NSDictionary *)dict type:(NSInteger)index;
+-(void)simulatePullDownRefresh;
 
 @end

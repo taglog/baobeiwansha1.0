@@ -41,10 +41,11 @@
 }
 
 -(void)setDict:(NSDictionary *)dict{
-    if([dict valueForKey:@"tag_name"]){
+
+    if([dict valueForKey:@"tag_name"]!= (id)[NSNull null]){
         self.title = [dict valueForKey:@"tag_name"];
     }
-    if([dict valueForKey:@"tag_description"]){
+    if([dict valueForKey:@"tag_description"]!= (id)[NSNull null]){
         self.descriptionString = [dict valueForKey:@"tag_description"];
     }
     [self setNeedsLayout];

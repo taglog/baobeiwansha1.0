@@ -10,4 +10,5 @@
 
 @interface HomePageTableView : HomePageModuleView <UITableViewDelegate,UITableViewDataSource>
 
+
 @end

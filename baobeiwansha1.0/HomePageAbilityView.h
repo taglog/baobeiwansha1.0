@@ -8,6 +8,9 @@
 
 #import "HomePageModuleView.h"
 
+
 @interface HomePageAbilityView : HomePageModuleView <UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout>
+
+-(void)setDict:(NSDictionary *)dict;
 
 @end

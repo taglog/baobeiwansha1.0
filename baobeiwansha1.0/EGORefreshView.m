@@ -59,7 +59,7 @@
             CALayer *layer = [CALayer layer];
             layer.frame = CGRectMake(25.0f, frame.size.height - 65.0f, 30.0f, 55.0f);
             layer.contentsGravity = kCAGravityResizeAspect;
-            layer.contents = (id)[UIImage imageNamed:@"blueArrow.png"].CGImage;
+            layer.contents = (id)[UIImage imageNamed:@"grayArrow.png"].CGImage;
             
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
             if ([[UIScreen mainScreen] respondsToSelector:@selector(scale)]) {
@@ -94,7 +94,7 @@
         //开始加载的指示
         UIActivityIndicatorView *view = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
         if(_position == EGORefreshHeader){
-            view.frame = CGRectMake(frame.size.width/2.0f - 10.0f, frame.size.height - 38.0f, 20.0f, 20.0f);
+            view.frame = CGRectMake(30.0f, frame.size.height - 38.0f, 20.0f, 20.0f);
         }
         else{
             view.frame = CGRectMake(frame.size.width/2.0f - 10.0f, frame.size.height - 30.0f, 20.0f, 20.0f);
@@ -119,9 +119,8 @@
             NSDate *date = [_delegate egoRefreshTableHeaderDataSourceLastUpdated:self];
             
             NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-            [formatter setAMSymbol:@"AM"];
-            [formatter setPMSymbol:@"PM"];
-            [formatter setDateFormat:@"MM/dd/yyyy hh:mm:a"];
+            
+            [formatter setDateFormat:@"yyyy/MM/dd HH:mm"];
             _lastUpdatedLabel.text = [NSString stringWithFormat:@"上次更新: %@", [formatter stringFromDate:date]];
             [[NSUserDefaults standardUserDefaults] setObject:_lastUpdatedLabel.text forKey:@"EGORefreshTableView_LastRefresh"];
             [[NSUserDefaults standardUserDefaults] synchronize];

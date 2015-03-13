@@ -7,8 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "SlidePagerView.h"
+#import "SlidePagerViewController.h"
+#import "PostTableViewController.h"
+#import "PostViewController.h"
 
-@interface PlayPageViewController : UIViewController<SlidePagerViewDataSource,SlidePagerViewDelegate>
+@interface PlayPageViewController : UIViewController<SlidePagerViewControllerDataSource,SlidePagerViewControllerDelegate,UITableViewDataSource,UITableViewDelegate,PostTableViewDelegate>
 
 @end

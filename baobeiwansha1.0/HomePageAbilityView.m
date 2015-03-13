@@ -12,7 +12,7 @@
 @interface HomePageAbilityView ()
 
 @property (nonatomic,retain) UICollectionView *abilityCollectionView;
-@property (nonatomic,retain) NSArray *ability;
+@property (nonatomic,retain) NSMutableArray *ability;
 
 @end
 @implementation HomePageAbilityView
@@ -23,6 +23,26 @@
         [self initContentView];
     }
     return self;
+}
+
+-(void)setDict:(NSDictionary *)dict{
+    
+    self.ability = [[NSMutableArray alloc]init];
+    
+    if([dict valueForKey:@"capability_title_1"]!= (id)[NSNull null] && [dict valueForKey:@"capability_content_1"]!= (id)[NSNull null]){
+        [self.ability addObject:@{@"tag_name":[dict valueForKey:@"capability_title_1"],@"tag_description":[dict valueForKey:@"capability_content_1"]}];
+
+    }
+    if([dict valueForKey:@"capability_title_2"]!= (id)[NSNull null] && [dict valueForKey:@"capability_content_2"]!= (id)[NSNull null]){
+        [self.ability addObject:@{@"tag_name":[dict valueForKey:@"capability_title_2"],@"tag_description":[dict valueForKey:@"capability_content_2"]}];
+        
+    }
+    if([dict valueForKey:@"capability_title_3"]!= (id)[NSNull null] && [dict valueForKey:@"capability_content_3"]!= (id)[NSNull null]){
+        [self.ability addObject:@{@"tag_name":[dict valueForKey:@"capability_title_3"],@"tag_description":[dict valueForKey:@"capability_content_3"]}];
+        
+    }
+    [self.abilityCollectionView reloadData];
+
 }
 
 -(void)initContentView{
@@ -43,7 +63,6 @@
     [self addSubview:self.abilityCollectionView];
     
 }
-
 
 #pragma mark - collectionView delegate
 
@@ -70,7 +89,6 @@
     static NSString *identify = @"abilitycell";
     
     HomePageAbilityViewCell *abilityCell = [collectionView dequeueReusableCellWithReuseIdentifier:identify forIndexPath:indexPath];
-    self.ability = @[@{@"tag_name":@"守规则",@"tag_description":@"孩子正处于秩序敏感期"},@{@"tag_name":@"性别意识",@"tag_description":@"认知男人和女人不一样"},@{@"tag_name":@"运动能力",@"tag_description":@"应该开始学习跳跃"}];
     
     [abilityCell setDict:[self.ability objectAtIndex:indexPath.row]];
     
@@ -126,7 +144,8 @@
 - (void)collectionView:(UICollectionView *)colView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     // TODO: add a selected mark
-    
+    NSString *tag = [[self.ability objectAtIndex:indexPath.row] valueForKey:@"tag_name"];
+    [self.delegate pushViewControllerWithSender:tag moduleView:self];
 }
 
 - (void)collectionView:(UICollectionView *)colView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath

@@ -7,7 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-
+@protocol HomePageProfileViewDelegate <NSObject>
+-(void)pushProfilePageSettingViewController;
+-(void)pushBabyConditionViewController;
+@end
 @interface HomePageProfileView : UIView
+@property (nonatomic,weak) id<HomePageProfileViewDelegate> delegate;
 -(void)setDict:(NSDictionary *)dict frame:(CGRect)frame;
 @end

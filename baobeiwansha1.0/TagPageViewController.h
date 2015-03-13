@@ -8,7 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface TagPageViewController : UIViewController 
+
+@interface TagPageViewController : UIViewController <UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout>
 
 
 @end

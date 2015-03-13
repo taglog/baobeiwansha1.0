@@ -12,6 +12,6 @@
 #import "HomePageLocationView.h"
 #import "HomePageTableView.h"
 
-@interface HomePageViewController : UIViewController <UIScrollViewDelegate,HomePageModuleViewDelegate>
+@interface HomePageViewController : UIViewController <UIScrollViewDelegate,HomePageModuleViewDelegate,HomePageProfileViewDelegate>
 
 @end

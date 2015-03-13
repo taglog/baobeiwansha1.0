@@ -53,12 +53,14 @@
     
     [self sizeToFit];
     
+    self.backgroundColor = [UIColor colorWithRed:206.0/255.0f green:202.0/255.0f blue:195.0/255.0f alpha:1.0f];
+    
     self.tabIcon.frame = CGRectMake((self.frame.size.width - 24)/2, 5, 24, 24);
     
     self.tabLabel.frame = CGRectMake(0, 5 + self.tabIcon.frame.size.height, self.frame.size.width, 16.0);
     self.tabLabel.text = self.tabTitle;
     self.tabLabel.textAlignment = NSTextAlignmentCenter;
-    self.tabLabel.font = [UIFont systemFontOfSize: 11.0f];
+    self.tabLabel.font = [UIFont systemFontOfSize: 12.0f];
     
 }
 
@@ -71,7 +73,7 @@
 -(void)setTabToHighlight{
     
     self.tabIcon.image = self.highlightIcon;
-    self.tabLabel.textColor = [UIColor redColor];
+    self.tabLabel.textColor = [UIColor colorWithRed:255.0f/255.0f green:119.0f/255.0f blue:119.0/255.0f alpha:1.0f];
     
 }
 @end

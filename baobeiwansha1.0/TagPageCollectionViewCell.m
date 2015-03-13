@@ -52,16 +52,16 @@
 
 -(void)layoutSubviews{
     [super layoutSubviews];
-    
-    self.iconView.frame = CGRectMake(0,10,60,60);
-    self.iconView.backgroundColor = [UIColor colorWithRed:255.0/255.0f green:78.0/255.0f blue:162.0/255.0f alpha:1.0f];
+        
+    self.iconView.frame = CGRectMake((self.aframe.size.width-60)/2.0f,10,60,60);
+    self.iconView.backgroundColor = [UIColor colorWithRed:255.0/255.0f green:101.0/255.0f blue:108.0/255.0f alpha:1.0f];
     self.iconView.layer.cornerRadius = 30;
     self.iconView.layer.masksToBounds = YES;
     
     self.icon.frame = CGRectMake(12, 12, 36, 36);
     self.icon.image = [UIImage imageNamed:@"book2"];
     
-    self.titleLabel.frame = CGRectMake(0, 75, 60, 20);
+    self.titleLabel.frame = CGRectMake(0, 78, self.aframe.size.width, 20);
     self.titleLabel.text = self.tag;
     self.titleLabel.textColor = [UIColor colorWithRed:103.0/255.0f green:103.0/255.0f blue:103.0/255.0f alpha:1.0f];
     self.titleLabel.textAlignment = NSTextAlignmentCenter;

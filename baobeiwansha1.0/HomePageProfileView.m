@@ -9,6 +9,7 @@
 #import "HomePageProfileView.h"
 
 @interface HomePageProfileView ()
+
 @property (nonatomic,retain) UIImageView *backgroundView;
 @property (nonatomic,retain) UIButton *headImageButton;
 @property (nonatomic,retain) UIImageView *genderIcon;
@@ -37,11 +38,16 @@
     
     if(!self.backgroundView){
         self.backgroundView = [[UIImageView alloc]init];
+        self.backgroundView.userInteractionEnabled = YES;
+        UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(pushProfilePageSetting:)];
+        tapGestureRecognizer.numberOfTouchesRequired = 1;
+        [self.backgroundView addGestureRecognizer:tapGestureRecognizer];
         [self addSubview:self.backgroundView];
 
     }
     if(!self.headImageButton){
         self.headImageButton = [[UIButton alloc]init];
+        [self.headImageButton addTarget:self action:@selector(pushProfilePageSetting) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:self.headImageButton];
 
     }
@@ -67,6 +73,9 @@
     }
     if(!self.babyConditionTextView){
         self.babyConditionTextView = [[UITextView alloc]init];
+        UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(pushBabyCondition:)];
+        tapGesture.numberOfTouchesRequired = 1;
+        [self.babyConditionTextView addGestureRecognizer:tapGesture];
         [self.babyCondition addSubview:self.babyConditionTextView];
     }
     
@@ -79,6 +88,18 @@
     
     self.aframe = frame;
     
+    if([dict objectForKey:@"nickName"]){
+        self.babyName.text = [NSString stringWithFormat:@"%@ | ",[dict objectForKey:@"nickName"]];
+    }
+    if([dict objectForKey:@"babyMonthString"]){
+        self.babyAge.text = [dict objectForKey:@"babyMonthString"];
+
+    }
+    if([dict objectForKey:@"days_message"]!= (id)[NSNull null]){
+        self.babyConditionTextView.text = [dict objectForKey:@"days_message"];
+
+    }
+
     [self setNeedsLayout];
 }
 
@@ -98,18 +119,17 @@
     self.headImageButton.layer.borderColor = [UIColor whiteColor].CGColor;
     
     
-    self.babyName.frame = CGRectMake(115, 90, 100, 16);
-    self.babyName.text = @"俞静仪  |";
+    self.babyName.frame = CGRectMake(115, 90, 16 *[self.babyName.text length], 16);
     self.babyName.textColor = [UIColor whiteColor];
     self.babyName.font = [UIFont fontWithName:@"STHeitiSC-Medium" size:16.0f];
     
-    self.genderIcon.frame = CGRectMake(188, 94, 10, 10);
+    self.genderIcon.frame = CGRectMake(self.babyName.frame.size.width + 40, 94, 10, 10);
     self.genderIcon.backgroundColor = [UIColor redColor];
 
-    self.babyAge.frame = CGRectMake(198, 91, 100, 15);
-    self.babyAge.text = @"  2岁6个月";
+    self.babyAge.frame = CGRectMake(self.babyName.frame.size.width + 60, 91, 100, 15);
     self.babyAge.textColor = [UIColor whiteColor];
     self.babyAge.font = [UIFont systemFontOfSize:15.0f];
+    self.babyAge.textAlignment = NSTextAlignmentLeft;
     
     self.babyCondition.frame = CGRectMake(15, 140, self.aframe.size.width - 30, 90)
     ;
@@ -124,11 +144,18 @@
     self.babyConditionTextView.font = [UIFont systemFontOfSize:14.0f];
     self.babyConditionTextView.scrollEnabled = NO;
     self.babyConditionTextView.editable = NO;
-    self.babyConditionTextView.text = @"好奇又好动，孩子太调皮，新买来的漂亮花瓶，他拿榜头敲出声音，西去哦汽车开不动了，他把汽车拆的七零八落，听见外面声音嘈杂，他马上跑出去看热闹。他把汽车拆的啊"
-    ;
+    
     self.babyConditionTextView.textColor = [UIColor colorWithRed:103.0/255.0f green:103.0/255.0f blue:103.0/255.0f alpha:1.0f];
     
     
 }
-
+-(void)pushProfilePageSetting{
+    [self.delegate pushProfilePageSettingViewController];
+}
+-(void)pushBabyCondition:(UITapGestureRecognizer *)sender{
+    [self.delegate pushBabyConditionViewController];
+}
+-(void)pushProfilePageSetting:(UITapGestureRecognizer *)sender{
+    [self.delegate pushProfilePageSettingViewController];
+}
 @end

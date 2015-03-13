@@ -9,5 +9,8 @@
 #import <UIKit/UIKit.h>
 
 @interface PostTableViewCell : UITableViewCell
--(void)setDict:(NSDictionary *)dict frame:(CGRect)frame;
+
+-(void)setDataWithDict:(NSDictionary *)dict frame:(CGRect)frame;
+-(void)updateCollectionCount:(NSInteger)collectionNumber;
+
 @end

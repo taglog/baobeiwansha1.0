@@ -126,6 +126,8 @@
 - (void)collectionView:(UICollectionView *)colView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     // TODO: add a selected mark
+    NSString *tag = [[self.location objectAtIndex:indexPath.row] valueForKey:@"tag_name"];
+    [self.delegate pushViewControllerWithSender:tag moduleView:self];
     
 }
 
