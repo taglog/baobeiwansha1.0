@@ -47,7 +47,7 @@
 -(void)initViews{
     
     if(!self.tableView){
-        self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width,365)];
+        self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width,368)];
         self.tableView.separatorInset = UIEdgeInsetsZero;
         self.tableView.scrollEnabled = NO;
         self.tableView.delegate = self;
@@ -125,10 +125,33 @@
                     break;
             }
         }
+
         cell.textLabel.font = [UIFont systemFontOfSize:14.0f];
         cell.textLabel.textColor = [UIColor colorWithRed:53.0f/255.0f green:53.0f/255.0f blue:53.0f/255.0f alpha:1.0f];
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        
+        //module的上下边界
+        CALayer *titleViewTopBorder = [CALayer layer];
+        titleViewTopBorder.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, 0.5f);
+        titleViewTopBorder.backgroundColor = [UIColor colorWithWhite:0.8f
+                                                               alpha:1.0f].CGColor;
+        
+        CALayer *titleViewBottomBorder = [CALayer layer];
+        titleViewBottomBorder.frame = CGRectMake(0.0f, 43.5f, self.view.frame.size.width, 0.5f);
+        titleViewBottomBorder.backgroundColor = [UIColor colorWithWhite:0.8f
+                                                                  alpha:1.0f].CGColor;
+        if(indexPath.row == 0){
+            [cell.layer addSublayer:titleViewTopBorder];
+            
+        }
+        if(indexPath.row == 4){
+            [cell.layer addSublayer:titleViewBottomBorder];
+        }
+        if(indexPath.section == 0 && indexPath.row == 0){
+            [cell.layer addSublayer:titleViewBottomBorder];
+        }
     }
+    
     return cell;
 }
 
@@ -194,6 +217,7 @@
     return 20;
     
 }
+
 -(void)pushNotificationON:(UISwitch *)sender{
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{

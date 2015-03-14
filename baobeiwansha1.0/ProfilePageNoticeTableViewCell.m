@@ -44,7 +44,7 @@
 
 -(void)setDict:(NSDictionary *)dict frame:(CGRect)frame;
 {
-    
+    NSLog(@"%@",dict);
     self.titleLabel.text = @"心理学家经过长期认为，儿童时期是培养健康心";
     self.timeLabel.text = @"2015-10-10";
     self.aframe = frame;

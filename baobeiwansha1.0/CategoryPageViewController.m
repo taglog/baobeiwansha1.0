@@ -6,14 +6,14 @@
 //  Copyright (c) 2015年 刘昕. All rights reserved.
 //
 
-#import "PlayPageViewController.h"
+#import "CategoryPageViewController.h"
 #import "TabView.h"
 #import "JGProgressHUD.h"
 #import "JGProgressHUDSuccessIndicatorView.h"
 #import "AFNetworking.h"
 #import "AppDelegate.h"
 
-@interface PlayPageViewController ()
+@interface CategoryPageViewController ()
 
 @property (nonatomic,retain) TabView *tabView0;
 @property (nonatomic,retain) TabView *tabView1;
@@ -55,7 +55,7 @@
 @property (nonatomic,retain)AppDelegate *appDelegate;
 
 @end
-@implementation PlayPageViewController
+@implementation CategoryPageViewController
 
 -(id)init{
     

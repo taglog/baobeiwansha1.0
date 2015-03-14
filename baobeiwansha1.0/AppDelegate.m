@@ -12,7 +12,7 @@
 #import "PanPopNavigationController.h"
 
 #import "HomePageViewController.h"
-#import "PlayPageViewController.h"
+#import "CategoryPageViewController.h"
 #import "ProfilePageViewController.h"
 
 @interface AppDelegate ()
@@ -100,7 +100,7 @@
 }
 -(void)globalSettings{
     
-    self.rootURL = @"http://blog.yhb360.com/baobaowansha/";
+    self.rootURL = @"http://localhost/baobaowansha/";
 
 }
 -(void)generateUserID{
@@ -165,10 +165,10 @@
     homePageViewController.tabBarItem = mainTabFirst;
     homePageViewController.tabBarItem.title = @"首页";
 
-    PlayPageViewController *playPageViewController = [[PlayPageViewController alloc]init];
-    PanPopNavigationController *playPageNav = [[PanPopNavigationController alloc]initWithRootViewController:playPageViewController];
-    playPageViewController.tabBarItem = mainTabSecond;
-    playPageViewController.tabBarItem.title = @"分类";
+    CategoryPageViewController *categoryPageViewController = [[CategoryPageViewController alloc]init];
+    PanPopNavigationController *playPageNav = [[PanPopNavigationController alloc]initWithRootViewController:categoryPageViewController];
+    categoryPageViewController.tabBarItem = mainTabSecond;
+    categoryPageViewController.tabBarItem.title = @"分类";
     
     ProfilePageViewController *profilePageViewController = [[ProfilePageViewController alloc]init];
     PanPopNavigationController *profilePageNav = [[PanPopNavigationController alloc]initWithRootViewController:profilePageViewController];

@@ -29,7 +29,11 @@
 @end
 
 @implementation HomePageViewController
-
+-(id)init{
+    self = [super init];
+    self.isNavigationHidden = NO;
+    return self;
+}
 -(void)viewWillAppear:(BOOL)animated{
     
     [super viewWillAppear:animated];
@@ -39,7 +43,8 @@
     self.navigationController.navigationBar.barStyle = UIBarStyleBlackTranslucent;
     NSDictionary * dict=[NSDictionary dictionaryWithObject:[UIColor whiteColor] forKey:NSForegroundColorAttributeName];
     self.navigationController.navigationBar.titleTextAttributes = dict;
-
+    
+    
     
 }
 
@@ -304,12 +309,12 @@
 -(void)pushBabyConditionViewController{
     
     if([self.responseDict valueForKey:@"days_detail_post_id"]!= (id)[NSNull null]){
-        [self pushViewController:[[self.responseDict valueForKey:@"days_detail_post_id"]integerValue]];
+        [self pushPostViewController:[[self.responseDict valueForKey:@"days_detail_post_id"]integerValue]];
 
     }
 }
 
--(void)pushViewController:(NSInteger)postID{
+-(void)pushPostViewController:(NSInteger)postID{
     NSLog(@"%ld",(long)postID);
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     

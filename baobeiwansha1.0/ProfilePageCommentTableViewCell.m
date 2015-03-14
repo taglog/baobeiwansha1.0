@@ -7,6 +7,8 @@
 //
 
 #import "ProfilePageCommentTableViewCell.h"
+#import "UIImageView+AFNetworking.h"
+
 @interface ProfilePageCommentTableViewCell ()
 
 @property (nonatomic,retain) UIImageView *image;
@@ -51,18 +53,43 @@
     self.aframe = frame;
     self.dict = dict;
     
-    self.image.image = [UIImage imageNamed:@"boy.jpg"];
-    NSMutableAttributedString * attributedString1 = [[NSMutableAttributedString alloc] initWithString:@"自己穿衣带帽，鼓励宝宝自己动手有益自身发展"];
-    NSMutableParagraphStyle * paragraphStyle1 = [[NSMutableParagraphStyle alloc] init];
-    [paragraphStyle1 setLineSpacing:8];
-    [attributedString1 addAttribute:NSParagraphStyleAttributeName value:paragraphStyle1 range:NSMakeRange(0, [@"自己穿衣带帽，鼓励宝宝自己动手有益自身发展" length])];
-    [self.title setAttributedText:attributedString1];
     
-    NSMutableAttributedString * attributedString2 = [[NSMutableAttributedString alloc] initWithString:@"这无形之中培养了孩子完整的人格，王者的风范，是任何说教所望尘莫及的，也是千金难买的"];
-    NSMutableParagraphStyle * paragraphStyle2 = [[NSMutableParagraphStyle alloc] init];
-    [paragraphStyle2 setLineSpacing:5];
-    [attributedString2 addAttribute:NSParagraphStyleAttributeName value:paragraphStyle1 range:NSMakeRange(0, [@"这无形之中培养了孩子完整的人格，王者的风范，是任何说教所望尘莫及的，也是千金难买的" length])];
-    [self.commentContentLabel setAttributedText:attributedString2];
+    NSString *imagePathOnServer = @"http://blog.yhb360.com/wp-content/uploads/";
+    NSString *imageGetFromServer = [dict valueForKey:@"post_cover"];
+    
+    //没有设置特色图像的话会报错，所以需要检测是否为空
+    if(imageGetFromServer != (id)[NSNull null]){
+        NSString *imageString = [imagePathOnServer stringByAppendingString:imageGetFromServer];
+        NSURL *imageUrl = [NSURL URLWithString:[imageString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+        [self.image setImageWithURL:imageUrl placeholderImage:[UIImage imageNamed:@"loadingbackground.png"]];
+        
+    }else{
+        //没有特色图像的时候，怎么办
+        [self.image setImageWithURL:[NSURL URLWithString:@""] placeholderImage:[UIImage imageNamed:@"loadingbackground.png"]];
+        
+    }
+    
+    NSString *title = [dict valueForKey:@"post_title"];
+    if(title != (id)[NSNull null]){
+        
+        NSMutableAttributedString * attributedString1 = [[NSMutableAttributedString alloc] initWithString:title];
+        NSMutableParagraphStyle * paragraphStyle1 = [[NSMutableParagraphStyle alloc] init];
+        [paragraphStyle1 setLineSpacing:8];
+        [attributedString1 addAttribute:NSParagraphStyleAttributeName value:paragraphStyle1 range:NSMakeRange(0, [title length])];
+        [self.title setAttributedText:attributedString1];
+        
+    }
+    
+    NSString *comment = [dict valueForKey:@"comment_content"];
+    if(comment != (id)[NSNull null]){
+        
+        NSMutableAttributedString * attributedString2 = [[NSMutableAttributedString alloc] initWithString:comment];
+        NSMutableParagraphStyle * paragraphStyle2 = [[NSMutableParagraphStyle alloc] init];
+        [paragraphStyle2 setLineSpacing:5];
+        [attributedString2 addAttribute:NSParagraphStyleAttributeName value:paragraphStyle2 range:NSMakeRange(0, [comment length])];
+        [self.commentContentLabel setAttributedText:attributedString2];
+    }
+    
     [self setNeedsLayout];
     
 }

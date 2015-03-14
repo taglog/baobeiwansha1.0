@@ -7,6 +7,8 @@
 //
 
 #import "ProfilePageCollectionTableViewCell.h"
+#import "UIImageView+AFNetworking.h"
+
 @interface ProfilePageCollectionTableViewCell ()
 
 //postID
@@ -64,13 +66,37 @@
     self.dict = dict;
     self.aframe = frame;
     
-    self.image.image = [UIImage imageNamed:@"boy.jpg"];
-    NSMutableAttributedString * attributedString1 = [[NSMutableAttributedString alloc] initWithString:@"自己穿衣带帽，鼓励宝宝自己动手有益自身发展"];
-    NSMutableParagraphStyle * paragraphStyle1 = [[NSMutableParagraphStyle alloc] init];
-    [paragraphStyle1 setLineSpacing:5];
-    [attributedString1 addAttribute:NSParagraphStyleAttributeName value:paragraphStyle1 range:NSMakeRange(0, [@"自己穿衣带帽，鼓励宝宝自己动手有益自身发展" length])];
-    [self.title setAttributedText:attributedString1];
-    self.introduction.text = @"孩子的潜力和天分要由父母来开发，那么";
+    NSString *imagePathOnServer = @"http://blog.yhb360.com/wp-content/uploads/";
+    NSString *imageGetFromServer = [dict valueForKey:@"post_cover"];
+    
+    //没有设置特色图像的话会报错，所以需要检测是否为空
+    if(imageGetFromServer != (id)[NSNull null]){
+        NSString *imageString = [imagePathOnServer stringByAppendingString:imageGetFromServer];
+        NSURL *imageUrl = [NSURL URLWithString:[imageString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+        [self.image setImageWithURL:imageUrl placeholderImage:[UIImage imageNamed:@"loadingbackground.png"]];
+        
+    }else{
+        //没有特色图像的时候，怎么办
+        [self.image setImageWithURL:[NSURL URLWithString:@""] placeholderImage:[UIImage imageNamed:@"loadingbackground.png"]];
+        
+    }
+    
+    NSString *title = [dict valueForKey:@"post_title"];
+
+    if(title != (id)[NSNull null]){
+
+        NSMutableAttributedString * attributedString1 = [[NSMutableAttributedString alloc] initWithString:title];
+        NSMutableParagraphStyle * paragraphStyle1 = [[NSMutableParagraphStyle alloc] init];
+        [paragraphStyle1 setLineSpacing:5];
+        [attributedString1 addAttribute:NSParagraphStyleAttributeName value:paragraphStyle1 range:NSMakeRange(0, [title length])];
+        [self.title setAttributedText:attributedString1];
+    }
+    
+    
+    NSString *introduction = [dict valueForKey:@"post_excerpt"];
+    if(introduction != (id)[NSNull null]){
+        self.introduction.text = introduction;
+    }
     [self setNeedsLayout];
     
 }

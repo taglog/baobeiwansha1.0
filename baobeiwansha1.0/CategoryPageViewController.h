@@ -11,6 +11,6 @@
 #import "PostTableViewController.h"
 #import "PostViewController.h"
 
-@interface PlayPageViewController : UIViewController<SlidePagerViewControllerDataSource,SlidePagerViewControllerDelegate,UITableViewDataSource,UITableViewDelegate,PostTableViewDelegate>
+@interface CategoryPageViewController : UIViewController<SlidePagerViewControllerDataSource,SlidePagerViewControllerDelegate,UITableViewDataSource,UITableViewDelegate,PostTableViewDelegate>
 
 @end

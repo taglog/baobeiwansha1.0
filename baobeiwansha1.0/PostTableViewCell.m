@@ -38,6 +38,10 @@
 @property (nonatomic,retain) UILabel *tagLabel2;
 @property (nonatomic,retain) UILabel *tagLabel3;
 
+@property (nonatomic,retain) NSString *tag1;
+@property (nonatomic,retain) NSString *tag2;
+@property (nonatomic,retain) NSString *tag3;
+
 @end
 @implementation PostTableViewCell
 
@@ -50,6 +54,8 @@
 }
 
 -(void)initViews{
+    
+    
     if(!self.image){
         self.image = [[UIImageView alloc]init];
         [self.contentView addSubview:self.image];
@@ -120,7 +126,7 @@
         [paragraphStyle setLineSpacing:5];
         [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [titletext length])];
         [self.title setAttributedText: attributedString];
-
+        
     }
     if([dict objectForKey:@"post_excerpt"] != (id)[NSNull null]){
         self.introduction.text = [dict objectForKey:@"post_excerpt"];
@@ -130,32 +136,40 @@
         [paragraphStyle1 setLineSpacing:3];
         [attributedString1 addAttribute:NSParagraphStyleAttributeName value:paragraphStyle1 range:NSMakeRange(0, [self.introduction.text length])];
         [self.introduction setAttributedText:attributedString1];
+        
     }
     if([dict objectForKey:@"collection_count"]){
         self.collectionNumber.text = [NSString stringWithFormat:@"%@",[dict objectForKey:@"collection_count"]];
     }
     
     self.collectionIcon.image = [UIImage imageNamed:@"heart"];
+    
     self.type = 1;
     if(self.type == 1){
         self.typeLabel.text = @"绘本";
         self.typeLabel.backgroundColor = [UIColor colorWithRed:0.0/255.0f green:198.0/255.0f blue:236.0/255.0f alpha:1.0f];
-
+        
     }else if(self.type == 2){
         self.typeLabel.text = @"玩具";
         self.typeLabel.backgroundColor = [UIColor colorWithRed:0.0/255.0f green:198.0/255.0f blue:236.0/255.0f alpha:1.0f];
-
+        
     }else if(self.type == 3){
         self.typeLabel.text = @"游戏";
         self.typeLabel.backgroundColor = [UIColor colorWithRed:0.0/255.0f green:198.0/255.0f blue:236.0/255.0f alpha:1.0f];
-
-
+        
+        
     }
-    
-    self.tagLabel1.text = @"创造力";
-    self.tagLabel2.text = @"发育";
-    self.tagLabel3.text = @"创造力";
+    NSLog(@"%@",dict);
+    NSArray *tagArray = [dict objectForKey:@"tags"];
 
+    if(tagArray != (id)[NSNull null]){
+        NSInteger count = [tagArray count];
+        NSLog(@"%ld",(long)count);
+    }
+    self.tagLabel1.text = @"11";
+    self.tagLabel2.text = @"22";
+    self.tagLabel3.text = @"33";
+    
     [self setNeedsLayout];
     
 }
@@ -204,8 +218,8 @@
     self.introduction.frame = CGRectMake(self.image.frame.size.width + 2*paddingLeft, paddingTop + self.title.frame.size.height, self.aframe.size.width - self.image.frame.size.width - 2*paddingLeft - paddingRight, 15);
     self.introduction.font = [UIFont systemFontOfSize:12.0f];
     self.introduction.textColor = [UIColor colorWithRed:143.0f/255.0f green:143.0f/255.0f blue:143.0f/255.0f alpha:1.0f];
-
-    self.tagLabel1.frame = CGRectMake(paddingLeft, paddingTop + self.image.frame.size.height +paddingBottom + 3, 50, 20);
+    self.tagLabel1.frame = CGRectMake(paddingLeft, paddingTop + self.image.frame.size.height +paddingBottom + 3,50, 20);
+    
     self.tagLabel1.backgroundColor = [UIColor colorWithRed:212.0/255.0f green:202.0/255.0f blue:189.0/255.0f alpha:1.0f];
     self.tagLabel1.textColor = [UIColor whiteColor];
     self.tagLabel1.textAlignment = NSTextAlignmentCenter;
@@ -213,15 +227,19 @@
     self.tagLabel1.font = [UIFont systemFontOfSize:12.0f];
     self.tagLabel1.layer.masksToBounds = YES;
     
-    self.tagLabel2.frame = CGRectMake(paddingLeft + self.tagLabel1.frame.size.width + 10, paddingTop + self.image.frame.size.height  +paddingBottom + 3, 40, 20);
+    self.tagLabel2.frame = CGRectMake(paddingLeft + self.tagLabel1.frame.size.width + 10, paddingTop + self.image.frame.size.height  +paddingBottom + 3, 50, 20);
+    
+    
     self.tagLabel2.backgroundColor = [UIColor colorWithRed:212.0/255.0f green:202.0/255.0f blue:189.0/255.0f alpha:1.0f];
     self.tagLabel2.textColor = [UIColor whiteColor];
     self.tagLabel2.textAlignment = NSTextAlignmentCenter;
     self.tagLabel2.layer.cornerRadius = 2;
     self.tagLabel2.font = [UIFont systemFontOfSize:12.0f];
     self.tagLabel2.layer.masksToBounds = YES;
-    
+
     self.tagLabel3.frame = CGRectMake(paddingLeft + self.tagLabel1.frame.size.width+ self.tagLabel2.frame.size.width + 20, paddingTop + self.image.frame.size.height +paddingBottom + 3, 50, 20);
+    
+    
     self.tagLabel3.backgroundColor = [UIColor colorWithRed:212.0/255.0f green:202.0/255.0f blue:189.0/255.0f alpha:1.0f];
     self.tagLabel3.textColor = [UIColor whiteColor];
     self.tagLabel3.textAlignment = NSTextAlignmentCenter;

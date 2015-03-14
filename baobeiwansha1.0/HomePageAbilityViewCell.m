@@ -11,9 +11,12 @@
 
 @property (nonatomic,retain) UILabel *titleLabel;
 @property (nonatomic,retain) UIView *descriptionView;
-@property (nonatomic,retain) UILabel *descriptionLabel;
+@property (nonatomic,retain) UILabel *descriptionLabelTop;
+@property (nonatomic,retain) UILabel *descriptionLabelBottom;
+
 @property (nonatomic,retain) NSString *title;
-@property (nonatomic,retain) NSString *descriptionString;
+@property (nonatomic,retain) NSString *descriptionStringTop;
+@property (nonatomic,retain) NSString *descriptionStringBottom;
 @property (nonatomic,assign) CGRect aframe;
 @end
 
@@ -30,13 +33,29 @@
 
 -(void)initViews{
     
-    self.titleLabel = [[UILabel alloc]init];
-    self.descriptionView = [[UIView alloc]init];
-    self.descriptionLabel = [[UILabel alloc]init];
+    if(!self.titleLabel){
+        self.titleLabel = [[UILabel alloc]init];
+        [self.contentView addSubview:self.titleLabel];
+
+    }
+    if(!self.descriptionView){
+        self.descriptionView = [[UIView alloc]init];
+        [self.contentView addSubview: self.descriptionView];
+
+    }
     
-    [self.contentView addSubview:self.titleLabel];
-    [self.contentView addSubview: self.descriptionView];
-    [self.descriptionView addSubview:self.descriptionLabel];
+    if(!self.descriptionLabelTop){
+        self.descriptionLabelTop = [[UILabel alloc]init];
+        [self.descriptionView addSubview:self.descriptionLabelTop];
+
+    }
+    
+    if(!self.descriptionLabelBottom){
+        self.descriptionLabelBottom = [[UILabel alloc]init];
+        [self.descriptionView addSubview:self.descriptionLabelBottom];
+
+    }
+
     
 }
 
@@ -45,8 +64,13 @@
     if([dict valueForKey:@"tag_name"]!= (id)[NSNull null]){
         self.title = [dict valueForKey:@"tag_name"];
     }
-    if([dict valueForKey:@"tag_description"]!= (id)[NSNull null]){
-        self.descriptionString = [dict valueForKey:@"tag_description"];
+    NSString *description = [dict valueForKey:@"tag_description"];
+    if(description != (id)[NSNull null]){
+        
+        NSRange range = [description rangeOfString:@"|"];
+        
+        self.descriptionStringTop = [description substringToIndex:range.location];
+        self.descriptionStringBottom = [description substringFromIndex:range.location+1];
     }
     [self setNeedsLayout];
     
@@ -67,12 +91,21 @@
     self.descriptionView.backgroundColor = [UIColor whiteColor];
     self.descriptionView.layer.cornerRadius = 3;
     
-    self.descriptionLabel.frame = CGRectMake(0, 0, self.aframe.size.width - 10, 52);
-    self.descriptionLabel.font = [UIFont systemFontOfSize:14.0f];
-    self.descriptionLabel.numberOfLines = 2;
-    self.descriptionLabel.text = self.descriptionString;
-    self.descriptionLabel.textColor = [UIColor colorWithRed:103.0/255.0f green:103.0/255.0f blue:103.0/255.0f alpha:1.0f];
-    self.descriptionLabel.textAlignment = NSTextAlignmentCenter;
+    self.descriptionLabelTop.frame = CGRectMake(0, 4, self.aframe.size.width - 10, 22);
+    self.descriptionLabelTop.font = [UIFont systemFontOfSize:14.0f];
+    self.descriptionLabelTop.numberOfLines = 2;
+    self.descriptionLabelTop.text = self.descriptionStringTop;
+    self.descriptionLabelTop.textColor = [UIColor colorWithRed:103.0/255.0f green:103.0/255.0f blue:103.0/255.0f alpha:1.0f];
+    self.descriptionLabelTop.textAlignment = NSTextAlignmentCenter;
+    
+    
+    self.descriptionLabelBottom.frame = CGRectMake(0, 25, self.aframe.size.width - 10, 27);
+    self.descriptionLabelBottom.font = [UIFont systemFontOfSize:14.0f];
+    self.descriptionLabelBottom.numberOfLines = 2;
+    self.descriptionLabelBottom.text = self.descriptionStringBottom;
+    self.descriptionLabelBottom.textColor = [UIColor colorWithRed:103.0/255.0f green:103.0/255.0f blue:103.0/255.0f alpha:1.0f];
+    self.descriptionLabelBottom.textAlignment = NSTextAlignmentCenter;
+
     
 }
 @end
