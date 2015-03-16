@@ -350,8 +350,8 @@
 
 -(void)pushBabyConditionViewController{
     
-    if([self.responseDict valueForKey:@"days_detail_post_id"]!= (id)[NSNull null]){
-        [self pushPostViewController:[[self.responseDict valueForKey:@"days_detail_post_id"]integerValue]];
+    if([[self.responseDict objectForKey:@"dailyMessage"] valueForKey:@"days_detail_post_id"]!= (id)[NSNull null]){
+        [self pushPostViewController:[[[self.responseDict objectForKey:@"dailyMessage"] valueForKey:@"days_detail_post_id"]integerValue]];
 
     }
 }
