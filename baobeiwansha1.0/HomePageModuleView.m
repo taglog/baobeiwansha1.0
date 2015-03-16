@@ -81,7 +81,7 @@
     self.titleLabel.frame = CGRectMake(15, 0, self.aframe.size.width, 45);
     self.titleLabel.text = self.title;
     self.titleLabel.textColor = [UIColor colorWithRed:103.0/255.0f green:103.0/255.0f blue:103.0/255.0f alpha:1.0f];
-    self.titleLabel.font = [UIFont fontWithName:@"STHeitiSC-Medium" size:15.0f];
+    self.titleLabel.font = [UIFont fontWithName:@"STHeitiSC-Medium" size:14.0f];
     
     CALayer *bottomBorder = [CALayer layer];
     bottomBorder.frame = CGRectMake(0.0f, 44.5f, self.titleView.frame.size.width, 0.5f);

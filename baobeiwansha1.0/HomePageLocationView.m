@@ -12,7 +12,7 @@
 @interface HomePageLocationView ()
 
 @property (nonatomic,retain) UICollectionView *locationCollectionView;
-@property (nonatomic,retain) NSArray *location;
+@property (nonatomic,retain) NSMutableArray *location;
 
 @end
 @implementation HomePageLocationView
@@ -23,11 +23,19 @@
     }
     return self;
 }
+-(void)setArray:(NSArray *)array{
+    
+    self.location = [[NSMutableArray alloc]initWithArray:array];
+    
+    [self.locationCollectionView reloadData];
+    
+}
+
 -(void)initContentView{
     
     UICollectionViewFlowLayout *flowLayout=[[UICollectionViewFlowLayout alloc] init];
     flowLayout.scrollDirection = UICollectionViewScrollDirectionVertical;
-    flowLayout.minimumInteritemSpacing = (self.frame.size.width - 280)/3;
+    flowLayout.minimumInteritemSpacing = 0;
     
     self.locationCollectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, 45, self.frame.size.width, self.frame.size.height - 45) collectionViewLayout:flowLayout];
     
@@ -68,8 +76,9 @@
     static NSString *identify = @"locationcell";
     
     HomePageLocationViewCell *locationCell = [collectionView dequeueReusableCellWithReuseIdentifier:identify forIndexPath:indexPath];
-    self.location = @[@{@"tag_name":@"爱周末",@"":@""},@{@"tag_name":@"寒假",@"":@""},@{@"tag_name":@"爱吃饭",@"":@""},@{@"tag_name":@"和父母玩",@"":@"",}];
-    [locationCell setDict:[self.location objectAtIndex:indexPath.row]];
+
+    [locationCell setDict:[self.location objectAtIndex:indexPath.row] frame:self.frame];
+    
     switch (indexPath.row) {
         case 0:
             locationCell.iconView.backgroundColor = [UIColor colorWithRed:62.0/255.0f green:255.0/255.0f blue:167.0/255.0f alpha:1.0f];
@@ -98,7 +107,7 @@
 
 -(UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {
-    return UIEdgeInsetsMake(15, 15, 15, 15);
+    return UIEdgeInsetsMake(15, 5, 15, 5);
 }
 
 
@@ -106,7 +115,7 @@
 
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    CGSize size = CGSizeMake(60, 60);
+    CGSize size = CGSizeMake((self.frame.size.width - 30)/4, 60);
     return size;
 }
 

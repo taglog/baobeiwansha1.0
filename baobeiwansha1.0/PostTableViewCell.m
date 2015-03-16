@@ -42,6 +42,7 @@
 @property (nonatomic,retain) NSString *tag2;
 @property (nonatomic,retain) NSString *tag3;
 
+
 @end
 @implementation PostTableViewCell
 
@@ -159,16 +160,20 @@
         
         
     }
-    NSLog(@"%@",dict);
     NSArray *tagArray = [dict objectForKey:@"tags"];
 
     if(tagArray != (id)[NSNull null]){
         NSInteger count = [tagArray count];
-        NSLog(@"%ld",(long)count);
+        if(count > 0){
+            self.tagLabel1.text = [tagArray objectAtIndex:0];
+            NSLog(@"%@",self.tagLabel1.text);
+
+            self.tagLabel2.text = [tagArray objectAtIndex:1];
+            self.tagLabel3.text = [tagArray objectAtIndex:2];
+        }
+        
     }
-    self.tagLabel1.text = @"11";
-    self.tagLabel2.text = @"22";
-    self.tagLabel3.text = @"33";
+    
     
     [self setNeedsLayout];
     
@@ -202,7 +207,8 @@
     self.image.layer.masksToBounds = YES;
     self.image.layer.borderWidth = 1.0f;
     self.image.layer.borderColor = [UIColor colorWithRed:222.0/255.0f green:222.0/255.0f blue:222.0/255.0f alpha:1.0f].CGColor;
-    
+    self.image.contentMode = UIViewContentModeScaleAspectFit;
+
     self.title.frame = CGRectMake(self.image.frame.size.width + 2*paddingLeft, paddingTop - 14, self.aframe.size.width - self.image.frame.size.width - 2*paddingLeft - paddingRight - 35, 45);
     self.title.numberOfLines = 2;
     self.title.font = [UIFont fontWithName:@"STHeitiSC-Medium" size:15.0f];
@@ -218,8 +224,13 @@
     self.introduction.frame = CGRectMake(self.image.frame.size.width + 2*paddingLeft, paddingTop + self.title.frame.size.height, self.aframe.size.width - self.image.frame.size.width - 2*paddingLeft - paddingRight, 15);
     self.introduction.font = [UIFont systemFontOfSize:12.0f];
     self.introduction.textColor = [UIColor colorWithRed:143.0f/255.0f green:143.0f/255.0f blue:143.0f/255.0f alpha:1.0f];
-    self.tagLabel1.frame = CGRectMake(paddingLeft, paddingTop + self.image.frame.size.height +paddingBottom + 3,50, 20);
     
+    self.tagLabel1.frame = CGRectMake(paddingLeft, paddingTop + self.image.frame.size.height +paddingBottom + 3,50, 20);
+
+    if([self.tagLabel1.text length]>0){
+        self.tagLabel1.frame = CGRectMake(paddingLeft, paddingTop + self.image.frame.size.height +paddingBottom + 3,[self.tagLabel1.text length] * 14.0f, 20);
+        
+    }
     self.tagLabel1.backgroundColor = [UIColor colorWithRed:212.0/255.0f green:202.0/255.0f blue:189.0/255.0f alpha:1.0f];
     self.tagLabel1.textColor = [UIColor whiteColor];
     self.tagLabel1.textAlignment = NSTextAlignmentCenter;
@@ -229,16 +240,21 @@
     
     self.tagLabel2.frame = CGRectMake(paddingLeft + self.tagLabel1.frame.size.width + 10, paddingTop + self.image.frame.size.height  +paddingBottom + 3, 50, 20);
     
-    
+    if([self.tagLabel2.text length]>0){
+        self.tagLabel2.frame = CGRectMake(paddingLeft + self.tagLabel1.frame.size.width + 10, paddingTop + self.image.frame.size.height  +paddingBottom + 3, [self.tagLabel2.text length] * 14.0f, 20);
+    }
     self.tagLabel2.backgroundColor = [UIColor colorWithRed:212.0/255.0f green:202.0/255.0f blue:189.0/255.0f alpha:1.0f];
     self.tagLabel2.textColor = [UIColor whiteColor];
     self.tagLabel2.textAlignment = NSTextAlignmentCenter;
     self.tagLabel2.layer.cornerRadius = 2;
     self.tagLabel2.font = [UIFont systemFontOfSize:12.0f];
     self.tagLabel2.layer.masksToBounds = YES;
-
+    
     self.tagLabel3.frame = CGRectMake(paddingLeft + self.tagLabel1.frame.size.width+ self.tagLabel2.frame.size.width + 20, paddingTop + self.image.frame.size.height +paddingBottom + 3, 50, 20);
     
+    if([self.tagLabel3.text length] > 0){
+        self.tagLabel3.frame = CGRectMake(paddingLeft + self.tagLabel1.frame.size.width+ self.tagLabel2.frame.size.width + 20, paddingTop + self.image.frame.size.height +paddingBottom + 3, [self.tagLabel3.text length] * 14.0f, 20);
+    }
     
     self.tagLabel3.backgroundColor = [UIColor colorWithRed:212.0/255.0f green:202.0/255.0f blue:189.0/255.0f alpha:1.0f];
     self.tagLabel3.textColor = [UIColor whiteColor];

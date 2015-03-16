@@ -123,10 +123,10 @@
     self.babyName.textColor = [UIColor whiteColor];
     self.babyName.font = [UIFont fontWithName:@"STHeitiSC-Medium" size:16.0f];
     
-    self.genderIcon.frame = CGRectMake(self.babyName.frame.size.width + 40, 94, 10, 10);
+    self.genderIcon.frame = CGRectMake(self.babyName.frame.size.width + 55, 94, 10, 10);
     self.genderIcon.backgroundColor = [UIColor redColor];
 
-    self.babyAge.frame = CGRectMake(self.babyName.frame.size.width + 60, 91, 100, 15);
+    self.babyAge.frame = CGRectMake(self.babyName.frame.size.width + 70, 91, 100, 15);
     self.babyAge.textColor = [UIColor whiteColor];
     self.babyAge.font = [UIFont systemFontOfSize:15.0f];
     self.babyAge.textAlignment = NSTextAlignmentLeft;

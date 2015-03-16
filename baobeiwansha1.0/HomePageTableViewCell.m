@@ -7,6 +7,8 @@
 //
 
 #import "HomePageTableViewCell.h"
+#import "UIImageView+AFNetworking.h"
+
 @interface HomePageTableViewCell ()
 
 @property (nonatomic,retain) UIImageView *iconView;
@@ -14,6 +16,8 @@
 @property (nonatomic,retain) NSString *title;
 @property (nonatomic,assign) CGRect aframe;
 @property (nonatomic,retain) NSDictionary *dict;
+@property (nonatomic,assign) NSInteger ID;
+
 @end
 
 @implementation HomePageTableViewCell
@@ -43,8 +47,30 @@
     self.aframe = frame;
     self.dict = dict;
     
-    self.titleLabel.text = @"游戏是幼儿最爱的活动~";
-
+    if([dict valueForKey:@"ID"] != (id)[NSNull null]){
+        self.ID = [[dict valueForKey:@"ID"] integerValue];
+    }
+    
+    
+    NSString *imagePathOnServer = @"http://blog.yhb360.com/wp-content/uploads/";
+    NSString *imageGetFromServer = [dict valueForKey:@"post_cover"];
+    
+    //没有设置特色图像的话会报错，所以需要检测是否为空
+    if(imageGetFromServer != (id)[NSNull null] && imageGetFromServer != nil){
+        NSString *imageString = [imagePathOnServer stringByAppendingString:imageGetFromServer];
+        NSURL *imageUrl = [NSURL URLWithString:[imageString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+        [self.iconView setImageWithURL:imageUrl placeholderImage:[UIImage imageNamed:@"loadingbackground.png"]];
+        
+    }else{
+        //没有特色图像的时候，怎么办
+        [self.iconView setImageWithURL:[NSURL URLWithString:@""] placeholderImage:[UIImage imageNamed:@"loadingbackground.png"]];
+        
+    }
+    
+    if([dict valueForKey:@"post_title"] != (id)[NSNull null]){
+        self.titleLabel.text = [dict valueForKey:@"post_title"];
+    }
+    
     [self setNeedsLayout];
     
 }
@@ -53,7 +79,7 @@
     [super layoutSubviews];
     
     self.iconView.frame = CGRectMake(15, 10, 40, 40);
-    self.iconView.image = [UIImage imageNamed:@"boy.jpg"];
+
     self.iconView.layer.cornerRadius = 3;
     self.iconView.layer.masksToBounds = YES;
     

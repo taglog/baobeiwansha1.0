@@ -11,5 +11,5 @@
 @interface HomePageLocationViewCell : UICollectionViewCell
 @property (nonatomic,retain) UIImageView *iconView;
 
--(void)setDict:(NSDictionary *)dict;
+-(void)setDict:(NSDictionary *)dict frame:(CGRect)frame;
 @end

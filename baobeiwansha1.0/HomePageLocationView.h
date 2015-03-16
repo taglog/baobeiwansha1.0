@@ -10,4 +10,6 @@
 
 @interface HomePageLocationView : HomePageModuleView <UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout>
 
+-(void)setArray:(NSArray *)array;
+
 @end

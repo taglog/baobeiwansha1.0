@@ -22,13 +22,23 @@
 @property (nonatomic,assign) int babyMonth;
 @property (nonatomic,retain) HomePageProfileView *homePageProfileView;
 @property (nonatomic,retain) HomePageAbilityView *homePageAbilityView;
+@property (nonatomic,retain) HomePageLocationView *homePageLocationView;
+@property (nonatomic,retain) HomePageTableView *homePageTableView;
 
 @property (nonatomic,retain) NSDictionary *responseDict;
+
+@property (nonatomic,retain) NSDictionary *abilityDict;
+@property (nonatomic,retain) NSArray *locationArray;
+@property (nonatomic,retain) NSArray *postArray;
+
 @property (nonatomic,retain) AppDelegate *appDelegate;
+@property (nonatomic,assign) CGFloat navBarAlpha;
+
 
 @end
 
 @implementation HomePageViewController
+
 -(id)init{
     self = [super init];
     self.isNavigationHidden = NO;
@@ -38,30 +48,53 @@
     
     [super viewWillAppear:animated];
     
+    [self setNavigationBarTransparent];
+    
+}
+
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    if(self.isNavigationHidden == YES){
+        [self setNavigationBarColorWithAlpha:self.navBarAlpha];
+        
+    }
+
+}
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    
+    [self setNavigationBarColorWithAlpha:1.0f];
+    
+    
+    
+}
+
+-(void)setNavigationBarTransparent{
+    
     [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"navigationbar.png"] forBarMetrics:UIBarMetricsDefault];
     self.navigationController.navigationBar.shadowImage = [UIImage new];
     self.navigationController.navigationBar.barStyle = UIBarStyleBlackTranslucent;
     NSDictionary * dict=[NSDictionary dictionaryWithObject:[UIColor whiteColor] forKey:NSForegroundColorAttributeName];
     self.navigationController.navigationBar.titleTextAttributes = dict;
     
-    
+    self.navigationController.navigationBar.alpha = 1.0f;
+
     
 }
 
--(void)viewWillDisappear:(BOOL)animated{
-    [super viewWillDisappear:animated];
+-(void)setNavigationBarColorWithAlpha:(CGFloat)alpha{
     
-    if(self.isNavigationHidden == YES){
-        self.navigationController.navigationBar.alpha = 1;
-    }
     [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
     self.navigationController.navigationBar.barTintColor = [UIColor whiteColor];
     self.navigationController.navigationBar.barStyle = UIBarStyleDefault;
+
     NSDictionary * dict=[NSDictionary dictionaryWithObject:[UIColor colorWithRed:255.0/255.0f green:78.0/255.0f blue:162.0/255.0f alpha:1.0f] forKey:NSForegroundColorAttributeName];
     self.navigationController.navigationBar.titleTextAttributes = dict;
-
+    
+    self.navigationController.navigationBar.alpha = alpha;
     
 }
+
 -(void)viewDidLoad{
     [super viewDidLoad];
     
@@ -69,6 +102,10 @@
     self.automaticallyAdjustsScrollViewInsets = NO;
     
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    
+    self.responseDict = [[NSDictionary alloc]init];
+    self.locationArray = [[NSArray alloc]init];
+    self.postArray = [[NSArray alloc]init];
     
     [self initUserInfo];
     [self getInfoFromServer];
@@ -116,17 +153,26 @@
     NSString *postRouter = @"index/home";
     NSString *postRequestUrl = [self.appDelegate.rootURL stringByAppendingString:postRouter];
     NSString *urlString = [postRequestUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    NSLog(@"%@",urlString);
+
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     manager.requestSerializer.timeoutInterval = 20;
     [manager POST:urlString parameters:requestParam success:^(AFHTTPRequestOperation *operation,id responseObject) {
+        
         NSLog(@"%@",responseObject);
+        
         if(responseObject != nil){
-            self.responseDict = [NSDictionary dictionaryWithDictionary:[responseObject valueForKey:@"data"]];
+            
+            self.responseDict = [responseObject valueForKey:@"data"];
+            self.abilityDict = [self.responseDict objectForKey:@"dailyMessage"];
+            self.locationArray = [self.responseDict objectForKey:@"taglist"];
+            self.postArray = [self.responseDict objectForKey:@"postlist"];
+            [self.userInfoDict setObject:[self.abilityDict valueForKey:@"days_message"] forKey:@"days_message"];
+            
+            [self.homePageProfileView setDict:self.userInfoDict frame:self.view.frame];
+            [self.homePageAbilityView setDict:self.abilityDict];
 
-            [self.homePageAbilityView setDict:self.responseDict];
-            [self.userInfoDict setObject:[self.responseDict valueForKey:@"days_message"] forKey:@"days_message"];
-        [self.homePageProfileView setDict:self.userInfoDict frame:self.view.frame];
+            [self.homePageLocationView setArray:self.locationArray];
+            [self.homePageTableView setArray:self.postArray];
             
         }
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
@@ -137,9 +183,6 @@
               NSLog(@"%@",error);
               [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
           }];
-    
-    
-    
     
 }
 -(void)initViews{
@@ -175,7 +218,6 @@
 
 -(void)initViewSection1{
     
-    
     self.homePageAbilityView = [[HomePageAbilityView alloc]initWithFrame:CGRectMake(0, 260, self.view.frame.size.width, 160)];
     
     self.homePageAbilityView.title = @"这些潜能要大发展啦，快抓住时机跟我玩吧~";
@@ -187,28 +229,28 @@
 
 -(void)initViewSection2{
     
-    HomePageLocationView *homePageLocationView = [[HomePageLocationView alloc]initWithFrame:CGRectMake(0, 430, self.view.frame.size.width, 175)];
+    self.homePageLocationView = [[HomePageLocationView alloc]initWithFrame:CGRectMake(0, 430, self.view.frame.size.width, 175)];
     
-    homePageLocationView.tag = 1;
-    homePageLocationView.delegate = self;
+    self.homePageLocationView.tag = 1;
+    self.homePageLocationView.delegate = self;
     
-    [self.homeScrollView addSubview:homePageLocationView];
+    [self.homeScrollView addSubview:self.homePageLocationView];
     
-    homePageLocationView.title = @"不同的场合，我要有不一样的玩法~";
+    self.homePageLocationView.title = @"不同的场合，我要有不一样的玩法~";
     
 }
 
 -(void)initViewSection3{
     
-    HomePageTableView *homePageTableView = [[HomePageTableView alloc]initWithFrame:CGRectMake(0, 615, self.view.frame.size.width, 225)];
+    self.homePageTableView = [[HomePageTableView alloc]initWithFrame:CGRectMake(0, 615, self.view.frame.size.width, 225)];
     
-    homePageTableView.tag = 2;
-    homePageTableView.delegate = self;
+    self.homePageTableView.tag = 2;
+    self.homePageTableView.delegate = self;
     
-    [self.homeScrollView addSubview:homePageTableView];
+    [self.homeScrollView addSubview:self.homePageTableView];
     
     
-    homePageTableView.title = @"寓教于乐可没那么简单，父母也来学习吧~";
+    self.homePageTableView.title = @"寓教于乐可没那么简单，父母也来学习吧~";
     
 }
 
@@ -239,27 +281,31 @@
 #pragma mark - scrollViewDelegate
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
     
+    CGFloat startPointY = 20;
+    CGFloat endPointY = 200;
+    
     if(scrollView.contentOffset.y < 0){
         CGPoint point = CGPointMake(0, 0);
         scrollView.contentOffset = point;
+        
     }
     
-    if(scrollView.contentOffset.y > 20){
-        [UIView animateWithDuration:0.3 animations:^{
-            self.navigationController.navigationBar.alpha = 0;
-
-        } completion:^(BOOL finished) {
-            self.isNavigationHidden = YES;
-        }];
+    if(scrollView.contentOffset.y >= startPointY && scrollView.contentOffset.y < endPointY){
         
-    }else{
+        self.navBarAlpha = scrollView.contentOffset.y/(endPointY - startPointY);
         
-        [UIView animateWithDuration:0.3 animations:^{
-            self.navigationController.navigationBar.alpha = 1;
+        [self setNavigationBarColorWithAlpha:self.navBarAlpha];
+        
+        self.isNavigationHidden = YES;
+        
+    }else if(scrollView.contentOffset.y >= endPointY){
+        
+        [self setNavigationBarColorWithAlpha:1.0f];
 
-        } completion:^(BOOL finished) {
-            self.isNavigationHidden = NO;
-        }];
+    }else if(scrollView.contentOffset.y < startPointY){
+        
+        [self setNavigationBarTransparent];
+        self.isNavigationHidden = NO;
     }
     
 }

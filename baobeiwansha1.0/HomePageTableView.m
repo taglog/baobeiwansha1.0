@@ -8,7 +8,12 @@
 
 #import "HomePageTableView.h"
 #import "HomePageTableViewCell.h"
+@interface HomePageTableView ()
 
+@property (nonatomic,retain) UITableView *homePageTableView;
+@property (nonatomic,retain) NSMutableArray *tableArray;
+
+@end
 @implementation HomePageTableView
 -(id)initWithFrame:(CGRect)frame{
     
@@ -19,15 +24,21 @@
     return self;
     
 }
-
+-(void)setArray:(NSArray *)array{
+    
+    self.tableArray = [[NSMutableArray alloc]initWithArray:array];
+    
+    [self.homePageTableView reloadData];
+    
+}
 -(void)initContentView{
     
-    UITableView *homePageTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 45,self.frame.size.width, self.frame.size.height - 45)];
-    homePageTableView.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0);
-    homePageTableView.scrollEnabled = NO;
-    homePageTableView.delegate = self;
-    homePageTableView.dataSource = self;
-    [self addSubview: homePageTableView];
+    self.homePageTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 45,self.frame.size.width, self.frame.size.height - 45)];
+    self.homePageTableView.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0);
+    self.homePageTableView.scrollEnabled = NO;
+    self.homePageTableView.delegate = self;
+    self.homePageTableView.dataSource = self;
+    [self addSubview: self.homePageTableView];
 }
 
 #pragma mark - UITableViewDataSource
@@ -47,7 +58,7 @@
     if(cell == nil){
         cell = [[HomePageTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ID];
     }
-    [cell setDict:nil frame:self.frame];
+    [cell setDict:[self.tableArray objectAtIndex:indexPath.row]frame:self.frame];
     
     return cell;
 }
@@ -59,7 +70,7 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    [self.delegate pushViewControllerWithSender:[NSNumber numberWithInt:1] moduleView:self];
+    [self.delegate pushViewControllerWithSender:[[self.tableArray objectAtIndex:indexPath.row] valueForKey:@"ID"] moduleView:self];
 }
 
 @end

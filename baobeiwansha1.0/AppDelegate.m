@@ -100,7 +100,7 @@
 }
 -(void)globalSettings{
     
-    self.rootURL = @"http://localhost/baobaowansha/";
+    self.rootURL = @"http://blog.yhb360.com/baobaowansha/";
 
 }
 -(void)generateUserID{
@@ -193,38 +193,38 @@
     }];
     
 }
-//- (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-//    // 去掉了avos的代码
-//    AVInstallation *currentInstallation = [AVInstallation currentInstallation];
-//    NSLog(@"applicate device token is called with tocken:%@", deviceToken);
-//    [currentInstallation setDeviceTokenFromData:deviceToken];
-//    [currentInstallation saveInBackground];
-//    
-//    // send token to our own user db
-//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-//        //TODO, update db
-//        //NSString *tokenStr = [[NSString alloc] initWithData:deviceToken  encoding:NSUTF8StringEncoding];
-//        NSString *token = [[deviceToken description] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]];
-//        NSString *deviceTokenStr = [token stringByReplacingOccurrencesOfString:@" " withString:@""];
-//        AFHTTPRequestOperationManager *afnmanager = [AFHTTPRequestOperationManager manager];
-//        afnmanager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
-//        NSString * settingURL = [self.rootURL stringByAppendingString:@"/serverside/app_token.php?action=token"];
-//        NSMutableDictionary * dict = [[NSMutableDictionary alloc] init];
-//        [dict setObject:self.generatedUserID forKey:@"userIdStr"];
-//        [dict setObject:deviceTokenStr forKey:@"userIOSToken"];
-//        NSLog(@"sending token: %@", dict);
-//        [afnmanager POST:settingURL parameters:dict success:^(AFHTTPRequestOperation *operation, id responseObject) {
-//            NSLog(@"Token update Success: %@", responseObject);
-//        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-//            NSLog(@"Token update Error: %@", error);
-//        }];
-//    });
-//    
-//    
-//}
-//- (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
-//    NSLog(@"register notification failed with code: %@", error);
-//}
+- (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    // 去掉了avos的代码
+    AVInstallation *currentInstallation = [AVInstallation currentInstallation];
+    NSLog(@"applicate device token is called with tocken:%@", deviceToken);
+    [currentInstallation setDeviceTokenFromData:deviceToken];
+    [currentInstallation saveInBackground];
+    
+    // send token to our own user db
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        //TODO, update db
+        //NSString *tokenStr = [[NSString alloc] initWithData:deviceToken  encoding:NSUTF8StringEncoding];
+        NSString *token = [[deviceToken description] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]];
+        NSString *deviceTokenStr = [token stringByReplacingOccurrencesOfString:@" " withString:@""];
+        AFHTTPRequestOperationManager *afnmanager = [AFHTTPRequestOperationManager manager];
+        afnmanager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
+        NSString * settingURL = [self.rootURL stringByAppendingString:@"/serverside/app_token.php?action=token"];
+        NSMutableDictionary * dict = [[NSMutableDictionary alloc] init];
+        [dict setObject:self.generatedUserID forKey:@"userIdStr"];
+        [dict setObject:deviceTokenStr forKey:@"userIOSToken"];
+        NSLog(@"sending token: %@", dict);
+        [afnmanager POST:settingURL parameters:dict success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            NSLog(@"Token update Success: %@", responseObject);
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            NSLog(@"Token update Error: %@", error);
+        }];
+    });
+    
+    
+}
+- (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
+    NSLog(@"register notification failed with code: %@", error);
+}
 
 #pragma mark - 公有函数
 

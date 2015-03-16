@@ -10,5 +10,6 @@
 
 @interface HomePageTableView : HomePageModuleView <UITableViewDelegate,UITableViewDataSource>
 
+-(void)setArray:(NSArray *)array;
 
 @end
