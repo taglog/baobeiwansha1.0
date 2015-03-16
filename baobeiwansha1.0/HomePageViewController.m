@@ -314,7 +314,6 @@
 -(void)pushViewControllerWithSender:(id)sender moduleView:(UIView *)view{
     
     TagPostTableViewController *tagPostViewController;
-    PostViewController *post;
     switch (view.tag) {
         case 0:
             tagPostViewController = [[TagPostTableViewController alloc]initWithURL:@{@"requestRouter":@"post/tag"} tag:sender];
@@ -332,10 +331,7 @@
             
             break;
         case 2:
-            post = [[PostViewController alloc]init];
-            post.hidesBottomBarWhenPushed = YES;
-
-            [self.navigationController pushViewController:post animated:YES];
+            [self pushPostViewController:[sender integerValue]];
             
             break;
         default:
@@ -361,7 +357,7 @@
 }
 
 -(void)pushPostViewController:(NSInteger)postID{
-    NSLog(@"%ld",(long)postID);
+
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
     
@@ -407,4 +403,5 @@
     [self.navigationController pushViewController:post animated:YES];
 
 }
+
 @end
