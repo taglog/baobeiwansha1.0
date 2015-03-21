@@ -27,7 +27,8 @@
 //收藏人数
 @property (nonatomic,retain) UILabel *collectionNumber;
 
-@property (nonatomic,retain) UIImageView *collectionIcon;
+//@property (nonatomic,retain) UIImageView *collectionIcon;
+@property (nonatomic,retain) UIButton *collectionButton;
 
 //传入的frame
 @property (nonatomic,assign) CGRect aframe;
@@ -89,9 +90,13 @@
         self.collectionNumber = [[UILabel alloc]init];
         [self.contentView addSubview:self.collectionNumber];
     }
-    if(!self.collectionIcon){
-        self.collectionIcon = [[UIImageView alloc]init];
-        [self.contentView addSubview:self.collectionIcon];
+
+    if(!self.collectionButton){
+        //self.collectionButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
+        self.collectionButton = [[UIButton alloc] init];
+        [self.collectionButton setImage:[UIImage imageNamed:@"heart"] forState:UIControlStateNormal];
+        [self.contentView addSubview:self.collectionButton];
+                                 
     }
     
 }
@@ -143,7 +148,7 @@
         self.collectionNumber.text = [NSString stringWithFormat:@"%@",[dict objectForKey:@"collection_count"]];
     }
     
-    self.collectionIcon.image = [UIImage imageNamed:@"heart"];
+    //self.collectionIcon.image = [UIImage imageNamed:@"heart"];
     
     self.type = 1;
     if(self.type == 1){
@@ -190,29 +195,37 @@
     
     [super layoutSubviews];
     
-    CALayer *bottomBorder = [CALayer layer];
     
-    bottomBorder.frame = CGRectMake(0.0f, 139.5f, self.aframe.size.width, 0.5f);
+    CALayer *bottomBorder = [CALayer layer];
+
+    bottomBorder.frame = CGRectMake(0.0f, 119.5f, self.aframe.size.width, 0.5f);
     bottomBorder.backgroundColor = [UIColor colorWithWhite:0.8f
                                                      alpha:1.0f].CGColor;
     [self.contentView.layer addSublayer:bottomBorder];
     
     CGFloat paddingRight = 15.0f;
     CGFloat paddingLeft = 15.0f;
-    CGFloat paddingTop = 25.0f;
-    CGFloat paddingBottom = 15.0f;
+    CGFloat paddingTop = (NARROW_SCREEN)? 15.0f : 20.0f;
+    //CGFloat paddingBottom = 20.0f;
     
-    self.image.frame = CGRectMake(paddingLeft, paddingTop, 60, 60);
+    CGFloat imageSize = (NARROW_SCREEN)? 60.0f : 80.0f;
+    //CGFloat maxCellHeight = imageSize + paddingTop + paddingBottom;
+    
+    self.image.frame = CGRectMake(paddingLeft, paddingTop, imageSize, imageSize);
     self.image.layer.cornerRadius = 3;
     self.image.layer.masksToBounds = YES;
     self.image.layer.borderWidth = 1.0f;
     self.image.layer.borderColor = [UIColor colorWithRed:222.0/255.0f green:222.0/255.0f blue:222.0/255.0f alpha:1.0f].CGColor;
     self.image.contentMode = UIViewContentModeScaleAspectFit;
 
-    self.title.frame = CGRectMake(self.image.frame.size.width + 2*paddingLeft, paddingTop - 14, self.aframe.size.width - self.image.frame.size.width - 2*paddingLeft - paddingRight - 35, 45);
-    self.title.numberOfLines = 2;
+    
+    self.title.frame = CGRectMake(self.image.frame.size.width + 2*paddingLeft, paddingTop, self.aframe.size.width - self.image.frame.size.width - 2*paddingLeft - paddingRight - 35, 999);
+    
+    self.title.numberOfLines = 0;
     self.title.font = [UIFont fontWithName:@"STHeitiSC-Medium" size:15.0f];
     self.title.textColor = [UIColor colorWithRed:80.0f/255.0f green:80.0f/255.0f blue:80.0f/255.0f alpha:1.0f];
+    [self.title sizeToFit];
+    
     
     self.typeLabel.frame = CGRectMake(self.aframe.size.width - 45,paddingTop, 30, 16.0f);
     self.typeLabel.textColor = [UIColor whiteColor];
@@ -221,40 +234,127 @@
     self.typeLabel.font = [UIFont systemFontOfSize:12.0f];
     self.typeLabel.layer.masksToBounds = YES;
     
-    self.introduction.frame = CGRectMake(self.image.frame.size.width + 2*paddingLeft, paddingTop + self.title.frame.size.height, self.aframe.size.width - self.image.frame.size.width - 2*paddingLeft - paddingRight, 15);
+    int numberOfLinesOfIntro = 2;
+    float introHeight = numberOfLinesOfIntro * 16;
+    if (self.title.frame.size.height > 15) {
+        numberOfLinesOfIntro = 1;
+        introHeight = 12;
+    }
+    NSLog(@"numeber of line of introduction is %d", numberOfLinesOfIntro);
+    self.introduction.frame = CGRectMake(self.image.frame.size.width + 2*paddingLeft, paddingTop + self.title.frame.size.height + 10, self.aframe.size.width - self.image.frame.size.width - 2*paddingLeft - paddingRight, introHeight);
+    
+    self.introduction.numberOfLines = numberOfLinesOfIntro;
     self.introduction.font = [UIFont systemFontOfSize:12.0f];
     self.introduction.textColor = [UIColor colorWithRed:143.0f/255.0f green:143.0f/255.0f blue:143.0f/255.0f alpha:1.0f];
+    //[self.introduction sizeToFit];
     
-    self.tagLabel1.frame = CGRectMake(paddingLeft, paddingTop + self.image.frame.size.height +paddingBottom + 3,50, 20);
-
-    if([self.tagLabel1.text length]>0){
-        self.tagLabel1.frame = CGRectMake(paddingLeft, paddingTop + self.image.frame.size.height +paddingBottom + 3,[self.tagLabel1.text length] * 14.0f, 20);
+    
+    //此处区分宽屏和窄屏进行展示，对于宽屏 tag直接展示在图片右侧，对于窄屏，需要另起一行进行展示
+    
+    if (NARROW_SCREEN) {
         
+        self.tagLabel1.frame = CGRectMake(
+                                          paddingLeft,
+                                          paddingTop + self.image.frame.size.height + 10 ,
+                                          50, 20);
+        
+        if([self.tagLabel1.text length]>0){
+            self.tagLabel1.frame = CGRectMake(
+                                              paddingLeft,
+                                              paddingTop + self.image.frame.size.height + 10 ,
+                                              [self.tagLabel1.text length] * 14.0f,
+                                              20);
+            
+        }
+        
+        self.tagLabel2.frame = CGRectMake(
+                                          paddingLeft + self.tagLabel1.frame.size.width + 5,
+                                          paddingTop + self.image.frame.size.height + 10 ,
+                                          50, 20);
+        
+        if([self.tagLabel2.text length]>0){
+            self.tagLabel2.frame = CGRectMake(
+                                              paddingLeft + self.tagLabel1.frame.size.width + 5,
+                                              paddingTop + self.image.frame.size.height + 10 ,                                              [self.tagLabel2.text length] * 14.0f,
+                                              20);
+        }
+        
+        
+        self.tagLabel3.frame = CGRectMake(
+                                          paddingLeft + self.tagLabel1.frame.size.width + self.tagLabel2.frame.size.width + 10,
+                                          paddingTop + self.image.frame.size.height + 10 ,
+                                          50, 20);
+        
+        if([self.tagLabel3.text length] > 0){
+            self.tagLabel3.frame = CGRectMake(
+                                              paddingLeft + self.tagLabel1.frame.size.width+ self.tagLabel2.frame.size.width + 10,
+                                              paddingTop + self.image.frame.size.height + 10 ,
+                                              [self.tagLabel3.text length] * 14.0f,
+                                              20
+                                              );
+        }
+
+    } else {
+    
+        self.tagLabel1.frame = CGRectMake(
+                                          self.image.frame.size.width + 2*paddingLeft,
+                                          paddingTop + self.title.frame.size.height +self.introduction.frame.size.height + 20 ,
+                                          50, 20);
+        
+        if([self.tagLabel1.text length]>0){
+            self.tagLabel1.frame = CGRectMake(
+                                              self.image.frame.size.width + 2*paddingLeft,
+                                              paddingTop + self.title.frame.size.height +self.introduction.frame.size.height + 20,
+                                              [self.tagLabel1.text length] * 14.0f,
+                                              20);
+            
+        }
+        
+        self.tagLabel2.frame = CGRectMake(
+                                          self.image.frame.size.width + 2*paddingLeft + self.tagLabel1.frame.size.width + 5,
+                                          paddingTop + self.title.frame.size.height +self.introduction.frame.size.height + 20,
+                                          50, 20);
+        
+        if([self.tagLabel2.text length]>0){
+            self.tagLabel2.frame = CGRectMake(
+                                              self.image.frame.size.width + 2*paddingLeft + self.tagLabel1.frame.size.width + 5,
+                                              paddingTop + self.title.frame.size.height +self.introduction.frame.size.height + 20,
+                                              [self.tagLabel2.text length] * 14.0f,
+                                              20);
+        }
+        
+        
+        self.tagLabel3.frame = CGRectMake(
+                                          self.image.frame.size.width + 2*paddingLeft + self.tagLabel1.frame.size.width + self.tagLabel2.frame.size.width + 10,
+                                          paddingTop + self.title.frame.size.height + self.introduction.frame.size.height + 20,
+                                          50, 20);
+        
+        if([self.tagLabel3.text length] > 0){
+            self.tagLabel3.frame = CGRectMake(
+                                              self.image.frame.size.width + 2*paddingLeft + self.tagLabel1.frame.size.width+ self.tagLabel2.frame.size.width + 10,
+                                              paddingTop + self.title.frame.size.height + self.introduction.frame.size.height + 20,
+                                              [self.tagLabel3.text length] * 14.0f,
+                                              20
+                                              );
+        }
+        
+        
+    
     }
+    
     self.tagLabel1.backgroundColor = [UIColor colorWithRed:212.0/255.0f green:202.0/255.0f blue:189.0/255.0f alpha:1.0f];
     self.tagLabel1.textColor = [UIColor whiteColor];
     self.tagLabel1.textAlignment = NSTextAlignmentCenter;
     self.tagLabel1.layer.cornerRadius = 2;
     self.tagLabel1.font = [UIFont systemFontOfSize:12.0f];
     self.tagLabel1.layer.masksToBounds = YES;
-    
-    self.tagLabel2.frame = CGRectMake(paddingLeft + self.tagLabel1.frame.size.width + 10, paddingTop + self.image.frame.size.height  +paddingBottom + 3, 50, 20);
-    
-    if([self.tagLabel2.text length]>0){
-        self.tagLabel2.frame = CGRectMake(paddingLeft + self.tagLabel1.frame.size.width + 10, paddingTop + self.image.frame.size.height  +paddingBottom + 3, [self.tagLabel2.text length] * 14.0f, 20);
-    }
+
     self.tagLabel2.backgroundColor = [UIColor colorWithRed:212.0/255.0f green:202.0/255.0f blue:189.0/255.0f alpha:1.0f];
     self.tagLabel2.textColor = [UIColor whiteColor];
     self.tagLabel2.textAlignment = NSTextAlignmentCenter;
     self.tagLabel2.layer.cornerRadius = 2;
     self.tagLabel2.font = [UIFont systemFontOfSize:12.0f];
     self.tagLabel2.layer.masksToBounds = YES;
-    
-    self.tagLabel3.frame = CGRectMake(paddingLeft + self.tagLabel1.frame.size.width+ self.tagLabel2.frame.size.width + 20, paddingTop + self.image.frame.size.height +paddingBottom + 3, 50, 20);
-    
-    if([self.tagLabel3.text length] > 0){
-        self.tagLabel3.frame = CGRectMake(paddingLeft + self.tagLabel1.frame.size.width+ self.tagLabel2.frame.size.width + 20, paddingTop + self.image.frame.size.height +paddingBottom + 3, [self.tagLabel3.text length] * 14.0f, 20);
-    }
     
     self.tagLabel3.backgroundColor = [UIColor colorWithRed:212.0/255.0f green:202.0/255.0f blue:189.0/255.0f alpha:1.0f];
     self.tagLabel3.textColor = [UIColor whiteColor];
@@ -264,15 +364,31 @@
     self.tagLabel3.layer.masksToBounds = YES;
     
     
-    self.collectionIcon.frame = CGRectMake(self.aframe.size.width - 40, paddingTop + self.image.frame.size.height + 15, 18, 18);
     
-    self.collectionNumber.frame = CGRectMake(self.aframe.size.width - 122, paddingTop + self.image.frame.size.height + paddingBottom, 80, 20);
+    self.collectionButton.frame = CGRectMake(self.aframe.size.width - 40,
+                                    paddingTop + self.title.frame.size.height + self.introduction.frame.size.height + 16,
+                                    28, 28);
+    [self.collectionButton addTarget:self action:@selector(collectionBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+    //self.collectionIcon.frame = CGRectMake(self.aframe.size.width - 40,
+    //                                       paddingTop + self.title.frame.size.height + self.introduction.frame.size.height + 20,
+    //                                       18, 18);
+    
+    self.collectionNumber.frame = CGRectMake(self.aframe.size.width - 122,
+                                             paddingTop + self.title.frame.size.height + self.introduction.frame.size.height + 20,
+                                             80, 20);
     self.collectionNumber.font = [UIFont fontWithName:@"Thonburi" size:15.0f];
     self.collectionNumber.textColor = [UIColor colorWithRed:153.0f/255.0f green:153.0f/255.0f blue:153.0f/255.0f alpha:1.0f];
     self.collectionNumber.textAlignment = NSTextAlignmentRight;
     
     
 }
+
+
+- (void)collectionBtnClick:(UIButton *)collectionBtn {
+    NSLog(@"collection Btn is clicked");
+}
+
+
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:NO animated:animated];
     // Configure the view for the selected state
