@@ -143,7 +143,7 @@
         self.collectionNumber.text = [NSString stringWithFormat:@"%@",[dict objectForKey:@"collection_count"]];
     }
     
-    self.collectionIcon.image = [UIImage imageNamed:@"heart"];
+    
     if([dict objectForKey:@"post_taxonomy"]){
         self.type = [[dict objectForKey:@"post_taxonomy"]integerValue];
         NSLog(@"%ld",(long)[[dict objectForKey:@"post_taxonomy"]integerValue]);
@@ -268,7 +268,8 @@
     
     
     self.collectionIcon.frame = CGRectMake(self.aframe.size.width - 40, paddingTop + self.image.frame.size.height + 15, 18, 18);
-    
+    self.collectionIcon.image = [UIImage imageNamed:@"star"];
+
     self.collectionNumber.frame = CGRectMake(self.aframe.size.width - 122, paddingTop + self.image.frame.size.height + paddingBottom, 80, 20);
     self.collectionNumber.font = [UIFont fontWithName:@"Thonburi" size:15.0f];
     self.collectionNumber.textColor = [UIColor colorWithRed:153.0f/255.0f green:153.0f/255.0f blue:153.0f/255.0f alpha:1.0f];

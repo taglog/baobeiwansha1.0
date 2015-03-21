@@ -37,7 +37,7 @@
     //第一次启动
     [self initViewControllers];
     
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"firstStart"]) {
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"firstStart"]) {
         
         [self showIntroView];
         
@@ -148,9 +148,9 @@
     self.mainTabBarController.tabBar.translucent = NO;
     self.mainTabBarController.tabBar.tintColor = [UIColor colorWithRed:255.0/255.0f green:78.0/255.0f blue:162.0/255.0f alpha:1.0f];
     
-    UITabBarItem *mainTabFirst = [[UITabBarItem alloc]initWithTitle:@"首页" image:[UIImage imageNamed:@"home"] tag:0];
-    UITabBarItem *mainTabSecond = [[UITabBarItem alloc]initWithTitle:@"分类" image:[UIImage imageNamed:@"home"] tag:1];
-    UITabBarItem *mainTabThird = [[UITabBarItem alloc]initWithTitle:@"我的" image:[UIImage imageNamed:@"home"] tag:2];
+    UITabBarItem *mainTabFirst = [[UITabBarItem alloc]initWithTitle:@"首页" image:[UIImage imageNamed:@"tabbar_home_gray"] tag:0];
+    UITabBarItem *mainTabSecond = [[UITabBarItem alloc]initWithTitle:@"分类" image:[UIImage imageNamed:@"tabbar_category_gray"] tag:1];
+    UITabBarItem *mainTabThird = [[UITabBarItem alloc]initWithTitle:@"我的" image:[UIImage imageNamed:@"tabbar_aboutme_gray"] tag:2];
     
     HomePageViewController *homePageViewController = [[HomePageViewController alloc]init];
     PanPopNavigationController *homePageNav = [[PanPopNavigationController alloc]initWithRootViewController:homePageViewController];

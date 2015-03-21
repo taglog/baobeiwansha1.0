@@ -114,9 +114,9 @@
         self.ageTitleLabel.textAlignment = NSTextAlignmentCenter;
         
         
-        self.ageFilterButtonIcon = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"arrowdown"]];
+        self.ageFilterButtonIcon = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"drop_btn"]];
         self.ageFilterButtonIcon.tag = 1;
-        self.ageFilterButtonIcon.frame = CGRectMake(95, 10, 24, 24);
+        self.ageFilterButtonIcon.frame = CGRectMake(95, 15, 15, 12);
         [self.ageFilterButton addTarget:self action:@selector(showAgeTableView) forControlEvents:UIControlEventTouchUpInside];
         
         [self.ageFilterButton addSubview:self.ageFilterButtonIcon];
@@ -206,11 +206,11 @@
 -(void)initTabViews{
     
     self.tabView0 = [[TabView alloc]initWithFrame:CGRectMake(0, 0,self.view.frame.size.width/3, 50.0)];
-    [self.tabView0 setNormalIcon:[UIImage imageNamed:@"home"] highlightIcon:[UIImage imageNamed:@"home"] tabTitle:@"绘本"];
+    [self.tabView0 setNormalIcon:[UIImage imageNamed:@"titlebar_book_gray"] highlightIcon:[UIImage imageNamed:@"titlebar_book"] tabTitle:@"绘本"];
     self.tabView1 = [[TabView alloc]initWithFrame:CGRectMake(0, 0,self.view.frame.size.width/3, 50.0)];
-    [self.tabView1 setNormalIcon:[UIImage imageNamed:@"home"] highlightIcon:[UIImage imageNamed:@"home"] tabTitle:@"玩具"];
+    [self.tabView1 setNormalIcon:[UIImage imageNamed:@"titlebar_game_gray"] highlightIcon:[UIImage imageNamed:@"titlebar_game"] tabTitle:@"玩具"];
     self.tabView2 = [[TabView alloc]initWithFrame:CGRectMake(0, 0,self.view.frame.size.width/3, 50.0)];
-    [self.tabView2 setNormalIcon:[UIImage imageNamed:@"home"] highlightIcon:[UIImage imageNamed:@"home"] tabTitle:@"游戏"];
+    [self.tabView2 setNormalIcon:[UIImage imageNamed:@"titlebar_toy_gray"] highlightIcon:[UIImage imageNamed:@"titlebar_toy"] tabTitle:@"游戏"];
     
 }
 

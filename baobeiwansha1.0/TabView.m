@@ -53,7 +53,7 @@
     
     [self sizeToFit];
     
-    self.backgroundColor = [UIColor colorWithRed:218.0/255.0f green:212.0/205.0f blue:195.0/255.0f alpha:1.0f];
+    self.backgroundColor = [UIColor colorWithRed:242.0/255.0f green:241.0/205.0f blue:231.0/255.0f alpha:1.0f];
     
     self.tabIcon.frame = CGRectMake((self.frame.size.width - 24)/2, 5, 24, 24);
     
@@ -67,13 +67,13 @@
 -(void)setTabToNormal{
     
     self.tabIcon.image = self.normalIcon;
-    self.tabLabel.textColor = [UIColor colorWithRed:51.0f/255.0f green:51.0f/255.0f blue:51.0/255.0f alpha:1.0];
+    self.tabLabel.textColor = [UIColor colorWithRed:150.0f/255.0f green:151.0f/255.0f blue:151.0/255.0f alpha:1.0];
 }
 
 -(void)setTabToHighlight{
     
     self.tabIcon.image = self.highlightIcon;
-    self.tabLabel.textColor = [UIColor colorWithRed:255.0f/255.0f green:119.0f/255.0f blue:119.0/255.0f alpha:1.0f];
+    self.tabLabel.textColor = [UIColor colorWithRed:51.0f/255.0f green:51.0f/255.0f blue:51.0/255.0f alpha:1.0f];
     
 }
 @end
