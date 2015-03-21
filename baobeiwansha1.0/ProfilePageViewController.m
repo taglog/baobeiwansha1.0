@@ -81,13 +81,15 @@
         NSLog(@"%@",responseObject);
         if(responseObject != nil){
             
+            if([self.responseDict valueForKey:@"data"] != nil){
+
             self.responseDict = [NSMutableDictionary dictionaryWithDictionary:[responseObject valueForKey:@"data"]];
             self.responseCollection = [self.responseDict valueForKey:@"my_collection"];
             self.responseComment = [self.responseDict valueForKey:@"my_comment"];
             
             [self.profilePageCollectionView.contentTableView reloadData];
             [self.profilePageCommentView.contentTableView reloadData];
-            
+            }
         }
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         

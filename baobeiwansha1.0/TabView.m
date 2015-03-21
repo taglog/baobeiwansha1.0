@@ -53,7 +53,7 @@
     
     [self sizeToFit];
     
-    self.backgroundColor = [UIColor colorWithRed:206.0/255.0f green:202.0/255.0f blue:195.0/255.0f alpha:1.0f];
+    self.backgroundColor = [UIColor colorWithRed:218.0/255.0f green:212.0/205.0f blue:195.0/255.0f alpha:1.0f];
     
     self.tabIcon.frame = CGRectMake((self.frame.size.width - 24)/2, 5, 24, 24);
     
