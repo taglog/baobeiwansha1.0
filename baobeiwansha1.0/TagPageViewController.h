@@ -7,9 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "EGORefreshView.h"
 
 
-@interface TagPageViewController : UIViewController <UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout>
+@interface TagPageViewController : UIViewController <UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout,EGORefreshViewDelegate>
 
+@property (nonatomic,strong) NSDictionary *requestURL;
+@property (nonatomic,assign) NSInteger p;
+@property (nonatomic,assign) NSInteger type;
 
 @end

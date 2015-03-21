@@ -9,6 +9,7 @@
 #import "HomePageViewController.h"
 #import "TagPageViewController.h"
 #import "TagPostTableViewController.h"
+#import "HomePageAdviceController.h"
 #import "PostViewController.h"
 #import "UserInfoSettingViewController.h"
 #import "AppDelegate.h"
@@ -44,6 +45,7 @@
     self.isNavigationHidden = NO;
     return self;
 }
+
 -(void)viewWillAppear:(BOOL)animated{
     
     [super viewWillAppear:animated];
@@ -60,12 +62,11 @@
     }
 
 }
+
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     
     [self setNavigationBarColorWithAlpha:1.0f];
-    
-    
     
 }
 
@@ -73,13 +74,12 @@
     
     [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"navigationbar.png"] forBarMetrics:UIBarMetricsDefault];
     self.navigationController.navigationBar.shadowImage = [UIImage new];
-    self.navigationController.navigationBar.barStyle = UIBarStyleBlackTranslucent;
+    self.navigationController.navigationBar.barStyle = UIBarStyleDefault;
     NSDictionary * dict=[NSDictionary dictionaryWithObject:[UIColor whiteColor] forKey:NSForegroundColorAttributeName];
     self.navigationController.navigationBar.titleTextAttributes = dict;
     
     self.navigationController.navigationBar.alpha = 1.0f;
 
-    
 }
 
 -(void)setNavigationBarColorWithAlpha:(CGFloat)alpha{
@@ -270,8 +270,12 @@
             [self.navigationController pushViewController:tagPageViewController animated:YES];
             break;
         case 2:
-            
+        {
+            HomePageAdviceController *adviceController = [[HomePageAdviceController alloc]initWithURL:@{@"requestRouter":@"index/getPosts"}];
+            adviceController.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:adviceController animated:YES];
             break;
+        }
         default:
             break;
     }
@@ -281,7 +285,7 @@
 #pragma mark - scrollViewDelegate
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
     
-    CGFloat startPointY = 20;
+    CGFloat startPointY = 0;
     CGFloat endPointY = 200;
     
     if(scrollView.contentOffset.y < 0){
@@ -290,7 +294,7 @@
         
     }
     
-    if(scrollView.contentOffset.y >= startPointY && scrollView.contentOffset.y < endPointY){
+    if(scrollView.contentOffset.y >startPointY && scrollView.contentOffset.y < endPointY){
         
         self.navBarAlpha = scrollView.contentOffset.y/(endPointY - startPointY);
         
@@ -302,7 +306,7 @@
         
         [self setNavigationBarColorWithAlpha:1.0f];
 
-    }else if(scrollView.contentOffset.y < startPointY){
+    }else if(scrollView.contentOffset.y <= startPointY){
         
         [self setNavigationBarTransparent];
         self.isNavigationHidden = NO;

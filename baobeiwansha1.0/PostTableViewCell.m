@@ -148,30 +148,34 @@
         self.collectionNumber.text = [NSString stringWithFormat:@"%@",[dict objectForKey:@"collection_count"]];
     }
     
+
     //self.collectionIcon.image = [UIImage imageNamed:@"heart"];
-    
-    self.type = 1;
-    if(self.type == 1){
-        self.typeLabel.text = @"绘本";
-        self.typeLabel.backgroundColor = [UIColor colorWithRed:0.0/255.0f green:198.0/255.0f blue:236.0/255.0f alpha:1.0f];
-        
-    }else if(self.type == 2){
-        self.typeLabel.text = @"玩具";
-        self.typeLabel.backgroundColor = [UIColor colorWithRed:0.0/255.0f green:198.0/255.0f blue:236.0/255.0f alpha:1.0f];
-        
-    }else if(self.type == 3){
-        self.typeLabel.text = @"游戏";
-        self.typeLabel.backgroundColor = [UIColor colorWithRed:0.0/255.0f green:198.0/255.0f blue:236.0/255.0f alpha:1.0f];
-        
-        
+    if([dict objectForKey:@"post_taxonomy"]){
+        self.type = [[dict objectForKey:@"post_taxonomy"]integerValue];
+        NSLog(@"%ld",(long)[[dict objectForKey:@"post_taxonomy"]integerValue]);
+        if(self.type == 1){
+            self.typeLabel.text = @"绘本";
+            self.typeLabel.backgroundColor = [UIColor colorWithRed:255.0/255.0f green:0.0/255.0f blue:147.0/255.0f alpha:1.0f];
+            
+        }else if(self.type == 2){
+            self.typeLabel.text = @"玩具";
+            self.typeLabel.backgroundColor = [UIColor colorWithRed:0.0/255.0f green:198.0/255.0f blue:236.0/255.0f alpha:1.0f];
+            
+        }else if(self.type == 3){
+            self.typeLabel.text = @"游戏";
+            self.typeLabel.backgroundColor = [UIColor colorWithRed:145.0/255.0f green:231.0/255.0f blue:77.0/255.0f alpha:1.0f];
+            
+            
+        }
+
     }
+
     NSArray *tagArray = [dict objectForKey:@"tags"];
 
     if(tagArray != (id)[NSNull null]){
         NSInteger count = [tagArray count];
         if(count > 0){
             self.tagLabel1.text = [tagArray objectAtIndex:0];
-            NSLog(@"%@",self.tagLabel1.text);
 
             self.tagLabel2.text = [tagArray objectAtIndex:1];
             self.tagLabel3.text = [tagArray objectAtIndex:2];

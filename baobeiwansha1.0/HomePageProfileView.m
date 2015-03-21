@@ -99,9 +99,17 @@
         self.babyConditionTextView.text = [dict objectForKey:@"days_message"];
 
     }
-
+    
+    if([dict objectForKey:@"days_message"] != (id)[NSNull null]){
+        
+        self.babyConditionTextView.text = [dict objectForKey:@"days_message"];
+    
+        
+        
+    }
     [self setNeedsLayout];
 }
+
 
 -(void)layoutSubviews{
     [super layoutSubviews];
@@ -131,30 +139,46 @@
     self.babyAge.font = [UIFont systemFontOfSize:15.0f];
     self.babyAge.textAlignment = NSTextAlignmentLeft;
     
-    self.babyCondition.frame = CGRectMake(15, 140, self.aframe.size.width - 30, 90)
-    ;
+    
+    NSDictionary *attributes = @{NSFontAttributeName:[UIFont systemFontOfSize:15.0f]};
+    CGRect textRect = [self.babyConditionTextView.text boundingRectWithSize:CGSizeMake(self.aframe.size.width, CGFLOAT_MAX)
+                                                                    options:NSStringDrawingUsesLineFragmentOrigin
+                                                                 attributes:attributes
+                                                                    context:nil];
+    
+    
+    self.babyCondition.frame = CGRectMake(10, 140, self.aframe.size.width - 20, textRect.size.height + 8);
     self.babyCondition.backgroundColor = [UIColor whiteColor];
     self.babyCondition.layer.cornerRadius = 8;
     
-    UIImageView *upArrow = [[UIImageView alloc]initWithFrame:CGRectMake(40, -10, 20, 10)];
+    UIImageView *upArrow = [[UIImageView alloc]initWithFrame:CGRectMake(50, -10, 20, 10)];
     upArrow.image = [UIImage imageNamed:@"upArrow"];
     [self.babyCondition addSubview:upArrow];
     
-    self.babyConditionTextView.frame = CGRectMake(8, 5, self.babyCondition.frame.size.width - 10,self.babyCondition.frame.size.height - 10);
+    
+    self.babyConditionTextView.frame = CGRectMake(0, 0, self.babyCondition.frame.size.width,textRect.size.height);
+    self.babyConditionTextView.contentInset = UIEdgeInsetsMake(8, 8, 8, 8);
+    self.babyConditionTextView.layer.cornerRadius = 8;
     self.babyConditionTextView.font = [UIFont systemFontOfSize:14.0f];
     self.babyConditionTextView.scrollEnabled = NO;
     self.babyConditionTextView.editable = NO;
     
     self.babyConditionTextView.textColor = [UIColor colorWithRed:103.0/255.0f green:103.0/255.0f blue:103.0/255.0f alpha:1.0f];
     
+}
+
+-(void)pushProfilePageSetting{
+    
+    [self.delegate pushProfilePageSettingViewController];
     
 }
--(void)pushProfilePageSetting{
-    [self.delegate pushProfilePageSettingViewController];
-}
+
 -(void)pushBabyCondition:(UITapGestureRecognizer *)sender{
+    
     [self.delegate pushBabyConditionViewController];
+    
 }
+
 -(void)pushProfilePageSetting:(UITapGestureRecognizer *)sender{
     [self.delegate pushProfilePageSettingViewController];
 }

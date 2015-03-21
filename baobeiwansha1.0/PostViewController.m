@@ -66,12 +66,13 @@
 //没有评论的时候显示
 @property(nonatomic,retain)UILabel *noCommentLabel;
 
-@property(nonatomic,retain)AppDelegate *appDelegate;
+@property (nonatomic,retain)AppDelegate *appDelegate;
 
-@property(nonatomic,retain)JGProgressHUD *HUD;
+@property (nonatomic,retain)JGProgressHUD *HUD;
 
 @property (nonatomic,assign)NSInteger p;
 
+@property (nonatomic,assign) CGFloat bottomBarHeight;
 @end
 
 @implementation PostViewController
@@ -108,7 +109,7 @@
     
     [PostViewTimeAnalytics beginLogPageView:self.postID];
     
-    
+    [self initCollectionButton];
     //初始化textView
     [self initTextView];
     
@@ -128,6 +129,9 @@
     
 }
 
+-(void)initCollectionButton{
+    
+}
 
 
 -(void)initLeftBarButton{
@@ -269,40 +273,56 @@
 }
 
 -(void)initBottomBar{
-    
+    self.bottomBarHeight = 50.0f;
     //初始化底部的bar
     if(!self.bottomBar){
         
         
-        self.bottomBar = [[UIView alloc]initWithFrame:CGRectMake(0, self.view.frame.size.height - 40.0f, self.view.frame.size.width, 40.0f)];
-        self.bottomBar.backgroundColor = [UIColor colorWithRed:236.0/255.0f green:236.0/255.0f blue:236.0/255.0f alpha:1.0f];
+        self.bottomBar = [[UIView alloc]initWithFrame:CGRectMake(0, self.view.frame.size.height - self.bottomBarHeight, self.view.frame.size.width, self.bottomBarHeight)];
+        self.bottomBar.backgroundColor = [UIColor whiteColor];
         
         //初始化底部的Button
         if(_commentCreateButton == nil){
             
-            _commentCreateButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width - 40, 40.0f)];
-            [_commentCreateButton setBackgroundImage:[UIImage imageNamed:@"commentButton.png"] forState:UIControlStateNormal];
-            _commentCreateButton.backgroundColor = [UIColor redColor];
+            _commentCreateButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width - 60, self.bottomBarHeight)];
+            _commentCreateButton.backgroundColor = [UIColor whiteColor];
             [_commentCreateButton addTarget:self action:@selector(showCommentCreateViewController) forControlEvents:UIControlEventTouchUpInside];
             _commentCreateButton.adjustsImageWhenHighlighted = NO;
             
-            UILabel *commentCreateLabel = [[UILabel alloc]initWithFrame:CGRectMake(47.0f, 10.0f, 60.0f, 20.0f)];
-            commentCreateLabel.text = @"写跟帖";
-            commentCreateLabel.textColor = [UIColor colorWithRed:80.0f/255.0f green:80.0f/255.0f blue:80.0f/255.0f alpha:1.0f];
-            commentCreateLabel.font = [UIFont systemFontOfSize:14.0f];
+            UILabel *commentCreateLabel = [[UILabel alloc]initWithFrame:CGRectMake(9.0f, 9.0f, self.view.frame.size.width - 60, self.bottomBarHeight-18)];
+            commentCreateLabel.backgroundColor = [UIColor colorWithRed:230.0/255.0f green:225.0/255.0f blue:218.0/255.0f alpha:1.0f];
+            commentCreateLabel.layer.cornerRadius = 5;
+            commentCreateLabel.layer.masksToBounds = YES;
+            
+            UILabel *commentLabel = [[UILabel alloc]initWithFrame:CGRectMake(12.0f, 0.0f, self.view.frame.size.width - 60, self.bottomBarHeight-18)];
+            commentLabel.text = @"输入内容";
+            commentLabel.font = [UIFont systemFontOfSize:14.0f];
+
+            commentLabel.textColor = [UIColor colorWithRed:80.0f/255.0f green:80.0f/255.0f blue:80.0f/255.0f alpha:1.0f];
+
+            [commentCreateLabel addSubview:commentLabel];
             [_commentCreateButton addSubview:commentCreateLabel];
             
             [self.bottomBar addSubview:_commentCreateButton];
+            
+            CALayer *topBorder = [CALayer layer];
+            
+            topBorder.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, 0.5f);
+            topBorder.backgroundColor = [UIColor colorWithWhite:0.8f
+                                                          alpha:1.0f].CGColor;
+            [self.bottomBar.layer addSublayer:topBorder];
         }
         
+        
+
         //初始化collectButton
-        self.collectionButton = [[UIButton alloc]initWithFrame:CGRectMake(self.view.frame.size.width - 40, 8, 24, 24)];
+        self.collectionButton = [[UIButton alloc]initWithFrame:CGRectMake(self.view.frame.size.width - 40, 12, 24, 24)];
         [self.collectionButton setBackgroundImage:[UIImage imageNamed:@"unstar"] forState:UIControlStateNormal];
         [self.collectionButton addTarget:self action:@selector(collectPost:) forControlEvents:UIControlEventTouchUpInside];
         self.collectionButton.tag = 0;
         
         
-        self.collectionButtonSelected = [[UIButton alloc]initWithFrame:CGRectMake(self.view.frame.size.width - 40, 8, 24, 24)];
+        self.collectionButtonSelected = [[UIButton alloc]initWithFrame:CGRectMake(self.view.frame.size.width - 40, 12, 24, 24)];
         [self.collectionButtonSelected setBackgroundImage:[UIImage imageNamed:@"star"] forState:UIControlStateNormal];
         [self.collectionButtonSelected addTarget:self action:@selector(collectPost:) forControlEvents:UIControlEventTouchUpInside];
         self.collectionButtonSelected.tag = 1;
@@ -923,13 +943,13 @@
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
     
     //没滚到底部之前
-    if((scrollView.contentOffset.y +self.view.frame.size.height - 64) <= (_postScrollView.contentSize.height - 50)){
+    if((scrollView.contentOffset.y + self.view.frame.size.height - 64) <= (_postScrollView.contentSize.height - 50)){
         
         if(self.lastContentOffset > (int)scrollView.contentOffset.y){
             
             [self.view bringSubviewToFront:self.bottomBar];
             [UIView animateWithDuration:0.3 animations:^{
-                self.bottomBar.frame = CGRectMake(0,self.view.frame.size.height - 40, self.view.frame.size.width, 40.0f);
+                self.bottomBar.frame = CGRectMake(0,self.view.frame.size.height - self.bottomBarHeight, self.view.frame.size.width, self.bottomBarHeight);
                 //如果更改scrollView的frame，那么就会发生底部的抖动，这该怎么办
                 //            scrollView.frame = CGRectMake(0, 64.0f, self.view.frame.size.width, self.view.frame.size.height - 124.0f);
             }  completion:^(BOOL finished){
@@ -941,7 +961,7 @@
             
             [UIView animateWithDuration:0.3 animations:^{
                 
-                self.bottomBar.frame = CGRectMake(0, self.view.frame.size.height , self.view.frame.size.width, 40.0f);
+                self.bottomBar.frame = CGRectMake(0, self.view.frame.size.height , self.view.frame.size.width, self.bottomBarHeight);
                 
             }  completion:^(BOOL finished){
                 
@@ -952,7 +972,7 @@
     }else{
         //如果到了底部，就始终显示
         [UIView animateWithDuration:0.3 animations:^{
-            self.bottomBar.frame = CGRectMake(0,self.view.frame.size.height - 40, self.view.frame.size.width, 40.0f);
+            self.bottomBar.frame = CGRectMake(0,self.view.frame.size.height - self.bottomBarHeight, self.view.frame.size.width, self.bottomBarHeight);
             //如果更改scrollView的frame，那么就会发生底部的抖动，这该怎么办
             //            scrollView.frame = CGRectMake(0, 64.0f, self.view.frame.size.width, self.view.frame.size.height - 124.0f);
         }  completion:^(BOOL finished){

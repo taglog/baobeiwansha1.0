@@ -25,7 +25,7 @@
         self = [self initWithFrame:CGRectMake(0.0f, 10.0f - _scrollView.bounds.size.height, _scrollView.bounds.size.width, _scrollView.bounds.size.height)];
     }else{
         
-        self = [self initWithFrame:CGRectMake(0, _scrollView.frame.size.height + 10,_scrollView.frame.size.width,40.0f)];
+        self = [self initWithFrame:CGRectMake(0, 0,_scrollView.frame.size.width,40.0f)];
     }
     
     return self;

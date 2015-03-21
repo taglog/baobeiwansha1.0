@@ -7,6 +7,7 @@
 //
 
 #import "TagPageCollectionViewCell.h"
+#import "UIImageView+AFNetworking.h"
 
 @interface TagPageCollectionViewCell ()
 
@@ -42,10 +43,16 @@
 
 -(void)setDict:(NSDictionary *)dict{
     
-    if([dict valueForKey:@"tag_name"]){
-        self.tag = [dict valueForKey:@"tag_name"];
+    if([dict valueForKey:@"name"]){
+        self.tag = [dict valueForKey:@"name"];
     }
     
+    if([dict valueForKey:@"tag_imgurl"]!= (id)[NSNull null]&&[dict valueForKey:@"tag_imgurl"]){
+        NSString *imgUrlString = [NSString stringWithFormat:@"http://61.174.9.214/www/imgs/tagicon/%@.png",[dict valueForKey:@"tag_imgurl"]];
+        NSURL *imgUrl = [NSURL URLWithString:[imgUrlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+        [self.icon setImageWithURL:imgUrl placeholderImage:nil];
+        
+    }
     [self setNeedsLayout];
     
 }
@@ -54,12 +61,10 @@
     [super layoutSubviews];
         
     self.iconView.frame = CGRectMake((self.aframe.size.width-60)/2.0f,10,60,60);
-    self.iconView.backgroundColor = [UIColor colorWithRed:255.0/255.0f green:101.0/255.0f blue:108.0/255.0f alpha:1.0f];
     self.iconView.layer.cornerRadius = 30;
     self.iconView.layer.masksToBounds = YES;
     
     self.icon.frame = CGRectMake(12, 12, 36, 36);
-    self.icon.image = [UIImage imageNamed:@"book2"];
     
     self.titleLabel.frame = CGRectMake(0, 78, self.aframe.size.width, 20);
     self.titleLabel.text = self.tag;
