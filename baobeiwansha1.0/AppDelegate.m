@@ -191,6 +191,7 @@
 }
 -(void)popUserInfoSettingViewController{
     
+    //NSLog(@"to pop");
     [UIView animateWithDuration:2.0 animations:^{
         self.userInfoNav.view.alpha = 0;
     } completion:^(BOOL finished) {
@@ -240,6 +241,7 @@
     NSString *documentsDirectory = [paths objectAtIndex:0];
     return [documentsDirectory stringByAppendingPathComponent:@"userinfo.plist"];
 }
+
 
 //数字月份转换字符串
 +(NSString *)birthdayMonthToString:(NSInteger)month{

@@ -261,22 +261,25 @@
     if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
         NSLog(@"will load persisted data from file");
         self.userInfoDict = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
-
+        // NSLog(@"reading: %@", self.userInfoDict);
         [self setPlaceHolders];
         
     } else {
         NSLog(@"file is not exist and need init self.dict");
         
-        self.userInfoDict = [[NSMutableDictionary alloc]initWithCapacity:5];
-        [self.userInfoDict setObject:@"" forKey:@"babyGender"];
-        [self.userInfoDict setObject:@"" forKey:@"userGender"];
-        [self.userInfoDict setObject:@"设置昵称" forKey:@"nickName"];
-        [self.userInfoDict setObject:[NSDate date] forKey:@"babyBirthday"];
+        self.userInfoDict = [[NSMutableDictionary alloc]initWithCapacity:6];
+        //[self.userInfoDict setObject:@"" forKey:@"babyGender"];
+        //[self.userInfoDict setObject:@"" forKey:@"userGender"];
+        //[self.userInfoDict setObject:@"" forKey:@"nickName"];
+        //[self.userInfoDict setObject:[NSDate date] forKey:@"babyBirthday"];
+        [self.userInfoDict setObject:[NSNumber numberWithBool:NO] forKey:@"isHeadImageSet"];
     }
     
 }
 -(void)setPlaceHolders{
     
+    self.isHeadImageSet = [[self.userInfoDict valueForKey:@"isHeadImageSet"] boolValue];
+    //NSLog(@"isHeadImageSet is %hhd", self.isHeadImageSet);
     self.headImage.image = [UIImage imageWithData:[self.userInfoDict valueForKey:@"headImage"]];
     self.babyNickName.text = [self.userInfoDict valueForKey:@"nickName"];
     [self setUserGenderText:[[self.userInfoDict valueForKey:@"userGender"]integerValue]];
@@ -295,22 +298,25 @@
         [HUD dismissAfterDelay:1.0];
         return;
     }
+
     //没有填nickname
-    if(![self.userInfoDict objectForKey:@"nickName"]&&![[self.userInfoDict objectForKey:@"nickName"] isEqual:@""]){
+    if(![self.userInfoDict objectForKey:@"nickName"] || [[self.userInfoDict objectForKey:@"nickName"] isEqual:@""]){
         JGProgressHUD *HUD = [JGProgressHUD progressHUDWithStyle:JGProgressHUDStyleDark];
         HUD.textLabel.text = @"请填写宝贝昵称";
         [HUD showInView:self.view];
         [HUD dismissAfterDelay:1.0];
         return;
     }
+
     if(![self.userInfoDict objectForKey:@"userGender"]){
+        NSLog(@"no userGender");
         JGProgressHUD *HUD = [JGProgressHUD progressHUDWithStyle:JGProgressHUDStyleDark];
         HUD.textLabel.text = @"请选择您的身份";
         [HUD showInView:self.view];
         [HUD dismissAfterDelay:1.0];
         return;
-        
     }
+
     if(![self.userInfoDict objectForKey:@"babyBirthday"]){
         JGProgressHUD *HUD = [JGProgressHUD progressHUDWithStyle:JGProgressHUDStyleDark];
         HUD.textLabel.text = @"请选择宝贝生日";
@@ -318,7 +324,7 @@
         [HUD dismissAfterDelay:1.0];
         return;
     }
-    
+
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
     JGProgressHUD *HUD = [JGProgressHUD progressHUDWithStyle:JGProgressHUDStyleDark];
@@ -326,7 +332,7 @@
     [HUD showInView:self.view];
     HUD.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.4f];
     
-    NSLog(@"sending: %@", self.userInfoDict);
+    //NSLog(@"sending: %@", self.userInfoDict);
     
     [self.userInfoDict setObject:self.appDelegate.generatedUserID forKey:@"userIdStr"];
     
@@ -338,7 +344,16 @@
     afnmanager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
     
     
-    [afnmanager POST:userInfoURL parameters:self.userInfoDict success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    // 仅上传非图片部分
+    NSMutableDictionary * userTextInfoDict = [[NSMutableDictionary alloc] init];
+    [userTextInfoDict setValue:[self.userInfoDict objectForKey:@"babyGender"] forKey:@"babyGender"];
+    [userTextInfoDict setValue:[self.userInfoDict objectForKey:@"nickName"] forKey:@"nickName"];
+    [userTextInfoDict setValue:[self.userInfoDict objectForKey:@"userGender"] forKey:@"userGender"];
+    [userTextInfoDict setValue:[self.userInfoDict objectForKey:@"babyBirthday"] forKey:@"babyBirthday"];
+    [userTextInfoDict setObject:self.appDelegate.generatedUserID forKey:@"userIdStr"];
+    
+    
+    [afnmanager POST:userInfoURL parameters:userTextInfoDict success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
         NSLog(@"Sync successed: %@", responseObject);
         
@@ -357,7 +372,14 @@
         
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [HUD dismiss];
-            [self.delegate popUserInfoSettingViewController];
+            [self.appDelegate popUserInfoSettingViewController];
+            // 如果是点击过来的，需要弹出
+            @try {
+                [self.navigationController popViewControllerAnimated:YES];
+            } @catch (NSException *exception) {
+            } @finally {
+            }
+
             
         });
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
@@ -415,6 +437,8 @@
     [self setBabyGender:[sender tag]];
     
 }
+
+
 -(void)setBabyGender:(NSInteger)babyGender{
     //选择了男孩
 
@@ -641,6 +665,7 @@
             self.headImage.image = defaultImg;
             [self.userInfoDict setObject:UIImagePNGRepresentation(defaultImg) forKey:@"headImage"];
             self.isHeadImageSet = NO;
+            [self.userInfoDict setObject:[NSNumber numberWithBool:NO] forKey:@"isHeadImageSet"];
         }
 
     }
@@ -839,9 +864,15 @@
 #pragma mark VPImageCropperDelegate
 - (void)imageCropper:(VPImageCropperViewController *)cropperViewController didFinished:(UIImage *)editedImage {
     
-        self.headImage.image = editedImage;
-        self.isHeadImageSet = YES;
-        [self.userInfoDict setObject:UIImagePNGRepresentation(editedImage) forKey:@"headImage"];
+    self.headImage.image = editedImage;
+    self.isHeadImageSet = YES;
+    [self.userInfoDict setObject:[NSNumber numberWithBool:YES] forKey:@"isHeadImageSet"];
+
+    [self.userInfoDict setObject:UIImagePNGRepresentation(editedImage) forKey:@"headImage"];
+    
+    //self.userAvatarImageView.image = editedImage;
+    //[self.delegate updateAvatarImage:editedImage];
+
     
     [cropperViewController dismissViewControllerAnimated:YES completion:^{
         // TO DO
