@@ -12,6 +12,7 @@
 #import "JGProgressHUDSuccessIndicatorView.h"
 #import "AFNetworking.h"
 #import "AppDelegate.h"
+#import "TagPageViewController.h"
 
 @interface CategoryPageViewController ()
 
@@ -89,7 +90,7 @@
 -(void)initViews{
     
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-
+    [self initRightBarButton];
     [self initTitleView];
     [self initUserInfo];
     
@@ -104,6 +105,17 @@
 }
 
 #pragma mark - 初始化views
+-(void)initRightBarButton{
+    
+    UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"search.png"] style:UIBarButtonItemStylePlain target:self action:@selector(pushTagPageViewController)];
+    rightBarButton.tintColor = [UIColor colorWithRed:255.0/255.0f green:119.0/255.0f blue:119.0/255.0f alpha:1.0f];
+    self.navigationItem.rightBarButtonItem = rightBarButton;
+    
+}
+-(void)pushTagPageViewController{
+    TagPageViewController *tagPageViewController = [[TagPageViewController alloc]init];
+    [self.navigationController pushViewController:tagPageViewController animated:YES];
+}
 -(void)initTitleView{
     
     if(self.ageFilterButton == nil){
@@ -112,11 +124,11 @@
         self.ageTitleLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 120, 44)];
         self.ageTitleLabel.text = @"";
         self.ageTitleLabel.textAlignment = NSTextAlignmentCenter;
-        
+        self.ageTitleLabel.textColor = [UIColor colorWithRed:255.0/255.0f green:78.0/255.0f blue:162.0/255.0f alpha:1.0f];
         
         self.ageFilterButtonIcon = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"drop_btn"]];
         self.ageFilterButtonIcon.tag = 1;
-        self.ageFilterButtonIcon.frame = CGRectMake(95, 15, 15, 12);
+        self.ageFilterButtonIcon.frame = CGRectMake(95, 17, 15, 12);
         [self.ageFilterButton addTarget:self action:@selector(showAgeTableView) forControlEvents:UIControlEventTouchUpInside];
         
         [self.ageFilterButton addSubview:self.ageFilterButtonIcon];
@@ -208,9 +220,9 @@
     self.tabView0 = [[TabView alloc]initWithFrame:CGRectMake(0, 0,self.view.frame.size.width/3, 50.0)];
     [self.tabView0 setNormalIcon:[UIImage imageNamed:@"titlebar_book_gray"] highlightIcon:[UIImage imageNamed:@"titlebar_book"] tabTitle:@"绘本"];
     self.tabView1 = [[TabView alloc]initWithFrame:CGRectMake(0, 0,self.view.frame.size.width/3, 50.0)];
-    [self.tabView1 setNormalIcon:[UIImage imageNamed:@"titlebar_game_gray"] highlightIcon:[UIImage imageNamed:@"titlebar_game"] tabTitle:@"玩具"];
+    [self.tabView1 setNormalIcon:[UIImage imageNamed:@"titlebar_toy_gray"] highlightIcon:[UIImage imageNamed:@"titlebar_toy"] tabTitle:@"玩具"];
     self.tabView2 = [[TabView alloc]initWithFrame:CGRectMake(0, 0,self.view.frame.size.width/3, 50.0)];
-    [self.tabView2 setNormalIcon:[UIImage imageNamed:@"titlebar_toy_gray"] highlightIcon:[UIImage imageNamed:@"titlebar_toy"] tabTitle:@"游戏"];
+    [self.tabView2 setNormalIcon:[UIImage imageNamed:@"titlebar_game_gray"] highlightIcon:[UIImage imageNamed:@"titlebar_game"] tabTitle:@"游戏"];
     
 }
 

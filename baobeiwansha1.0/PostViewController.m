@@ -48,7 +48,8 @@
 @property (nonatomic,retain)EGORefreshView *refreshFooterView;
 
 //用来更新tableViewCell的数组
-@property(nonatomic,retain)NSMutableArray *commentTableViewCell;
+@property (nonatomic,retain) NSMutableArray *commentTableViewCell;
+@property (nonatomic,retain) NSIndexPath *commentTapIndexPath;
 
 //是否reloading标志
 @property (nonatomic,assign)BOOL reloading;
@@ -73,6 +74,7 @@
 @property (nonatomic,assign)NSInteger p;
 
 @property (nonatomic,assign) CGFloat bottomBarHeight;
+
 @end
 
 @implementation PostViewController
@@ -82,7 +84,8 @@
     [super viewDidLoad];
     
     self.view.backgroundColor = [UIColor whiteColor];
-    
+    self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+
     [self initLeftBarButton];
     self.collectButtonEnabled = YES;
     //阻止自动调整滚轮位置，否则导航栏下会出现一段空间
@@ -137,7 +140,7 @@
 -(void)initLeftBarButton{
     
     UIBarButtonItem *leftBarButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back.png"] style:UIBarButtonItemStylePlain target:self action:@selector(popViewController)];
-    leftBarButton.tintColor = [UIColor colorWithRed:255.0/255.0f green:78.0/255.0f blue:162.0/255.0f alpha:1.0f];
+    leftBarButton.tintColor = [UIColor colorWithRed:255.0/255.0f green:119.0/255.0f blue:119.0/255.0f alpha:1.0f];
     self.navigationItem.leftBarButtonItem = leftBarButton;
     
 }
@@ -746,14 +749,17 @@
     
     //初始化homeTableViewCell
     self.commentTableViewCell = [[NSMutableArray alloc]init];
-    self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     
-    NSString *commentRouter = [NSString stringWithFormat:@"/comment/get?id=%li&p=1",(long)_postID];
+    NSString *commentRouter = @"/comment/get";
+    
+    NSDictionary *postParam = [[NSDictionary alloc]initWithObjectsAndKeys:self.appDelegate.generatedUserID,@"userIdStr",[NSNumber numberWithInteger:1],@"p",[NSNumber numberWithInteger:self.postID],@"id",nil];
     NSString *commentRequestUrl = [self.appDelegate.rootURL stringByAppendingString:commentRouter];
+
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     manager.requestSerializer.timeoutInterval = 20;
-    [manager GET:commentRequestUrl parameters:nil success:^(AFHTTPRequestOperation *operation,id responseObject) {
+    [manager POST:commentRequestUrl parameters:postParam  success:^(AFHTTPRequestOperation *operation,id responseObject) {
         
+        NSLog(@"%@",responseObject);
         NSArray *responseArray = [responseObject valueForKey:@"data"];
         
         if(responseArray != (id)[NSNull null]){
@@ -870,8 +876,62 @@
     return [CommentTableViewCell heightForCellWithDict:self.commentTableViewCell[indexPath.row] frame:self.view.frame];
 }
 
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    self.commentTapIndexPath = indexPath;
+    NSLog(@"%ld",(long)indexPath.row);
+    NSLog(@"%@",[self.commentTableViewCell objectAtIndex:indexPath.row]);
+    
+    if([[[self.commentTableViewCell objectAtIndex:indexPath.row]valueForKey:@"canDeleteComment"]integerValue]==1){
+        
+        UIActionSheet *deleteCommentSheet = [[UIActionSheet alloc] initWithTitle:nil
+                                                               delegate:self
+                                                      cancelButtonTitle:@"取消"
+                                                 destructiveButtonTitle:nil
+                                                      otherButtonTitles:@"删除评论",  nil];
+        
+        [deleteCommentSheet showInView:self.view];
+    }
+}
 
+-(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
+    
+    //删除评论
+    if(buttonIndex == 0){
+        NSInteger commentID = [[[self.commentTableViewCell objectAtIndex:self.commentTapIndexPath.row]valueForKey:@"comment_ID"]integerValue];
+        
+        [self.commentTableViewCell removeObjectAtIndex:self.commentTapIndexPath.row];
+        [self.commentTableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:self.commentTapIndexPath]
+                         withRowAnimation:UITableViewRowAnimationAutomatic];
+        
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+        
+        NSString *commentRouter = @"/comment/delete";
+        
+        
+        NSDictionary *postParam = [[NSDictionary alloc]initWithObjectsAndKeys:self.appDelegate.generatedUserID,@"userIdStr",[NSNumber numberWithInteger:commentID],@"comment_ID",nil];
+        
+        NSString *commentRequestUrl = [self.appDelegate.rootURL stringByAppendingString:commentRouter];
+        
+        AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+        manager.requestSerializer.timeoutInterval = 20;
+        [manager POST:commentRequestUrl parameters:postParam success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            NSArray *responseArray = [responseObject valueForKey:@"data"];
+            
+            if(responseArray != (id)[NSNull null]){
+                
+                
+            }else{
+                
+                
+            }
 
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            
+        }];
+        
+    }
+    
+}
 #pragma mark 下拉数据刷新
 - (void)reloadTableViewDataSource{
     
@@ -882,11 +942,13 @@
     if(_refreshFooterView.pullUp){
         self.p = 2;
         
-        NSString *commentRouter = [NSString stringWithFormat:@"/comment/get?id=%ld&p=%@",(long)_postID,[NSNumber numberWithInteger:self.p]];
+        NSString *commentRouter = @"/comment/get";
+        
+        NSDictionary *postParam = [[NSDictionary alloc]initWithObjectsAndKeys:self.appDelegate.generatedUserID,@"userIdStr",[NSNumber numberWithInteger:1],@"p",[NSNumber numberWithInteger:self.postID],@"id",nil];
         NSString *commentRequestUrl = [self.appDelegate.rootURL stringByAppendingString:commentRouter];
         AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
         manager.requestSerializer.timeoutInterval = 20;
-        [manager GET:commentRequestUrl parameters:nil success:^(AFHTTPRequestOperation *operation,id responseObject) {
+        [manager POST:commentRequestUrl parameters:postParam success:^(AFHTTPRequestOperation *operation,id responseObject) {
             
             NSArray *responseArray = [responseObject valueForKey:@"data"];
             if(responseArray != (id)[NSNull null]){
@@ -894,6 +956,7 @@
                     NSDictionary *dict = [responseArray valueForKey:responseDict];
                     [self.commentTableViewCell addObject:dict];
                 }
+                
                 _reloading = YES;
                 [_commentTableView reloadData];
                 [self relayoutCommentTableView:_textViewSize];

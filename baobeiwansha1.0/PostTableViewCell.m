@@ -30,11 +30,12 @@
 //@property (nonatomic,retain) UIImageView *collectionIcon;
 @property (nonatomic,retain) UIButton *collectionButton;
 
+@property (nonatomic,retain) CALayer *bottomBorder;
 //传入的frame
 @property (nonatomic,assign) CGRect aframe;
 
-@property (nonatomic,retain) NSDictionary *dict;
-
+@property (nonatomic,retain) NSMutableDictionary *dict;
+@property (nonatomic,retain) NSIndexPath *indexPath;
 @property (nonatomic,retain) UILabel *tagLabel1;
 @property (nonatomic,retain) UILabel *tagLabel2;
 @property (nonatomic,retain) UILabel *tagLabel3;
@@ -94,17 +95,20 @@
     if(!self.collectionButton){
         //self.collectionButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
         self.collectionButton = [[UIButton alloc] init];
-        [self.collectionButton setImage:[UIImage imageNamed:@"star"] forState:UIControlStateNormal];
         [self.contentView addSubview:self.collectionButton];
                                  
     }
-    
+    if(!self.bottomBorder){
+        self.bottomBorder = [CALayer layer];
+        [self.contentView.layer addSublayer:self.bottomBorder];
+    }
 }
 
--(void)setDataWithDict:(NSDictionary *)dict frame:(CGRect)frame{
+-(void)setDataWithDict:(NSDictionary *)dict frame:(CGRect)frame indexPath:(NSIndexPath *)indexPath{
     
-    self.dict = dict;
+    self.dict = [[NSMutableDictionary alloc]initWithDictionary:dict];
     self.aframe = frame;
+    self.indexPath = indexPath;
     
     if([dict valueForKey:@"ID"] != (id)[NSNull null]){
         self.ID = [[dict valueForKey:@"ID"] integerValue];
@@ -168,7 +172,17 @@
         }
 
     }
+    
+    if([dict objectForKey:@"isCollection"] != (id)[NSNull null]){
+        
+        if([[self.dict objectForKey:@"isCollection"] integerValue] == 0){
+            [self.collectionButton setImage:[UIImage imageNamed:@"unstar"] forState:UIControlStateNormal];
+        }else{
+            [self.collectionButton setImage:[UIImage imageNamed:@"star"] forState:UIControlStateNormal];
 
+        }
+    }
+    
     NSArray *tagArray = [dict objectForKey:@"tags"];
 
     if(tagArray != (id)[NSNull null]){
@@ -187,10 +201,23 @@
     
 }
 
--(void)updateCollectionCount:(NSInteger)collectionNumber{
+-(void)updateCollectionCount:(NSInteger)collectionNumber type:(NSInteger)type{
     
     self.collectionNumber.text = [NSString stringWithFormat:@"%ld", (long)collectionNumber];
-    
+    NSLog(@"%ld",(long)type);
+    if(type == 0){
+    //取消收藏
+        [self.dict setObject:[NSNumber numberWithInteger:0] forKey:@"isCollection"];
+        
+        [self.collectionButton setImage:[UIImage imageNamed:@"unstar"] forState:UIControlStateNormal];
+ 
+    }else{
+        
+        [self.dict setObject:[NSNumber numberWithInteger:1] forKey:@"isCollection"];
+
+        [self.collectionButton setImage:[UIImage imageNamed:@"star"] forState:UIControlStateNormal];
+
+    }
     [self setNeedsLayout];
     
 }
@@ -199,12 +226,11 @@
     [super layoutSubviews];
     
     
-    CALayer *bottomBorder = [CALayer layer];
+    
 
-    bottomBorder.frame = CGRectMake(0.0f, 119.5f, self.aframe.size.width, 0.5f);
-    bottomBorder.backgroundColor = [UIColor colorWithWhite:0.8f
+    self.bottomBorder.frame = CGRectMake(0.0f, 119.5f, self.aframe.size.width, 0.5f);
+    self.bottomBorder.backgroundColor = [UIColor colorWithWhite:0.8f
                                                      alpha:1.0f].CGColor;
-    [self.contentView.layer addSublayer:bottomBorder];
     
     CGFloat paddingRight = 15.0f;
     CGFloat paddingLeft = 15.0f;
@@ -377,7 +403,7 @@
                                     paddingTop + self.title.frame.size.height + self.introduction.frame.size.height + 16,
                                     28, 28);
     [self.collectionButton addTarget:self action:@selector(collectionBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-    //self.collectionIcon.frame = CGRectMake(self.aframe.size.width - 40,
+    //self.collectionIcon.frame = CGRectMake(self.aframe.size.w idth - 40,
     //                                       paddingTop + self.title.frame.size.height + self.introduction.frame.size.height + 20,
     //                                       18, 18);
     
@@ -394,6 +420,7 @@
 
 - (void)collectionBtnClick:(UIButton *)collectionBtn {
     NSLog(@"collection Btn is clicked");
+    [self.delegate collectPost:self.indexPath];
 }
 
 

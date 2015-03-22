@@ -7,7 +7,6 @@
 //
 
 #import "TagPostTableViewController.h"
-#import "PostTableViewCell.h"
 #import "AFNetworking.h"
 #import "AppDelegate.h"
 #import "JGProgressHUD.h"
@@ -75,7 +74,7 @@
     
         
     UIBarButtonItem *leftBarButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back.png"] style:UIBarButtonItemStylePlain target:self action:@selector(popViewController)];
-    leftBarButton.tintColor = [UIColor colorWithRed:255.0/255.0f green:78.0/255.0f blue:162.0/255.0f alpha:1.0f];
+    leftBarButton.tintColor = [UIColor colorWithRed:255.0/255.0f green:119.0/255.0f blue:119.0/255.0f alpha:1.0f];
     
     self.navigationItem.leftBarButtonItem = leftBarButton;
 
@@ -121,7 +120,7 @@
         self.tableViewMask = [UIView new];
         self.tableViewMask.backgroundColor =[UIColor clearColor];
         _homeTableView.tableFooterView = self.tableViewMask;
-        
+        _homeTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         [_homeTableView setSeparatorInset:UIEdgeInsetsZero];
     }
     [self.view addSubview:_homeTableView];
@@ -198,15 +197,15 @@
         cell = [[PostTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ID];
     }
     if(self.postTableArray[indexPath.row]){
-        [cell setDataWithDict:self.postTableArray[indexPath.row] frame:self.view.frame];
+        [cell setDataWithDict:self.postTableArray[indexPath.row] frame:self.view.frame indexPath:indexPath];
     }
-    
+    cell.delegate = self;
     return cell;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    return 140;
+    return 120;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -249,25 +248,7 @@
     
 }
 
--(void)updateCollectionCount:(NSIndexPath *)indexPath type:(NSInteger)type{
-    
-    PostTableViewCell *cell = (PostTableViewCell *)[self.homeTableView cellForRowAtIndexPath:indexPath];
-    
-    NSInteger collectionNumber;
-    //收藏成功，需+1
-    if(type == 1){
-        collectionNumber = [[self.postTableArray[indexPath.row] objectForKey:@"collection_count"]integerValue] + 1;
-    }else{
-        collectionNumber = [[self.postTableArray[indexPath.row] objectForKey:@"collection_count"]integerValue] - 1;
-    }
-    NSMutableDictionary *dict = [[NSMutableDictionary alloc]initWithDictionary:
-                                 self.postTableArray[indexPath.row]];
-    [dict setObject:[NSNumber numberWithInteger:collectionNumber] forKey:@"collection_count"];
-    [self.postTableArray replaceObjectAtIndex:indexPath.row withObject:dict];
-    
-    [cell updateCollectionCount:collectionNumber];
-    
-}
+
 
 #pragma mark EGORefreshReloadData
 - (void)reloadTableViewDataSource{
@@ -462,6 +443,74 @@
 -(void)dismissHUD{
     [self.HUD dismiss];
 }
+-(void)collectPost:(NSIndexPath *)indexPath{
+    //如果之前没有收藏
+    if([[[self.postTableArray objectAtIndex:indexPath.row] valueForKey:@"isCollection"] integerValue] == 0){
+        
+        [self updateCollectionCount:indexPath type:1];
+        
+    }else{
+        //如果之前已经收藏
+        
+        [self updateCollectionCount:indexPath type:0];
+        
+    }
+    
+    
+    
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    
+    NSDictionary *collectParam =[NSDictionary dictionaryWithObjectsAndKeys:self.appDelegate.generatedUserID,@"userIdStr",[NSNumber numberWithInteger:[[[self.postTableArray objectAtIndex:indexPath.row] valueForKey:@"ID"] integerValue]],@"postID", nil];
+    
+    NSString *collectRouter = @"/post/collect";
+    NSString *collectRequestUrl = [self.appDelegate.rootURL stringByAppendingString:collectRouter];
+    
+    //进行收藏判断 userID,PostID
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    manager.requestSerializer.timeoutInterval = 20;
+    [manager POST:collectRequestUrl  parameters:collectParam success:^(AFHTTPRequestOperation *operation,id responseObject) {
+        NSInteger status = [[responseObject valueForKey:@"status"]integerValue];
+        
+        if(status == 1){
+            
+            
+        }else{
+            
+        }
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+    }failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+        NSLog(@"%@",error);
+        
+        
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+    }];
+    
+}
 
 
-@end
+-(void)updateCollectionCount:(NSIndexPath *)indexPath type:(NSInteger)type{
+    
+    PostTableViewCell *cell = (PostTableViewCell *)[self.homeTableView cellForRowAtIndexPath:indexPath];
+    
+    NSInteger collectionNumber;
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc]initWithDictionary:
+                                 self.postTableArray[indexPath.row]];
+    
+    //收藏成功，需+1
+    if(type == 1){
+        collectionNumber = [[self.postTableArray[indexPath.row] objectForKey:@"collection_count"]integerValue] + 1;
+        [dict setObject:[NSNumber numberWithInteger:1] forKey:@"isCollection"];
+        
+    }else{
+        collectionNumber = [[self.postTableArray[indexPath.row] objectForKey:@"collection_count"]integerValue] - 1;
+        [dict setObject:[NSNumber numberWithInteger:0] forKey:@"isCollection"];
+        
+    }
+    [dict setObject:[NSNumber numberWithInteger:collectionNumber] forKey:@"collection_count"];
+    [self.postTableArray replaceObjectAtIndex:indexPath.row withObject:dict];
+    
+    [cell updateCollectionCount:collectionNumber type:type];
+    
+}@end

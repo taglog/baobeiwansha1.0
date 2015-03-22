@@ -92,7 +92,7 @@
 }
 -(void)globalSettings{
     
-    self.rootURL = @"http://blog.yhb360.com/baobaowansha/";
+    self.rootURL = @"http://localhost/baobaowansha/";
 
 }
 -(void)generateUserID{
@@ -146,7 +146,7 @@
         self.mainTabBarController = [[UITabBarController alloc]init];
     }
     self.mainTabBarController.tabBar.translucent = NO;
-    self.mainTabBarController.tabBar.tintColor = [UIColor colorWithRed:255.0/255.0f green:78.0/255.0f blue:162.0/255.0f alpha:1.0f];
+    self.mainTabBarController.tabBar.tintColor = [UIColor colorWithRed:255.0/255.0f green:119.0/255.0f blue:119.0/255.0f alpha:1.0f];
     
     UITabBarItem *mainTabFirst = [[UITabBarItem alloc]initWithTitle:@"首页" image:[UIImage imageNamed:@"tabbar_home_gray"] tag:0];
     UITabBarItem *mainTabSecond = [[UITabBarItem alloc]initWithTitle:@"分类" image:[UIImage imageNamed:@"tabbar_category_gray"] tag:1];

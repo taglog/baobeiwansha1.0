@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "EGORefreshView.h"
 #import "PostViewController.h"
+#import "PostTableViewCell.h"
 
 
 @protocol PostTableViewDelegate
@@ -19,7 +20,7 @@
 
 @end
 
-@interface PostTableViewController : UIViewController<UITableViewDelegate,UITableViewDataSource,EGORefreshViewDelegate,PostViewDelegate>
+@interface PostTableViewController : UIViewController<UITableViewDelegate,UITableViewDataSource,EGORefreshViewDelegate,PostViewDelegate,PostTableViewCellDelegate>
 @property (nonatomic,assign) NSInteger p;
 @property (nonatomic,assign) NSInteger type;
 @property (nonatomic,strong) NSDictionary *requestURL;

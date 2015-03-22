@@ -9,9 +9,10 @@
 #import <UIKit/UIKit.h>
 #import "EGORefreshView.h"
 #import "PostViewController.h"
+#import "PostTableViewCell.h"
 
 
-@interface TagPostTableViewController : UIViewController<UITableViewDelegate,UITableViewDataSource,EGORefreshViewDelegate,PostViewDelegate>
+@interface TagPostTableViewController : UIViewController<UITableViewDelegate,UITableViewDataSource,EGORefreshViewDelegate,PostViewDelegate,PostTableViewCellDelegate>
 
 @property (nonatomic,strong)NSDictionary *requestURL;
 @property (nonatomic,retain) NSString *tag;
