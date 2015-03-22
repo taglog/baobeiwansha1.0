@@ -14,6 +14,7 @@
 #import "UserInfoSettingViewController.h"
 #import "AppDelegate.h"
 #import "AFNetworking.h"
+#import "ButtonCanDragScrollView.h"
 
 @interface HomePageViewController ()
 @property (nonatomic,retain) UIScrollView *homeScrollView;
@@ -49,8 +50,9 @@
 -(void)viewWillAppear:(BOOL)animated{
     
     [super viewWillAppear:animated];
-    
-    [self setNavigationBarTransparent];
+    if(self.isNavigationHidden == NO){
+        [self setNavigationBarTransparent];
+    }
     
 }
 
@@ -88,7 +90,7 @@
     self.navigationController.navigationBar.barTintColor = [UIColor whiteColor];
     self.navigationController.navigationBar.barStyle = UIBarStyleDefault;
 
-    NSDictionary * dict=[NSDictionary dictionaryWithObject:[UIColor colorWithRed:255.0/255.0f green:78.0/255.0f blue:162.0/255.0f alpha:1.0f] forKey:NSForegroundColorAttributeName];
+    NSDictionary * dict=[NSDictionary dictionaryWithObject:[UIColor colorWithRed:255.0/255.0f green:119.0/255.0f blue:119.0/255.0f alpha:1.0f] forKey:NSForegroundColorAttributeName];
     self.navigationController.navigationBar.titleTextAttributes = dict;
     
     self.navigationController.navigationBar.alpha = alpha;
@@ -158,7 +160,6 @@
     manager.requestSerializer.timeoutInterval = 20;
     [manager POST:urlString parameters:requestParam success:^(AFHTTPRequestOperation *operation,id responseObject) {
         
-        NSLog(@"%@",responseObject);
         
         if(responseObject != nil){
             
@@ -199,10 +200,12 @@
 -(void)initScrollView{
     
     if(!self.homeScrollView){
-        self.homeScrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
+        
+        self.homeScrollView = [[ButtonCanDragScrollView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
         [self.view addSubview:self.homeScrollView];
         self.homeScrollView.backgroundColor = [UIColor colorWithRed:245.0/255.0f green:245.0/255.0f blue:245.0/255.0f alpha:1.0];
         self.homeScrollView.contentSize = CGSizeMake(self.view.frame.size.width, 900);
+        self.homeScrollView.canCancelContentTouches = YES;
         self.homeScrollView.delegate = self;
     }
     
@@ -304,7 +307,7 @@
         
     }else if(scrollView.contentOffset.y >= endPointY){
         
-        [self setNavigationBarColorWithAlpha:1.0f];
+        //[self setNavigationBarColorWithAlpha:1.0f];
 
     }else if(scrollView.contentOffset.y <= startPointY){
         

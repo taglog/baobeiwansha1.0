@@ -40,7 +40,7 @@
     
     //提交按钮
     UIBarButtonItem *submitButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"check.png"] style:UIBarButtonItemStylePlain target:self action:@selector(commentSubmit)];
-    submitButton.tintColor = [UIColor colorWithRed:255.0/255.0f green:78.0/255.0f blue:162.0/255.0f alpha:1.0f];
+    submitButton.tintColor = [UIColor colorWithRed:255.0/255.0f green:119.0/255.0f blue:119.0/255.0f alpha:1.0f];
     self.navigationItem.rightBarButtonItem = submitButton;
     
     //自定义leftBarButtonItem以取代返回按钮
@@ -181,7 +181,7 @@
             NSInteger status = [[responseObject valueForKey:@"status"]integerValue];
             if(status == 1){
                 
-                NSDictionary *commentToPostViewController = [NSDictionary dictionaryWithObjectsAndKeys:userNickName,@"comment_author",text,@"comment_content",[responseObject valueForKey:@"comment_date"],@"comment_date",[responseObject valueForKey:@"comment_id"],@"comment_id", nil];
+                NSDictionary *commentToPostViewController = [NSDictionary dictionaryWithObjectsAndKeys:userNickName,@"comment_author",text,@"comment_content",[responseObject valueForKey:@"comment_date"],@"comment_date",[responseObject valueForKey:@"comment_id"],@"comment_ID",[NSNumber numberWithInteger:1],@"canDeleteComment", nil];
                 //输入完成，应该跳回到上一页，同时把上一页的tableView刷新
                 [self.delegate commentCreateSuccess:commentToPostViewController];
                 [self.HUD dismiss];

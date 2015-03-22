@@ -59,7 +59,7 @@
 -(void)initLeftBarButton{
     
     UIBarButtonItem *leftBarButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back.png"] style:UIBarButtonItemStylePlain target:self action:@selector(popViewController)];
-    leftBarButton.tintColor = [UIColor colorWithRed:255.0/255.0f green:78.0/255.0f blue:162.0/255.0f alpha:1.0f];
+    leftBarButton.tintColor = [UIColor colorWithRed:255.0/255.0f green:119.0/255.0f blue:119.0/255.0f alpha:1.0f];
     self.navigationItem.leftBarButtonItem = leftBarButton;
     
 }
@@ -78,11 +78,11 @@
 -(void)initTabViews{
     
     self.tabView0 = [[TabView alloc]initWithFrame:CGRectMake(0, 0,self.view.frame.size.width/3, 50.0)];
-    [self.tabView0 setNormalIcon:[UIImage imageNamed:@"home"] highlightIcon:[UIImage imageNamed:@"home"] tabTitle:@"绘本"];
+    [self.tabView0 setNormalIcon:[UIImage imageNamed:@"titlebar_book_gray"] highlightIcon:[UIImage imageNamed:@"titlebar_book"] tabTitle:@"绘本"];
     self.tabView1 = [[TabView alloc]initWithFrame:CGRectMake(0, 0,self.view.frame.size.width/3, 50.0)];
-    [self.tabView1 setNormalIcon:[UIImage imageNamed:@"home"] highlightIcon:[UIImage imageNamed:@"home"] tabTitle:@"玩具"];
+    [self.tabView1 setNormalIcon:[UIImage imageNamed:@"titlebar_toy_gray"] highlightIcon:[UIImage imageNamed:@"titlebar_toy"] tabTitle:@"玩具"];
     self.tabView2 = [[TabView alloc]initWithFrame:CGRectMake(0, 0,self.view.frame.size.width/3, 50.0)];
-    [self.tabView2 setNormalIcon:[UIImage imageNamed:@"home"] highlightIcon:[UIImage imageNamed:@"home"] tabTitle:@"游戏"];
+    [self.tabView2 setNormalIcon:[UIImage imageNamed:@"titlebar_game_gray"] highlightIcon:[UIImage imageNamed:@"titlebar_game"] tabTitle:@"游戏"];
     
 }
 
@@ -183,6 +183,30 @@
 
 -(void)slidePager:(SlidePagerViewController *)slidePager didChangeTabToIndex:(NSUInteger)index{
     
+    [self resetTabViewState];
+    
+    switch (index) {
+        case 0:
+            [self.tabView0 setTabToHighlight];
+            break;
+        case 1:
+            [self.tabView1 setTabToHighlight];
+            break;
+        case 2:
+            [self.tabView2 setTabToHighlight];
+            break;
+        default:
+            break;
+    }
+    
+    
+    
+}
+-(void)resetTabViewState{
+    
+    [self.tabView0 setTabToNormal];
+    [self.tabView1 setTabToNormal];
+    [self.tabView2 setTabToNormal];
     
 }
 

@@ -18,7 +18,8 @@
 -(void)updateCollectionCount:(NSIndexPath *)indexPath type:(NSInteger)type;
 
 @end
-@interface PostViewController : UIViewController<UITableViewDelegate,UITableViewDataSource,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,EGORefreshViewDelegate,CommentCreateDelegate>
+@interface PostViewController : UIViewController<UITableViewDelegate,UITableViewDataSource,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,EGORefreshViewDelegate,CommentCreateDelegate,UIActionSheetDelegate>
+
 @property (nonatomic,retain) NSIndexPath *indexPath;
 @property (nonatomic,retain) id<PostViewDelegate>delegate;
 -(void)initViewWithDict:(NSDictionary *)dict;

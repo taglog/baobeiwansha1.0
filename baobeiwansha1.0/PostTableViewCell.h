@@ -7,10 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
+@protocol PostTableViewCellDelegate <NSObject>
 
+-(void)collectPost:(NSIndexPath *)indexPath;
+
+@end
 @interface PostTableViewCell : UITableViewCell
 
--(void)setDataWithDict:(NSDictionary *)dict frame:(CGRect)frame;
--(void)updateCollectionCount:(NSInteger)collectionNumber;
+-(void)setDataWithDict:(NSDictionary *)dict frame:(CGRect)frame indexPath:(NSIndexPath *)indexPath;
+
+-(void)updateCollectionCount:(NSInteger)collectionNumber type:(NSInteger)type;
+
+@property (nonatomic,weak) id<PostTableViewCellDelegate> delegate;
 
 @end

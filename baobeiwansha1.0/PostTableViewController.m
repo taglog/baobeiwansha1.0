@@ -7,7 +7,6 @@
 //
 
 #import "PostTableViewController.h"
-#import "PostTableViewCell.h"
 #import "AFNetworking.h"
 #import "AppDelegate.h"
 
@@ -29,6 +28,7 @@
 
 @property (nonatomic,strong)UIView *tableViewMask;
 
+@property(nonatomic,assign)BOOL collectButtonEnabled;
 
 @end
 @implementation PostTableViewController
@@ -57,11 +57,11 @@
 -(void)defaultSettings{
     
     self.view.backgroundColor = [UIColor colorWithRed:242.0/255.0f green:242.0/255.0f blue:242.0/255.0f alpha:1.0f];
-//    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:255.0/255.0f green:78.0/255.0f blue:162.0/255.0f alpha:1.0f];
-//    self.title = @"PostList";
-//    NSDictionary * dict=[NSDictionary dictionaryWithObject:[UIColor whiteColor] forKey:NSForegroundColorAttributeName];
-//    self.navigationController.navigationBar.titleTextAttributes = dict;
-//    self.automaticallyAdjustsScrollViewInsets = NO;
+    //    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:255.0/255.0f green:78.0/255.0f blue:162.0/255.0f alpha:1.0f];
+    //    self.title = @"PostList";
+    //    NSDictionary * dict=[NSDictionary dictionaryWithObject:[UIColor whiteColor] forKey:NSForegroundColorAttributeName];
+    //    self.navigationController.navigationBar.titleTextAttributes = dict;
+    //    self.automaticallyAdjustsScrollViewInsets = NO;
     
 }
 -(void)initViews{
@@ -89,7 +89,7 @@
         self.tableViewMask.backgroundColor =[UIColor clearColor];
         self.postTableView.tableFooterView = self.tableViewMask;
         self.postTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    
+        
     }
     [self.view addSubview:self.postTableView];
     
@@ -164,7 +164,8 @@
         cell = [[PostTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ID];
     }
     
-        [cell setDataWithDict:self.postTableArray[indexPath.row] frame:self.view.frame];
+    [cell setDataWithDict:self.postTableArray[indexPath.row] frame:self.view.frame indexPath:indexPath];
+    cell.delegate = self;
     return cell;
 }
 
@@ -175,7 +176,7 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
-
+    
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
     
@@ -214,30 +215,12 @@
               [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
           }];
     [post showHUD];
-
+    
     [self.navigationController pushViewController:post animated:YES];
     
 }
 
--(void)updateCollectionCount:(NSIndexPath *)indexPath type:(NSInteger)type{
-    
-    PostTableViewCell *cell = (PostTableViewCell *)[self.postTableView cellForRowAtIndexPath:indexPath];
-    
-    NSInteger collectionNumber;
-    //收藏成功，需+1
-    if(type == 1){
-        collectionNumber = [[self.postTableArray[indexPath.row] objectForKey:@"collection_count"]integerValue] + 1;
-    }else{
-        collectionNumber = [[self.postTableArray[indexPath.row] objectForKey:@"collection_count"]integerValue] - 1;
-    }
-    NSMutableDictionary *dict = [[NSMutableDictionary alloc]initWithDictionary:
-                                 self.postTableArray[indexPath.row]];
-    [dict setObject:[NSNumber numberWithInteger:collectionNumber] forKey:@"collection_count"];
-    [self.postTableArray replaceObjectAtIndex:indexPath.row withObject:dict];
-    
-    [cell updateCollectionCount:collectionNumber];
-    
-}
+
 
 #pragma mark EGORefreshReloadData
 - (void)reloadTableViewDataSource{
@@ -448,8 +431,76 @@
     
 }
 
+-(void)collectPost:(NSIndexPath *)indexPath{
+    //如果之前没有收藏
+    if([[[self.postTableArray objectAtIndex:indexPath.row] valueForKey:@"isCollection"] integerValue] == 0){
+        
+        [self updateCollectionCount:indexPath type:1];
+        
+    }else{
+        //如果之前已经收藏
+  
+        [self updateCollectionCount:indexPath type:0];
+        
+    }
+    
+    
+    
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    
+    NSDictionary *collectParam =[NSDictionary dictionaryWithObjectsAndKeys:self.appDelegate.generatedUserID,@"userIdStr",[NSNumber numberWithInteger:[[[self.postTableArray objectAtIndex:indexPath.row] valueForKey:@"ID"] integerValue]],@"postID", nil];
+    
+    NSString *collectRouter = @"/post/collect";
+    NSString *collectRequestUrl = [self.appDelegate.rootURL stringByAppendingString:collectRouter];
+    
+    //进行收藏判断 userID,PostID
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    manager.requestSerializer.timeoutInterval = 20;
+    [manager POST:collectRequestUrl  parameters:collectParam success:^(AFHTTPRequestOperation *operation,id responseObject) {
+        NSInteger status = [[responseObject valueForKey:@"status"]integerValue];
+        
+        if(status == 1){
+            
+            
+        }else{
+            
+        }
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+    }failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+        NSLog(@"%@",error);
+        
+        
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+    }];
+    
+}
 
 
+-(void)updateCollectionCount:(NSIndexPath *)indexPath type:(NSInteger)type{
+    
+    PostTableViewCell *cell = (PostTableViewCell *)[self.postTableView cellForRowAtIndexPath:indexPath];
+    
+    NSInteger collectionNumber;
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc]initWithDictionary:
+                                 self.postTableArray[indexPath.row]];
 
+    //收藏成功，需+1
+    if(type == 1){
+        collectionNumber = [[self.postTableArray[indexPath.row] objectForKey:@"collection_count"]integerValue] + 1;
+        [dict setObject:[NSNumber numberWithInteger:1] forKey:@"isCollection"];
+        
+    }else{
+        collectionNumber = [[self.postTableArray[indexPath.row] objectForKey:@"collection_count"]integerValue] - 1;
+        [dict setObject:[NSNumber numberWithInteger:0] forKey:@"isCollection"];
+
+    }
+        [dict setObject:[NSNumber numberWithInteger:collectionNumber] forKey:@"collection_count"];
+    [self.postTableArray replaceObjectAtIndex:indexPath.row withObject:dict];
+    
+    [cell updateCollectionCount:collectionNumber type:type];
+    
+}
 
 @end

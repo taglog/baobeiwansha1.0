@@ -17,9 +17,10 @@
 @interface ProfilePageModuleView : UIView
 
 @property (nonatomic,retain) UIButton *titleView;
-@property (nonatomic,retain) NSString *moduleTitle;
-@property (nonatomic,retain) NSString *moduleDetail;
 @property (nonatomic,retain) UITableView *contentTableView;
+
+@property (nonatomic,retain) UILabel *moduleTitleLabel;
+@property (nonatomic,retain) UILabel *moduleDetailLabel;
 
 @property (nonatomic,weak) id<ProfilePageModuleViewDelegate> delegate;
 
