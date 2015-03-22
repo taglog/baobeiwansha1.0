@@ -30,6 +30,7 @@
 //@property (nonatomic,retain) UIImageView *collectionIcon;
 @property (nonatomic,retain) UIButton *collectionButton;
 
+@property (nonatomic,retain) CALayer *bottomBorder;
 //传入的frame
 @property (nonatomic,assign) CGRect aframe;
 
@@ -97,7 +98,10 @@
         [self.contentView addSubview:self.collectionButton];
                                  
     }
-    
+    if(!self.bottomBorder){
+        self.bottomBorder = [CALayer layer];
+        [self.contentView.layer addSublayer:self.bottomBorder];
+    }
 }
 
 -(void)setDataWithDict:(NSDictionary *)dict frame:(CGRect)frame indexPath:(NSIndexPath *)indexPath{
@@ -222,12 +226,11 @@
     [super layoutSubviews];
     
     
-    CALayer *bottomBorder = [CALayer layer];
+    
 
-    bottomBorder.frame = CGRectMake(0.0f, 119.5f, self.aframe.size.width, 0.5f);
-    bottomBorder.backgroundColor = [UIColor colorWithWhite:0.8f
+    self.bottomBorder.frame = CGRectMake(0.0f, 119.5f, self.aframe.size.width, 0.5f);
+    self.bottomBorder.backgroundColor = [UIColor colorWithWhite:0.8f
                                                      alpha:1.0f].CGColor;
-    [self.contentView.layer addSublayer:bottomBorder];
     
     CGFloat paddingRight = 15.0f;
     CGFloat paddingLeft = 15.0f;

@@ -120,7 +120,7 @@
         self.tableViewMask = [UIView new];
         self.tableViewMask.backgroundColor =[UIColor clearColor];
         _homeTableView.tableFooterView = self.tableViewMask;
-        
+        _homeTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         [_homeTableView setSeparatorInset:UIEdgeInsetsZero];
     }
     [self.view addSubview:_homeTableView];
@@ -205,7 +205,7 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    return 140;
+    return 120;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
