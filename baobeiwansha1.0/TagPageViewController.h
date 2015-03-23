@@ -14,6 +14,7 @@
 
 @property (nonatomic,strong) NSDictionary *requestURL;
 @property (nonatomic,assign) NSInteger p;
-@property (nonatomic,assign) NSInteger type;
+
+-(id)initWithType:(NSInteger)type;
 
 @end

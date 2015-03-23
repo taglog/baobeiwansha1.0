@@ -153,7 +153,6 @@
         
         self.boyButton = [[UIButton alloc]initWithFrame:CGRectMake(self.view.frame.size.width/2 - 75, (SHORT_SCREEN)?130:150, 60, 40)];
         
-        
         [self.boyButton setBackgroundImage:[UIImage imageNamed:@"btn_boy_gray"] forState:UIControlStateNormal];
         [self.boyButton setBackgroundImage:[UIImage imageNamed:@"btn_boy"] forState:UIControlStateSelected];
         
