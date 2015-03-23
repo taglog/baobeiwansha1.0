@@ -270,7 +270,7 @@
         numberOfLinesOfIntro = 1;
         introHeight = 12;
     }
-    NSLog(@"numeber of line of introduction is %d", numberOfLinesOfIntro);
+    //NSLog(@"numeber of line of introduction is %d", numberOfLinesOfIntro);
     self.introduction.frame = CGRectMake(self.image.frame.size.width + 2*paddingLeft, paddingTop + self.title.frame.size.height + 10, self.aframe.size.width - self.image.frame.size.width - 2*paddingLeft - paddingRight, introHeight);
     
     self.introduction.numberOfLines = numberOfLinesOfIntro;
@@ -282,11 +282,11 @@
     //此处区分宽屏和窄屏进行展示，对于宽屏 tag直接展示在图片右侧，对于窄屏，需要另起一行进行展示
     
     if (NARROW_SCREEN) {
-        
-        self.tagLabel1.frame = CGRectMake(
-                                          paddingLeft,
-                                          paddingTop + self.image.frame.size.height + 10 ,
-                                          50, 20);
+//        
+//        self.tagLabel1.frame = CGRectMake(
+//                                          paddingLeft,
+//                                          paddingTop + self.image.frame.size.height + 10 ,
+//                                          50, 20);
         
         if([self.tagLabel1.text length]>0){
             self.tagLabel1.frame = CGRectMake(
@@ -296,11 +296,11 @@
                                               20);
             
         }
-        
-        self.tagLabel2.frame = CGRectMake(
-                                          paddingLeft + self.tagLabel1.frame.size.width + 5,
-                                          paddingTop + self.image.frame.size.height + 10 ,
-                                          50, 20);
+//        
+//        self.tagLabel2.frame = CGRectMake(
+//                                          paddingLeft + self.tagLabel1.frame.size.width + 5,
+//                                          paddingTop + self.image.frame.size.height + 10 ,
+//                                          50, 20);
         
         if([self.tagLabel2.text length]>0){
             self.tagLabel2.frame = CGRectMake(
@@ -310,10 +310,10 @@
         }
         
         
-        self.tagLabel3.frame = CGRectMake(
-                                          paddingLeft + self.tagLabel1.frame.size.width + self.tagLabel2.frame.size.width + 10,
-                                          paddingTop + self.image.frame.size.height + 10 ,
-                                          50, 20);
+//        self.tagLabel3.frame = CGRectMake(
+//                                          paddingLeft + self.tagLabel1.frame.size.width + self.tagLabel2.frame.size.width + 10,
+//                                          paddingTop + self.image.frame.size.height + 10 ,
+//                                          50, 20);
         
         if([self.tagLabel3.text length] > 0){
             self.tagLabel3.frame = CGRectMake(
@@ -326,11 +326,11 @@
 
     } else {
     
-        self.tagLabel1.frame = CGRectMake(
-                                          self.image.frame.size.width + 2*paddingLeft,
-                                          paddingTop + self.title.frame.size.height +self.introduction.frame.size.height + 20 ,
-                                          50, 20);
-        
+//        self.tagLabel1.frame = CGRectMake(self.image.frame.size.width + 2*paddingLeft,
+//                                          paddingTop + self.title.frame.size.height +self.introduction.frame.size.height + 20,
+//                                          0,
+//                                          0);
+
         if([self.tagLabel1.text length]>0){
             self.tagLabel1.frame = CGRectMake(
                                               self.image.frame.size.width + 2*paddingLeft,
@@ -339,11 +339,12 @@
                                               20);
             
         }
-        
-        self.tagLabel2.frame = CGRectMake(
-                                          self.image.frame.size.width + 2*paddingLeft + self.tagLabel1.frame.size.width + 5,
-                                          paddingTop + self.title.frame.size.height +self.introduction.frame.size.height + 20,
-                                          50, 20);
+//        
+//        self.tagLabel2.frame = CGRectMake(
+//                                          self.image.frame.size.width + 2*paddingLeft + self.tagLabel1.frame.size.width + 5,
+//                                          paddingTop + self.title.frame.size.height +self.introduction.frame.size.height + 20,
+//                                          0,
+//                                          0);
         
         if([self.tagLabel2.text length]>0){
             self.tagLabel2.frame = CGRectMake(
@@ -353,11 +354,12 @@
                                               20);
         }
         
-        
-        self.tagLabel3.frame = CGRectMake(
-                                          self.image.frame.size.width + 2*paddingLeft + self.tagLabel1.frame.size.width + self.tagLabel2.frame.size.width + 10,
-                                          paddingTop + self.title.frame.size.height + self.introduction.frame.size.height + 20,
-                                          50, 20);
+//        
+//        self.tagLabel3.frame = CGRectMake(
+//                                          self.image.frame.size.width + 2*paddingLeft + self.tagLabel1.frame.size.width+ self.tagLabel2.frame.size.width + 10,
+//                                          paddingTop + self.title.frame.size.height + self.introduction.frame.size.height + 20,
+//                                          0,
+//                                          0);
         
         if([self.tagLabel3.text length] > 0){
             self.tagLabel3.frame = CGRectMake(

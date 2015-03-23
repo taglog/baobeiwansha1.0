@@ -66,7 +66,7 @@
     [super viewWillAppear:animated];
     
     self.navigationController.navigationBar.barTintColor = [UIColor whiteColor];
-    NSDictionary * dict=[NSDictionary dictionaryWithObject:[UIColor colorWithRed:255.0/255.0f green:78.0/255.0f blue:162.0/255.0f alpha:1.0f] forKey:NSForegroundColorAttributeName];
+    NSDictionary * dict=[NSDictionary dictionaryWithObject:[UIColor colorWithRed:255.0/255.0f green:119/255.0f blue:119/255.0f alpha:1.0f] forKey:NSForegroundColorAttributeName];
     
     self.navigationController.navigationBar.titleTextAttributes = dict;
     
@@ -78,7 +78,7 @@
     
     [self initLeftBarButtonItem];
 
-    self.title = @"设置宝宝信息";
+    self.title = @"设置宝贝信息";
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     
     [self initViews];
@@ -123,7 +123,7 @@
     
     if(!self.scrollView){
         self.scrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
-        self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.view.frame.size.height + 100);
+        self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.view.frame.size.height + 36);
         [self.view addSubview:self.scrollView];
     }
     
@@ -133,8 +133,8 @@
     
     if(!self.headImage){
         self.headImage = [[UIImageView alloc]init];
-        self.headImage.frame = CGRectMake((self.view.frame.size.width - 90)/2, 25, 90, 90);
-        self.headImage.image = [UIImage imageNamed:@"defaultSettingHeadImage"];
+        self.headImage.frame = CGRectMake((self.view.frame.size.width - 90)/2, 24, 90, 90);
+        self.headImage.image = [UIImage imageNamed:@"btn_avatar"];
         self.headImage.layer.cornerRadius = CGRectGetHeight(self.headImage.frame)/2;
         self.headImage.layer.masksToBounds = YES;
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(changeHeadImage)];
@@ -151,11 +151,11 @@
     
     if(!self.boyButton){
         
-        self.boyButton = [[UIButton alloc]initWithFrame:CGRectMake(self.view.frame.size.width/2 - 75, 155, 60, 40)];
+        self.boyButton = [[UIButton alloc]initWithFrame:CGRectMake(self.view.frame.size.width/2 - 75, (SHORT_SCREEN)?130:150, 60, 40)];
         
         
-        [self.boyButton setBackgroundImage:[UIImage imageNamed:@"settinggirlbuttonnormal"] forState:UIControlStateNormal];
-        [self.boyButton setBackgroundImage:[UIImage imageNamed:@"settingboybuttonselected"] forState:UIControlStateSelected];
+        [self.boyButton setBackgroundImage:[UIImage imageNamed:@"btn_boy_gray"] forState:UIControlStateNormal];
+        [self.boyButton setBackgroundImage:[UIImage imageNamed:@"btn_boy"] forState:UIControlStateSelected];
         
         self.boyButton.layer.cornerRadius = 4;
         self.boyButton.layer.masksToBounds = YES;
@@ -167,10 +167,10 @@
     }
     if(!self.girlButton){
         
-        self.girlButton = [[UIButton alloc]initWithFrame:CGRectMake(self.view.frame.size.width/2 + 15, 155, 60, 40)];
+        self.girlButton = [[UIButton alloc]initWithFrame:CGRectMake(self.view.frame.size.width/2 + 15, (SHORT_SCREEN)?130:150, 60, 40)];
         
-        [self.girlButton setBackgroundImage:[UIImage imageNamed:@"settinggirlbuttonnormal"] forState:UIControlStateNormal];
-        [self.girlButton setBackgroundImage:[UIImage imageNamed:@"settingboybuttonselected"] forState:UIControlStateSelected];
+        [self.girlButton setBackgroundImage:[UIImage imageNamed:@"btn_girl_gray"] forState:UIControlStateNormal];
+        [self.girlButton setBackgroundImage:[UIImage imageNamed:@"btn_girl"] forState:UIControlStateSelected];
         self.girlButton.layer.cornerRadius = 4;
         self.girlButton.layer.masksToBounds = YES;
         [self.girlButton addTarget:self action:@selector(editBabyGender:) forControlEvents:UIControlEventTouchUpInside];
@@ -225,7 +225,7 @@
 -(void)initForm{
     
     if(!self.tableView){
-        self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(50, 230, self.view.frame.size.width - 100, 200)];
+        self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(50, (SHORT_SCREEN)?200:230, self.view.frame.size.width - 100, 200)];
         self.tableView.scrollEnabled = NO;
         self.tableView.delegate = self;
         self.tableView.dataSource = self;
@@ -243,7 +243,7 @@
 -(void)initSubmitButton{
     
     if(!self.submitButton){
-        self.submitButton = [[UIButton alloc]initWithFrame:CGRectMake(50, 480, self.view.frame.size.width - 100, 50)];
+        self.submitButton = [[UIButton alloc]initWithFrame:CGRectMake(50, (SHORT_SCREEN)?360:440, self.view.frame.size.width - 100, 50)];
         self.submitButton.backgroundColor = [UIColor colorWithRed:255.0f/255.0f green:126.0f/255.0f blue:131.0f/255.0f alpha:1.0];
         [self.submitButton setTitle:@"保   存" forState:UIControlStateNormal];
         self.submitButton.titleLabel.font = [UIFont fontWithName:@"STHeitiSC-Medium" size:23.0f];
@@ -420,14 +420,14 @@
     
     if(!self.crown){
         self.crown = [[UIImageView alloc]init];
-        self.crown.image = [UIImage imageNamed:@"settingcrown"];
+        self.crown.image = [UIImage imageNamed:@"crown"];
         [self.scrollView addSubview:self.crown];
     }
     //女孩
     if(babyGender == 0){
-        self.crown.frame = CGRectMake(self.view.frame.size.width/2 + 35 , 134, 20, 18);
+        self.crown.frame = CGRectMake(self.view.frame.size.width/2 + 35 , (SHORT_SCREEN)?110:128, 20, 18);
     }else{
-        self.crown.frame = CGRectMake(self.view.frame.size.width/2 - 55, 134, 20, 18);
+        self.crown.frame = CGRectMake(self.view.frame.size.width/2 - 55, (SHORT_SCREEN)?110:128, 20, 18);
     }
     
 }
@@ -468,7 +468,7 @@
         self.girlButton.selected = NO;
         self.boyButton.selected = YES;
         [UIView animateWithDuration:0.2 animations:^{
-            self.crown.frame = CGRectMake(self.view.frame.size.width/2 - 55, 134, 20, 18);
+            self.crown.frame = CGRectMake(self.view.frame.size.width/2 - 55, (SHORT_SCREEN)?110:128, 20, 18);
             
         }];
 
@@ -494,7 +494,7 @@
         self.girlButton.selected = YES;
         self.boyButton.selected = NO;
         [UIView animateWithDuration:0.2 animations:^{
-            self.crown.frame = CGRectMake(self.view.frame.size.width/2 + 35 , 134, 20, 18);
+            self.crown.frame = CGRectMake(self.view.frame.size.width/2 + 35 , (SHORT_SCREEN)?110:128, 20, 18);
             
         }];
     }
@@ -563,7 +563,7 @@
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 70.0f;
+    return (SHORT_SCREEN)?45.0f:70.0f;
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
@@ -661,7 +661,7 @@
             }
         } else if (buttonIndex == 2) {
             //恢复默认背景图片
-            UIImage *defaultImg = [UIImage imageNamed:@"defaultSettingHeadImage"];
+            UIImage *defaultImg = [UIImage imageNamed:@"btn_avatar"];
             self.headImage.image = defaultImg;
             [self.userInfoDict setObject:UIImagePNGRepresentation(defaultImg) forKey:@"headImage"];
             self.isHeadImageSet = NO;

@@ -116,7 +116,7 @@
         } else if ([[dict objectForKey:@"babyGender"] integerValue] == 1) {
             [self.headImageButton setBackgroundImage:[UIImage imageNamed:@"boyhead.png"] forState:UIControlStateNormal];
         } else {
-            [self.headImageButton setBackgroundImage:[UIImage imageNamed:@"defaultSettingHeadImage.png"] forState:UIControlStateNormal];
+            [self.headImageButton setBackgroundImage:[UIImage imageNamed:@"btn_avatar.png"] forState:UIControlStateNormal];
         }
     }
     
@@ -203,7 +203,7 @@
     
     
     self.headImageButton.frame = CGRectMake(headImageOffsetX, headImageOffsetY, headImageSize, headImageSize);
-    //[self.headImageButton setBackgroundImage:[UIImage imageNamed:@"defaultSettingHeadImage.png"] forState:UIControlStateNormal];
+    //[self.headImageButton setBackgroundImage:[UIImage imageNamed:@"btn_avatar.png"] forState:UIControlStateNormal];
     self.headImageButton.layer.masksToBounds = YES;
     self.headImageButton.layer.cornerRadius = headImageSize/2;
     self.headImageButton.layer.borderWidth = 3;

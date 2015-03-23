@@ -124,11 +124,11 @@
         self.ageTitleLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 120, 44)];
         self.ageTitleLabel.text = @"";
         self.ageTitleLabel.textAlignment = NSTextAlignmentCenter;
-        self.ageTitleLabel.textColor = [UIColor colorWithRed:255.0/255.0f green:78.0/255.0f blue:162.0/255.0f alpha:1.0f];
+        self.ageTitleLabel.textColor = [UIColor colorWithRed:255.0/255.0f green:119/255.0f blue:119/255.0f alpha:1.0f];
         
         self.ageFilterButtonIcon = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"drop_btn"]];
         self.ageFilterButtonIcon.tag = 1;
-        self.ageFilterButtonIcon.frame = CGRectMake(95, 17, 15, 12);
+        self.ageFilterButtonIcon.frame = CGRectMake(100, 17, 10, 10);
         [self.ageFilterButton addTarget:self action:@selector(showAgeTableView) forControlEvents:UIControlEventTouchUpInside];
         
         [self.ageFilterButton addSubview:self.ageFilterButtonIcon];

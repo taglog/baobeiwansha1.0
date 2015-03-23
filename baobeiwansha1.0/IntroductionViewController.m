@@ -134,17 +134,18 @@
 
 -(void)initIntroPageViewController3{
     
-    UIButton *button = [[UIButton alloc]initWithFrame:CGRectMake((self.view.frame.size.width - 300)/2, self.view.frame.size.height - 160, 300, 60)];
+    UIButton *button = [[UIButton alloc]initWithFrame:CGRectMake(30, self.view.frame.size.height - 120, self.view.frame.size.width-60, (self.view.frame.size.width-60)*0.19)];
     [button setBackgroundImage:[UIImage imageNamed:@"3_btn"] forState:UIControlStateNormal];
     [button addTarget:self action:@selector(introFinished) forControlEvents:UIControlEventTouchUpInside];
 
-    UIImageView *imageView1 = [[UIImageView alloc]initWithFrame:CGRectMake(0, self.view.frame.size.height - 500, self.view.frame.size.width, 500)];
+    UIImageView *imageView1 = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.width*1.55)];
     imageView1.image = [UIImage imageNamed:@"3_bbws_all"];
+    //imageView1.backgroundColor = [UIColor colorWithRed:255.0/255.0f green:119/255.0f blue:119/255.0f alpha:1.0f];
     
     self.introPageViewController3 = [[UIViewController alloc]init];
     [self.introPageViewController3.view addSubview:imageView1];
     
-    self.introPageViewController3.view.backgroundColor = [UIColor colorWithRed:255.0/255.0f green:120.0/255.0f blue:120.0/255.0f alpha:1.0f];
+    self.introPageViewController3.view.backgroundColor = [UIColor whiteColor];
     [self.introPageViewController3.view addSubview:button];
     
 }
