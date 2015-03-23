@@ -14,13 +14,13 @@
 
 @property (nonatomic,assign)BOOL reloading;
 
-@property (nonatomic,retain) UITableView *postTableView;
-
-@property (nonatomic,strong) NSMutableArray *postTableArray;
-
 @property (nonatomic,retain)EGORefreshView *refreshHeaderView;
 
 @property (nonatomic,retain)EGORefreshView *refreshFooterView;
+
+@property (nonatomic,retain) UITableView *postTableView;
+
+@property (nonatomic,strong) NSMutableArray *postTableArray;
 
 @property (nonatomic,retain)AppDelegate *appDelegate;
 
@@ -270,7 +270,7 @@
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     manager.requestSerializer.timeoutInterval = 20;
     [manager POST:urlString parameters:postParam success:^(AFHTTPRequestOperation *operation,id responseObject) {
-        
+
         NSArray *responseArray = [responseObject valueForKey:@"data"];
         
         //如果存在数据，那么就初始化tableView

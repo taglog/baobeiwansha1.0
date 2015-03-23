@@ -12,7 +12,7 @@
 
 @property (nonatomic,retain) UIImage *normalIcon;
 @property (nonatomic,retain) UIImage *highlightIcon;
-
+@property (nonatomic,retain) CALayer *bottomBorder;
 @end
 @implementation TabView
 
@@ -33,6 +33,10 @@
     if(!self.tabLabel){
         self.tabLabel= [[UILabel alloc]init];
         [self addSubview:self.tabLabel];
+    }
+    if(!self.bottomBorder){
+        self.bottomBorder = [CALayer layer];
+        [self.layer addSublayer:self.bottomBorder];
     }
     
 }
@@ -61,6 +65,11 @@
     self.tabLabel.text = self.tabTitle;
     self.tabLabel.textAlignment = NSTextAlignmentCenter;
     self.tabLabel.font = [UIFont systemFontOfSize: 12.0f];
+    
+    self.bottomBorder.frame = CGRectMake(0, self.frame.size.height-0.5f, self.frame.size.width, 0.5f);
+    self.bottomBorder.backgroundColor = [UIColor colorWithWhite:0.8f
+                                                          alpha:1.0f].CGColor;
+    
     
 }
 

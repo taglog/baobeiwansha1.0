@@ -8,7 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "ProfilePageModuleView.h"
+#import "EGORefreshView.h"
 
-@interface ProfilePageViewController : UIViewController <ProfilePageModuleViewDelegate,UITableViewDataSource,UITableViewDelegate>
+@interface ProfilePageViewController : UIViewController <ProfilePageModuleViewDelegate,UITableViewDataSource,UITableViewDelegate,EGORefreshViewDelegate>
 
 @end

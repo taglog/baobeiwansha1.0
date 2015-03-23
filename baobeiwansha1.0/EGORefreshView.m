@@ -40,7 +40,7 @@
             //上次更新label
             UILabel *lastUpdateLabel = [[UILabel alloc] init];
             if(_position == EGORefreshHeader){
-                lastUpdateLabel.frame = CGRectMake(0.0f, frame.size.height - 30.0f, self.frame.size.width, 20.0f);
+                lastUpdateLabel.frame = CGRectMake(0.0f, frame.size.height - 37.0f, self.frame.size.width, 20.0f);
             }
             else{
                 lastUpdateLabel.frame = CGRectMake(0.0f, 0.0f, self.frame.size.width, 20.0f);
