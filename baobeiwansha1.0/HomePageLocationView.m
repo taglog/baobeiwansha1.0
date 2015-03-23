@@ -81,16 +81,16 @@
     
     switch (indexPath.row) {
         case 0:
-            locationCell.iconView.backgroundColor = [UIColor colorWithRed:62.0/255.0f green:255.0/255.0f blue:167.0/255.0f alpha:1.0f];
+            locationCell.iconView.backgroundColor = [UIColor colorWithRed:76/255.0f green:175/255.0f blue:80/255.0f alpha:1.0f];
             break;
         case 1:
-            locationCell.iconView.backgroundColor = [UIColor colorWithRed:248.0/255.0f green:207.0/255.0f blue:66.0/255.0f alpha:1.0f];
+            locationCell.iconView.backgroundColor = [UIColor colorWithRed:205/255.0f green:220/255.0f blue:57/255.0f alpha:1.0f];
             break;
         case 2:
-            locationCell.iconView.backgroundColor = [UIColor colorWithRed:255.0/255.0f green:178.0/255.0f blue:79.0/255.0f alpha:1.0f];
+            locationCell.iconView.backgroundColor = [UIColor colorWithRed:255/255.0f green:193/255.0f blue:7/255.0f alpha:1.0f];
             break;
         case 3:
-            locationCell.iconView.backgroundColor = [UIColor colorWithRed:215.0/255.0f green:91.0/255.0f blue:188.0/255.0f alpha:1.0f];
+            locationCell.iconView.backgroundColor = [UIColor colorWithRed:156/255.0f green:39/255.0f blue:176/255.0f alpha:1.0f];
             break;
         default:
             break;

@@ -471,6 +471,9 @@
     
     HomePagePostViewController *post = [[HomePagePostViewController alloc] init];
     post.hidesBottomBarWhenPushed = YES;
+    post.currentPostID = postID;
+    post.currentDaysIndex = [[[self.responseDict objectForKey:@"dailyMessage"] valueForKey:@"days_index"] integerValue];
+
     
     NSDictionary *requestParam = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInteger:postID],@"postID",self.appDelegate.generatedUserID,@"userIdStr",nil];
     
