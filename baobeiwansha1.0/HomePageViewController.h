@@ -11,7 +11,8 @@
 #import "HomePageAbilityView.h"
 #import "HomePageLocationView.h"
 #import "HomePageTableView.h"
+#import "EGORefreshView.h"
 
-@interface HomePageViewController : UIViewController <UIScrollViewDelegate,HomePageModuleViewDelegate,HomePageProfileViewDelegate>
+@interface HomePageViewController : UIViewController <UIScrollViewDelegate,HomePageModuleViewDelegate,HomePageProfileViewDelegate,EGORefreshViewDelegate>
 
 @end

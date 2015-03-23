@@ -14,13 +14,13 @@
 
 @property (nonatomic,assign)BOOL reloading;
 
-@property (nonatomic,retain) UITableView *postTableView;
-
-@property (nonatomic,strong) NSMutableArray *postTableArray;
-
 @property (nonatomic,retain)EGORefreshView *refreshHeaderView;
 
 @property (nonatomic,retain)EGORefreshView *refreshFooterView;
+
+@property (nonatomic,retain) UITableView *postTableView;
+
+@property (nonatomic,strong) NSMutableArray *postTableArray;
 
 @property (nonatomic,retain)AppDelegate *appDelegate;
 

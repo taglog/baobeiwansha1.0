@@ -112,7 +112,6 @@
     
     [PostViewTimeAnalytics beginLogPageView:self.postID];
     
-    [self initCollectionButton];
     //初始化textView
     [self initTextView];
     
@@ -132,10 +131,6 @@
     
 }
 
--(void)initCollectionButton{
-    
-}
-
 
 -(void)initLeftBarButton{
     
@@ -148,6 +143,7 @@
 -(void)popViewController{
     [self.navigationController popViewControllerAnimated:YES];
 }
+
 
 -(IBAction)collectPost:(id)sender{
     

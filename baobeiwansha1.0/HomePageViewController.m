@@ -17,15 +17,23 @@
 #import "ButtonCanDragScrollView.h"
 
 @interface HomePageViewController ()
+
 @property (nonatomic,retain) UIScrollView *homeScrollView;
+
 @property (nonatomic,assign) BOOL isNavigationHidden;
+
 @property (nonatomic,retain) NSMutableDictionary *userInfoDict;
 @property (nonatomic,assign) int babyDay;
 @property (nonatomic,assign) int babyMonth;
+
 @property (nonatomic,retain) HomePageProfileView *homePageProfileView;
 @property (nonatomic,retain) HomePageAbilityView *homePageAbilityView;
 @property (nonatomic,retain) HomePageLocationView *homePageLocationView;
 @property (nonatomic,retain) HomePageTableView *homePageTableView;
+
+@property (nonatomic,assign)BOOL reloading;
+@property (nonatomic,retain)EGORefreshView *refreshHeaderView;
+
 
 @property (nonatomic,retain) NSDictionary *responseDict;
 
@@ -110,9 +118,9 @@
     self.postArray = [[NSArray alloc]init];
     
     [self initUserInfo];
-    [self getInfoFromServer];
     [self initViews];
-
+    [self initRefreshHeaderView];
+    [self simulatePullDownRefresh];
 }
 
 -(void)initUserInfo{
@@ -145,47 +153,6 @@
     
 }
 
--(void)getInfoFromServer{
-    
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-    
-    
-    NSDictionary *requestParam = [NSDictionary dictionaryWithObjectsAndKeys:self.appDelegate.generatedUserID,@"userIdStr",nil];
-    
-    NSString *postRouter = @"index/home";
-    NSString *postRequestUrl = [self.appDelegate.rootURL stringByAppendingString:postRouter];
-    NSString *urlString = [postRequestUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    manager.requestSerializer.timeoutInterval = 20;
-    [manager POST:urlString parameters:requestParam success:^(AFHTTPRequestOperation *operation,id responseObject) {
-        
-        
-        if(responseObject != nil){
-            
-            self.responseDict = [responseObject valueForKey:@"data"];
-            self.abilityDict = [self.responseDict objectForKey:@"dailyMessage"];
-            self.locationArray = [self.responseDict objectForKey:@"taglist"];
-            self.postArray = [self.responseDict objectForKey:@"postlist"];
-            [self.userInfoDict setObject:[self.abilityDict valueForKey:@"days_message"] forKey:@"days_message"];
-            
-            [self.homePageProfileView setDict:self.userInfoDict frame:self.view.frame];
-            [self.homePageAbilityView setDict:self.abilityDict];
-
-            [self.homePageLocationView setArray:self.locationArray];
-            [self.homePageTableView setArray:self.postArray];
-            
-        }
-        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-        
-    }
-          failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-              
-              NSLog(@"%@",error);
-              [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-          }];
-    
-}
 -(void)initViews{
 
     [self initScrollView];
@@ -256,6 +223,149 @@
     self.homePageTableView.title = @"寓教于乐可没那么简单，父母也来学习吧~";
     
 }
+//初始化下拉刷新header
+-(void)initRefreshHeaderView{
+    
+    //初始化headerView
+    if(!self.refreshHeaderView){
+        self.refreshHeaderView = [[EGORefreshView alloc] initWithScrollView:self.homeScrollView position:EGORefreshHeader ];
+        self.refreshHeaderView.delegate = self;
+        
+        [self.homeScrollView addSubview:self.refreshHeaderView];
+        
+    }
+    
+}
+
+#pragma mark EGORefreshReloadData
+- (void)reloadTableViewDataSource{
+    
+    //下拉刷新的数据处理
+    if(_refreshHeaderView.pullDown){
+        [self performPullDownRefresh];
+    }
+    
+}
+
+-(void)simulatePullDownRefresh{
+    
+    [self.refreshHeaderView setState:EGOOPullRefreshLoading];
+    self.homeScrollView.contentOffset = CGPointMake(0, -60);
+    
+    [self performPullDownRefresh];
+}
+
+-(void)performPullDownRefresh{
+    
+    _reloading = YES;
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    
+    
+    NSDictionary *requestParam = [NSDictionary dictionaryWithObjectsAndKeys:self.appDelegate.generatedUserID,@"userIdStr",nil];
+    
+    NSString *postRouter = @"index/home";
+    NSString *postRequestUrl = [self.appDelegate.rootURL stringByAppendingString:postRouter];
+    NSString *urlString = [postRequestUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    manager.requestSerializer.timeoutInterval = 20;
+    [manager POST:urlString parameters:requestParam success:^(AFHTTPRequestOperation *operation,id responseObject) {
+        
+        
+        if(responseObject != nil){
+            
+            self.responseDict = [responseObject valueForKey:@"data"];
+            self.abilityDict = [self.responseDict objectForKey:@"dailyMessage"];
+            self.locationArray = [self.responseDict objectForKey:@"taglist"];
+            self.postArray = [self.responseDict objectForKey:@"postlist"];
+            [self.userInfoDict setObject:[self.abilityDict valueForKey:@"days_message"] forKey:@"days_message"];
+            
+            [self.homePageProfileView setDict:self.userInfoDict frame:self.view.frame];
+            [self.homePageAbilityView setDict:self.abilityDict];
+            
+            [self.homePageLocationView setArray:self.locationArray];
+            [self.homePageTableView setArray:self.postArray];
+            
+        }
+        [self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:0.3f];
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+    }
+          failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+              
+              NSLog(@"%@",error);
+              [self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:0.3f];
+              [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+          }];
+    
+    
+    
+    
+    
+    
+}
+
+- (void)doneLoadingTableViewData{
+    
+    _reloading = NO;
+    [self.refreshHeaderView egoRefreshScrollViewDataSourceDidFinishedLoading:self.homeScrollView];
+    
+    
+}
+
+#pragma mark - EGOPullRefreshDelegate
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    
+    CGFloat startPointY = 0;
+    CGFloat endPointY = 200;
+    
+    
+    if(scrollView.contentOffset.y >startPointY && scrollView.contentOffset.y < endPointY){
+        
+        self.navBarAlpha = scrollView.contentOffset.y/(endPointY - startPointY);
+        
+        [self setNavigationBarColorWithAlpha:self.navBarAlpha];
+        
+        self.isNavigationHidden = YES;
+        
+    }else if(scrollView.contentOffset.y >= endPointY){
+        
+        //[self setNavigationBarColorWithAlpha:1.0f];
+        
+    }else if(scrollView.contentOffset.y <= startPointY){
+        
+        [self setNavigationBarTransparent];
+        self.isNavigationHidden = NO;
+    }
+    
+
+    [self.refreshHeaderView egoRefreshScrollViewDidScroll:scrollView];
+    
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
+    
+    [self.refreshHeaderView egoRefreshScrollViewDidEndDragging:scrollView];
+    
+}
+
+#pragma mark - EGORefreshTableHeaderDelegate Methods
+
+- (void)egoRefreshTableHeaderDidTriggerRefresh:(EGORefreshView *)view{
+    
+    [self reloadTableViewDataSource];
+    
+}
+
+- (BOOL)egoRefreshTableHeaderDataSourceIsLoading:(EGORefreshView *)view{
+    
+    return _reloading;
+}
+
+- (NSDate*)egoRefreshTableHeaderDataSourceLastUpdated:(EGORefreshView *)view{
+    return [NSDate date];
+    
+}
 
 #pragma mark - sectionDelegateMethod
 
@@ -285,37 +395,6 @@
     
 }
 
-#pragma mark - scrollViewDelegate
--(void)scrollViewDidScroll:(UIScrollView *)scrollView{
-    
-    CGFloat startPointY = 0;
-    CGFloat endPointY = 200;
-    
-    if(scrollView.contentOffset.y < 0){
-        CGPoint point = CGPointMake(0, 0);
-        scrollView.contentOffset = point;
-        
-    }
-    
-    if(scrollView.contentOffset.y >startPointY && scrollView.contentOffset.y < endPointY){
-        
-        self.navBarAlpha = scrollView.contentOffset.y/(endPointY - startPointY);
-        
-        [self setNavigationBarColorWithAlpha:self.navBarAlpha];
-        
-        self.isNavigationHidden = YES;
-        
-    }else if(scrollView.contentOffset.y >= endPointY){
-        
-        //[self setNavigationBarColorWithAlpha:1.0f];
-
-    }else if(scrollView.contentOffset.y <= startPointY){
-        
-        [self setNavigationBarTransparent];
-        self.isNavigationHidden = NO;
-    }
-    
-}
 
 #pragma mark homePageModuleView
 -(void)pushViewControllerWithSender:(id)sender moduleView:(UIView *)view{
@@ -354,6 +433,7 @@
     [self.navigationController pushViewController:profilePageSetting animated:YES];
     
 }
+
 
 -(void)pushBabyConditionViewController{
     
