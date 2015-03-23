@@ -161,8 +161,11 @@
     [self initViewSection1];
     [self initViewSection2];
     [self initViewSection3];
+
+
     
 }
+
 
 -(void)initScrollView{
     
@@ -183,24 +186,29 @@
     self.homePageProfileView.delegate = self;
     [self.homeScrollView addSubview:self.homePageProfileView];
     
-
 }
 
 -(void)initViewSection1{
     
-    self.homePageAbilityView = [[HomePageAbilityView alloc]initWithFrame:CGRectMake(0, 260, self.view.frame.size.width, 160)];
+    
+    self.homePageAbilityView = [[HomePageAbilityView alloc]initWithFrame:CGRectMake(0, 240, self.view.frame.size.width, 160)];
+    
+    //self.homePageAbilityView.frame = CGRectMake(0, self.homePageProfileView.frame.size.height+10, self.view.frame.size.width, 160);
+    //self.homePageAbilityView = [[HomePageAbilityView alloc]init];
     
     self.homePageAbilityView.title = @"这些潜能要大发展啦，快抓住时机跟我玩吧~";
     self.homePageAbilityView.tag = 0;
     self.homePageAbilityView.delegate = self;
     [self.homeScrollView addSubview:self.homePageAbilityView];
+    
 
 }
 
+
 -(void)initViewSection2{
     
-    self.homePageLocationView = [[HomePageLocationView alloc]initWithFrame:CGRectMake(0, 430, self.view.frame.size.width, 175)];
-    
+    self.homePageLocationView = [[HomePageLocationView alloc]initWithFrame:CGRectMake(0, 410, self.view.frame.size.width, 175)];
+
     self.homePageLocationView.tag = 1;
     self.homePageLocationView.delegate = self;
     
@@ -212,7 +220,7 @@
 
 -(void)initViewSection3{
     
-    self.homePageTableView = [[HomePageTableView alloc]initWithFrame:CGRectMake(0, 615, self.view.frame.size.width, 225)];
+    self.homePageTableView = [[HomePageTableView alloc]initWithFrame:CGRectMake(0, 597, self.view.frame.size.width, 225)];
     
     self.homePageTableView.tag = 2;
     self.homePageTableView.delegate = self;
