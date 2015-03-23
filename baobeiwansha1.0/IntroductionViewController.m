@@ -84,9 +84,9 @@
 
 -(void)initIntroPageViewController2{
     
-    UILabel *titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 64, self.view.frame.size.width, 60.0f)];
+    UILabel *titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 24, self.view.frame.size.width, 60.0f)];
     titleLabel.font = [UIFont fontWithName:@"STHeitiSC-Medium" size:40.0f];
-    titleLabel.text = @"培养啥?";
+    titleLabel.text = @"培 养 啥?";
     titleLabel.textAlignment = NSTextAlignmentCenter;
     titleLabel.textColor = [UIColor whiteColor];
     
@@ -171,7 +171,7 @@
 
 -(UIViewController *)introView:(IntroViewController *)introViewController contentViewControllerForViewAtIndex:(NSUInteger)index{
     
-    IntroPageViewController *introPageViewController;
+    UIViewController *introPageViewController;
     
     switch (index) {
         case 0:

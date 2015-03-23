@@ -67,8 +67,11 @@
     NSString *description = [dict valueForKey:@"tag_description"];
     if(description != (id)[NSNull null]){
         
-        NSRange range = [description rangeOfString:@"|"];
-        
+        NSRange range;
+        range = [description rangeOfString:@"|"];
+        if(range.location == NSNotFound){
+            range = [description rangeOfString:@"$$$$"];
+        }
         self.descriptionStringTop = [description substringToIndex:range.location];
         self.descriptionStringBottom = [description substringFromIndex:range.location+1];
     }

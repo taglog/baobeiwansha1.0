@@ -88,12 +88,12 @@
 
 -(void)initPageContentViews{
     
-    self.postTableViewController0 = [[PostTableViewController alloc]initWithURL:self.requestUrl type:1];
+    self.postTableViewController0 = [[PostTableViewController alloc]initWithURL:@{@"requestRouter":@"post/mycollection"} type:1];
     self.postTableViewController0.delegate = self;
-    self.postTableViewController1 = [[PostTableViewController alloc]initWithURL:@{@"requestRouter":@"post/category"} type:2];
+    self.postTableViewController1 = [[PostTableViewController alloc]initWithURL:@{@"requestRouter":@"post/mycollection"} type:2];
     self.postTableViewController1.delegate = self;
     
-    self.postTableViewController2 = [[PostTableViewController alloc]initWithURL:@{@"requestRouter":@"post/category"} type:3];
+    self.postTableViewController2 = [[PostTableViewController alloc]initWithURL:@{@"requestRouter":@"post/mycollection"} type:3];
     self.postTableViewController2.delegate = self;
     
     

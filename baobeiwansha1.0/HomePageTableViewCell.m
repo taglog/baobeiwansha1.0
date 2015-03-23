@@ -82,7 +82,8 @@
 
     self.iconView.layer.cornerRadius = 3;
     self.iconView.layer.masksToBounds = YES;
-    
+    self.iconView.contentMode = UIViewContentModeScaleAspectFit;
+
     self.titleLabel.frame = CGRectMake(65, 0, self.aframe.size.width - 80, 60);
     self.titleLabel.textColor = [UIColor colorWithRed:103.0/255.0f green:103.0/255.0f blue:103.0/255.0f alpha:1.0f];
     self.titleLabel.font = [UIFont systemFontOfSize:14.0f];

@@ -114,6 +114,7 @@
 }
 -(void)pushTagPageViewController{
     TagPageViewController *tagPageViewController = [[TagPageViewController alloc]init];
+    tagPageViewController.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:tagPageViewController animated:YES];
 }
 -(void)initTitleView{

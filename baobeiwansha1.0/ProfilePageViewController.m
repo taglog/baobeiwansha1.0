@@ -18,21 +18,36 @@
 #import "ProfilePageTableViewController.h"
 
 @interface ProfilePageViewController ()
+@property (nonatomic,assign) BOOL initialized;
+
+@property (nonatomic,assign) BOOL reloading;
+@property (nonatomic,retain) EGORefreshView *refreshHeaderView;
 
 @property (nonatomic,retain) UIScrollView *profilePageScrollView;
+
 @property (nonatomic,retain) ProfilePageModuleView *profilePageNoticeView;
 @property (nonatomic,retain) ProfilePageModuleView *profilePageCollectionView;
 @property (nonatomic,retain) ProfilePageModuleView *profilePageCommentView;
+
 @property (nonatomic,retain) AppDelegate *appDelegate;
+
 @property (nonatomic,retain) NSMutableDictionary *responseDict;
 @property (nonatomic,retain) NSMutableArray *responseCollection;
 @property (nonatomic,retain) NSMutableArray *responseComment;
+
 @property (nonatomic,assign) NSInteger collectionCount;
 @property (nonatomic,assign) NSInteger commentCount;
 
 @end
-@implementation ProfilePageViewController
 
+@implementation ProfilePageViewController
+-(id)init{
+    self = [super init];
+    if(self){
+        self.initialized = YES;
+    }
+    return self;
+}
 -(void)viewDidLoad{
     [super viewDidLoad];
     
@@ -43,8 +58,10 @@
     self.commentCount = 0;
     
     [self defaultSettings];
-    [self initViews];
-    [self getInfoFromServer];
+    
+    [self initProfilePageScrollView];
+    [self initRefreshHeaderView];
+    [self simulatePullDownRefresh];
 }
 
 -(void)defaultSettings{
@@ -63,75 +80,11 @@
     
     self.navigationItem.title = @"我的";
 
-}
-
-
--(void)getInfoFromServer{
-    
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-    
-    
-    NSDictionary *requestParam = [NSDictionary dictionaryWithObjectsAndKeys:self.appDelegate.generatedUserID,@"userIdStr",nil];
-    
-    NSString *postRouter = @"post/my";
-    NSString *postRequestUrl = [self.appDelegate.rootURL stringByAppendingString:postRouter];
-    NSString *urlString = [postRequestUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    manager.requestSerializer.timeoutInterval = 20;
-    [manager POST:urlString parameters:requestParam success:^(AFHTTPRequestOperation *operation,id responseObject) {
-        
-        NSLog(@"%@",responseObject);
-        if(responseObject != nil){
-            
-            if([responseObject valueForKey:@"data"] != nil){
-                
-            self.responseDict = [NSMutableDictionary dictionaryWithDictionary:[responseObject valueForKey:@"data"]];
-                if([self.responseDict valueForKey:@"my_collection"]){
-                    self.responseCollection = [self.responseDict valueForKey:@"my_collection"];
-                }
-                if([self.responseDict valueForKey:@"my_comment"]){
-                    self.responseComment = [self.responseDict valueForKey:@"my_comment"];
-                }
- 
-                
-                self.collectionCount = [[self.responseDict valueForKey:@"my_collection_count"] integerValue];
-                self.commentCount = [[self.responseDict valueForKey:@"my_comment_count"] integerValue];
-                
-            self.profilePageCollectionView.moduleDetailLabel.text =[NSString stringWithFormat:@"已为孩子收藏%ld种玩耍内容",(long)self.collectionCount];
-            self.profilePageCommentView.moduleDetailLabel.text = [NSString stringWithFormat:@"一共发表%ld篇评论",(long)self.commentCount];
-
-            
-            [self.profilePageCollectionView.contentTableView reloadData];
-
-            [self.profilePageCommentView.contentTableView reloadData];
-            
-            [self resetFrames];
-            }
-        }
-        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-        
-    }
-          failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-              
-              NSLog(@"%@",error);
-              [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-          }];
-    
-    
-    
+    self.automaticallyAdjustsScrollViewInsets = NO;
     
 }
--(void)resetFrames{
-    
-    self.profilePageNoticeView.frame = CGRectMake(0, 0, self.view.frame.size.width, 105);
-    self.profilePageCollectionView.frame = CGRectMake(0, self.profilePageNoticeView.frame.size.height, self.view.frame.size.width, 60 + [self.responseCollection count]*110 + 45);
-    
-    self.profilePageCommentView.frame = CGRectMake(0, 105 + self.profilePageCollectionView.frame.size.height, self.view.frame.size.width, 60 + [self.responseComment count]*150 + 45);
-    
-    self.profilePageScrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.profilePageNoticeView.frame.size.height + self.profilePageCollectionView.frame.size.height + self.profilePageCommentView.frame.size.height);
 
-}
+
 -(void)pushSettingController{
     
     ProfilePageSystemSettingViewController *profile = [[ProfilePageSystemSettingViewController alloc]init];
@@ -140,23 +93,23 @@
     
 }
 
+
+-(void)initProfilePageScrollView{
+    
+    self.profilePageScrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 64, self.view.frame.size.width, self.view.frame.size.height - 50-64)];
+    self.profilePageScrollView.contentSize = CGSizeMake(self.view.frame.size.width, 900);
+
+    self.profilePageScrollView.delegate = self;
+    [self.view addSubview:self.profilePageScrollView];
+    
+}
 -(void)initViews{
     
-    [self initProfilePageScrollView];
     [self initProfilePageNoticeView];
     [self initProfilePageCollectionView];
     [self initProfilePageCommentView];
     
 }
-
--(void)initProfilePageScrollView{
-    
-    self.profilePageScrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - 49)];
-    self.profilePageScrollView.contentSize = CGSizeMake(self.view.frame.size.width, 1000);
-    [self.view addSubview:self.profilePageScrollView];
-    
-}
-
 -(void)initProfilePageNoticeView{
     
     self.profilePageNoticeView = [[ProfilePageModuleView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 105)];
@@ -462,4 +415,145 @@
     
 }
 
+-(void)initRefreshHeaderView{
+    
+    //初始化headerView
+    if(_refreshHeaderView == nil){
+        _refreshHeaderView = [[EGORefreshView alloc] initWithScrollView:self.profilePageScrollView position:EGORefreshHeader ];
+        _refreshHeaderView.delegate = self;
+        
+        [self.profilePageScrollView addSubview:_refreshHeaderView];
+        
+    }
+    
+}
+#pragma mark EGORefreshReloadData
+- (void)reloadTableViewDataSource{
+    
+    //下拉刷新的数据处理
+    if(_refreshHeaderView.pullDown){
+        [self performPullDownRefresh];
+    }
+    
+}
+
+-(void)simulatePullDownRefresh{
+    
+    [_refreshHeaderView setState:EGOOPullRefreshLoading];
+    self.profilePageScrollView.contentOffset = CGPointMake(0, -60);
+    
+    [self performPullDownRefresh];
+}
+
+-(void)performPullDownRefresh{
+    
+    _reloading = YES;
+    
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    
+    
+    NSDictionary *requestParam = [NSDictionary dictionaryWithObjectsAndKeys:self.appDelegate.generatedUserID,@"userIdStr",nil];
+    
+    NSString *postRouter = @"post/my";
+    NSString *postRequestUrl = [self.appDelegate.rootURL stringByAppendingString:postRouter];
+    NSString *urlString = [postRequestUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    manager.requestSerializer.timeoutInterval = 20;
+    [manager POST:urlString parameters:requestParam success:^(AFHTTPRequestOperation *operation,id responseObject) {
+        
+        NSLog(@"%@",responseObject);
+        if(responseObject != nil){
+            
+            if([responseObject valueForKey:@"data"] != nil){
+                
+                if(self.initialized == YES){
+                    [self initViews];
+                    self.initialized = NO;
+                }
+                self.responseDict = [NSMutableDictionary dictionaryWithDictionary:[responseObject valueForKey:@"data"]];
+                if([self.responseDict valueForKey:@"my_collection"]){
+                    self.responseCollection = [self.responseDict valueForKey:@"my_collection"];
+                }
+                if([self.responseDict valueForKey:@"my_comment"]){
+                    self.responseComment = [self.responseDict valueForKey:@"my_comment"];
+                }
+                
+                
+                self.collectionCount = [[self.responseDict valueForKey:@"my_collection_count"] integerValue];
+                self.commentCount = [[self.responseDict valueForKey:@"my_comment_count"] integerValue];
+                
+                self.profilePageCollectionView.moduleDetailLabel.text =[NSString stringWithFormat:@"已为孩子收藏%ld种玩耍内容",(long)self.collectionCount];
+                self.profilePageCommentView.moduleDetailLabel.text = [NSString stringWithFormat:@"一共发表%ld篇评论",(long)self.commentCount];
+                
+                
+                [self.profilePageCollectionView.contentTableView reloadData];
+                
+                [self.profilePageCommentView.contentTableView reloadData];
+                
+                [self resetFrames];
+            }
+        }
+        [self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:0.3f];
+
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+    }
+          failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+              
+              NSLog(@"%@",error);
+              [self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:0.3f];
+
+              [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+          }];
+    
+}
+-(void)resetFrames{
+    
+    self.profilePageNoticeView.frame = CGRectMake(0, 0, self.view.frame.size.width, 105);
+    self.profilePageCollectionView.frame = CGRectMake(0, self.profilePageNoticeView.frame.size.height, self.view.frame.size.width, 60 + [self.responseCollection count]*110 + 45);
+    
+    self.profilePageCommentView.frame = CGRectMake(0, 105 + self.profilePageCollectionView.frame.size.height, self.view.frame.size.width, 60 + [self.responseComment count]*150 + 45);
+    
+    //self.profilePageScrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.profilePageNoticeView.frame.size.height + self.profilePageCollectionView.frame.size.height + self.profilePageCommentView.frame.size.height);
+    
+}
+- (void)doneLoadingTableViewData{
+    
+    _reloading = NO;
+    [_refreshHeaderView egoRefreshScrollViewDataSourceDidFinishedLoading:self.profilePageScrollView];
+    
+}
+
+
+#pragma mark - EGOPullRefreshDelegate
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    
+    [_refreshHeaderView egoRefreshScrollViewDidScroll:scrollView];
+    
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
+    
+    [_refreshHeaderView egoRefreshScrollViewDidEndDragging:scrollView];
+    
+}
+
+#pragma mark - EGORefreshTableHeaderDelegate Methods
+
+- (void)egoRefreshTableHeaderDidTriggerRefresh:(EGORefreshView *)view{
+    
+    [self reloadTableViewDataSource];
+    
+}
+
+- (BOOL)egoRefreshTableHeaderDataSourceIsLoading:(EGORefreshView *)view{
+    
+    return _reloading;
+}
+
+- (NSDate*)egoRefreshTableHeaderDataSourceLastUpdated:(EGORefreshView *)view{
+    return [NSDate date];
+    
+}
 @end

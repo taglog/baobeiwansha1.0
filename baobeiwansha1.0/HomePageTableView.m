@@ -46,6 +46,7 @@
     return 1;
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    
     return 3;
 }
 
@@ -56,9 +57,15 @@
     HomePageTableViewCell *cell=[tableView dequeueReusableCellWithIdentifier:ID];
 
     if(cell == nil){
+        
         cell = [[HomePageTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ID];
+        
     }
-    [cell setDict:[self.tableArray objectAtIndex:indexPath.row]frame:self.frame];
+    if([self.tableArray objectAtIndex:indexPath.row] != (id)[NSNull null]){
+        
+        [cell setDict:[self.tableArray objectAtIndex:indexPath.row] frame:self.frame];
+
+    }
     
     return cell;
 }

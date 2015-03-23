@@ -380,6 +380,7 @@
         _textView.attributedString = [self _attributedStringForSnippetUsingiOS6Attributes:NO];
         
         _textViewSize = [self getTextViewHeight:_textView.attributedString];
+        
         if(_textViewSize.height* 0.052 < 100){
             _textView.frame = CGRectMake(0, 0, _frame.size.width, _textViewSize.height +100);
         }else{
@@ -726,6 +727,8 @@
     
     [_refreshFooterView setFrame:CGRectMake(0, _postScrollView.contentSize.height, self.view.frame.size.width, 100.0f)];
 }
+
+
 -(CGFloat)getCommentTableViewHeight:(NSMutableArray *)commentTableViewCell{
     
     CGFloat height = 0;
@@ -796,6 +799,7 @@
     }];
     
 }
+
 
 //初始化tableView
 -(void)initTableView{

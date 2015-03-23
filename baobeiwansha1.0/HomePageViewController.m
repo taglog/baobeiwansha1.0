@@ -15,6 +15,7 @@
 #import "AppDelegate.h"
 #import "AFNetworking.h"
 #import "ButtonCanDragScrollView.h"
+#import "HomePagePostViewController.h"
 
 @interface HomePageViewController ()
 
@@ -31,8 +32,8 @@
 @property (nonatomic,retain) HomePageLocationView *homePageLocationView;
 @property (nonatomic,retain) HomePageTableView *homePageTableView;
 
-@property (nonatomic,assign)BOOL reloading;
-@property (nonatomic,retain)EGORefreshView *refreshHeaderView;
+@property (nonatomic,assign) BOOL reloading;
+@property (nonatomic,retain) EGORefreshView *refreshHeaderView;
 
 
 @property (nonatomic,retain) NSDictionary *responseDict;
@@ -44,7 +45,7 @@
 @property (nonatomic,retain) AppDelegate *appDelegate;
 @property (nonatomic,assign) CGFloat navBarAlpha;
 
-
+@property (nonatomic,assign) BOOL initialized;
 @end
 
 @implementation HomePageViewController
@@ -52,6 +53,7 @@
 -(id)init{
     self = [super init];
     self.isNavigationHidden = NO;
+    self.initialized = YES;
     return self;
 }
 
@@ -118,7 +120,7 @@
     self.postArray = [[NSArray alloc]init];
     
     [self initUserInfo];
-    [self initViews];
+    [self initScrollView];
     [self initRefreshHeaderView];
     [self simulatePullDownRefresh];
 }
@@ -153,19 +155,6 @@
     
 }
 
--(void)initViews{
-
-    [self initScrollView];
-    //一共4个section
-    [self initProfileView];
-    [self initViewSection1];
-    [self initViewSection2];
-    [self initViewSection3];
-
-
-    
-}
-
 
 -(void)initScrollView{
     
@@ -173,13 +162,23 @@
         
         self.homeScrollView = [[ButtonCanDragScrollView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
         [self.view addSubview:self.homeScrollView];
-        self.homeScrollView.backgroundColor = [UIColor colorWithRed:245.0/255.0f green:245.0/255.0f blue:245.0/255.0f alpha:1.0];
+        self.homeScrollView.backgroundColor = [UIColor colorWithRed:250.0/255.0f green:250.0/255.0f blue:250.0/255.0f alpha:1.0];
         self.homeScrollView.contentSize = CGSizeMake(self.view.frame.size.width, 900);
         self.homeScrollView.canCancelContentTouches = YES;
         self.homeScrollView.delegate = self;
     }
     
 }
+-(void)initViews{
+
+    //一共4个section
+    [self initProfileView];
+    [self initViewSection1];
+    [self initViewSection2];
+    [self initViewSection3];
+    
+}
+
 -(void)initProfileView{
     
     self.homePageProfileView = [[HomePageProfileView alloc]init];
@@ -279,7 +278,6 @@
     manager.requestSerializer.timeoutInterval = 20;
     [manager POST:urlString parameters:requestParam success:^(AFHTTPRequestOperation *operation,id responseObject) {
         
-        
         if(responseObject != nil){
             
             self.responseDict = [responseObject valueForKey:@"data"];
@@ -288,13 +286,21 @@
             self.postArray = [self.responseDict objectForKey:@"postlist"];
             [self.userInfoDict setObject:[self.abilityDict valueForKey:@"days_message"] forKey:@"days_message"];
             
+            if(self.initialized == YES){
+                [self initViews];
+                self.initialized = NO;
+            }
+            
             [self.homePageProfileView setDict:self.userInfoDict frame:self.view.frame];
             [self.homePageAbilityView setDict:self.abilityDict];
             
             [self.homePageLocationView setArray:self.locationArray];
             [self.homePageTableView setArray:self.postArray];
-            
+
         }
+        
+        NSLog(@"111");
+
         [self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:0.3f];
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         
@@ -308,11 +314,18 @@
     
     
     
-    
+    NSLog(@"111");
+
     
     
 }
-
+-(void)resetFrames{
+    
+    self.homePageAbilityView.frame = CGRectMake(0, self.homePageProfileView.frame.size.height + 10, self.view.frame.size.width, 160);
+    self.homePageLocationView.frame = CGRectMake(0, self.homePageAbilityView.frame.origin.y + self.homePageAbilityView.frame.size.height, self.view.frame.size.width, 175);
+    self.homePageTableView.frame = CGRectMake(0, self.homePageLocationView.frame.origin.y + self.homePageLocationView.frame.size.height, self.view.frame.size.width, 225);
+    
+}
 - (void)doneLoadingTableViewData{
     
     _reloading = NO;
@@ -456,7 +469,7 @@
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
     
-    PostViewController *post = [[PostViewController alloc] init];
+    HomePagePostViewController *post = [[HomePagePostViewController alloc] init];
     post.hidesBottomBarWhenPushed = YES;
     
     NSDictionary *requestParam = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInteger:postID],@"postID",self.appDelegate.generatedUserID,@"userIdStr",nil];
@@ -466,8 +479,6 @@
     NSString *postRequestUrl = [self.appDelegate.rootURL stringByAppendingString:postRouter];
 
     NSString *urlString = [postRequestUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    NSLog(@"%@",postRequestUrl);
-    NSLog(@"%@",requestParam);
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     manager.requestSerializer.timeoutInterval = 20;
