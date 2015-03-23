@@ -26,9 +26,14 @@
 }
 -(void)setArray:(NSArray *)array{
     
-    self.tableArray = [[NSMutableArray alloc]initWithArray:array];
-    
-    [self.homePageTableView reloadData];
+
+    if([array  count]!= 0){
+
+        self.tableArray = [[NSMutableArray alloc]initWithArray:array];
+        
+        [self.homePageTableView reloadData];
+
+    }
     
 }
 -(void)initContentView{
@@ -43,11 +48,14 @@
 
 #pragma mark - UITableViewDataSource
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+   
     return 1;
+
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    
+
     return 3;
+
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -67,6 +75,8 @@
 
     }
     
+    NSLog(@"%@",self.tableArray);
+
     return cell;
 }
 
@@ -78,6 +88,8 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
     [self.delegate pushViewControllerWithSender:[[self.tableArray objectAtIndex:indexPath.row] valueForKey:@"ID"] moduleView:self];
+
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 @end

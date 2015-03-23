@@ -8,10 +8,17 @@
 
 #import <UIKit/UIKit.h>
 @protocol HomePageProfileViewDelegate <NSObject>
+
 -(void)pushProfilePageSettingViewController;
 -(void)pushBabyConditionViewController;
+
+-(void)resetFrame:(CGFloat)profileViewheight;
+
 @end
 @interface HomePageProfileView : UIView
+
+@property (nonatomic,retain) UIImageView *backgroundView;
+
 @property (nonatomic,weak) id<HomePageProfileViewDelegate> delegate;
 -(void)setDict:(NSDictionary *)dict frame:(CGRect)frame;
 

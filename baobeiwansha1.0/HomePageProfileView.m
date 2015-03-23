@@ -10,7 +10,6 @@
 
 @interface HomePageProfileView ()
 
-@property (nonatomic,retain) UIImageView *backgroundView;
 @property (nonatomic,retain) UIButton *headImageButton;
 @property (nonatomic,retain) UIImageView *genderIcon;
 @property (nonatomic,retain) UILabel *babyName;
@@ -253,12 +252,12 @@
 
     
     // 最终得到整个section的高度
-    self.frame = CGRectMake(0, 0, self.aframe.size.width, profileViewInitialHeight+self.babyConditionTextView.frame.size.height);
+    self.frame = CGRectMake(0, 0, self.aframe.size.width, profileViewInitialHeight + self.babyConditionTextView.frame.size.height);
     
-    self.backgroundView.frame = CGRectMake(0, 0, self.aframe.size.width, profileViewInitialHeight+self.babyConditionTextView.frame.size.height);
+    self.backgroundView.frame = CGRectMake(0, 0, self.aframe.size.width, profileViewInitialHeight + self.babyConditionTextView.frame.size.height);
     self.backgroundView.image = [UIImage imageNamed:@"topbackground"];
     
-    
+    [self.delegate resetFrame:self.backgroundView.frame.size.height];
 }
 
 -(void)pushProfilePageSetting{

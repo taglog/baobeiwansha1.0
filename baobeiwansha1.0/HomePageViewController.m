@@ -38,6 +38,7 @@
 
 @property (nonatomic,retain) NSDictionary *responseDict;
 
+@property (nonatomic,retain) NSDictionary *userInfo;
 @property (nonatomic,retain) NSDictionary *abilityDict;
 @property (nonatomic,retain) NSArray *locationArray;
 @property (nonatomic,retain) NSArray *postArray;
@@ -118,8 +119,8 @@
     self.responseDict = [[NSDictionary alloc]init];
     self.locationArray = [[NSArray alloc]init];
     self.postArray = [[NSArray alloc]init];
-    
-    [self initUserInfo];
+    self.userInfo = [[NSDictionary alloc]init];
+
     [self initScrollView];
     [self initRefreshHeaderView];
     [self simulatePullDownRefresh];
@@ -132,23 +133,8 @@
     
     //如果存在userinfo.plist
     if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
+        
         self.userInfoDict = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
-        NSDate *date = [self.userInfoDict objectForKey:@"babyBirthday"];
-        NSString *timeStamp = [NSString stringWithFormat:@"%ld", (long)[date timeIntervalSince1970]];
-        int time = [timeStamp intValue];
-        NSDate *nowDate = [NSDate date];
-        NSString *nowStamp = [NSString stringWithFormat:@"%ld", (long)[nowDate timeIntervalSince1970]];
-        int now = [nowStamp intValue];
-        
-        int babyBirthdayStamp = now - time;
-        
-        self.babyDay = floor(babyBirthdayStamp/60/60/24);
-        
-        self.babyMonth = floor(babyBirthdayStamp/60/60/24/30);
-        
-        NSString *babyMonthString = [AppDelegate birthdayMonthToString:self.babyMonth];
-        
-        [self.userInfoDict setObject:babyMonthString forKey:@"babyMonthString"];
         
         
     }
@@ -264,6 +250,8 @@
 
 -(void)performPullDownRefresh{
     
+    [self initUserInfo];
+
     _reloading = YES;
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
@@ -279,27 +267,41 @@
     [manager POST:urlString parameters:requestParam success:^(AFHTTPRequestOperation *operation,id responseObject) {
         
         if(responseObject != nil){
-            
+
             self.responseDict = [responseObject valueForKey:@"data"];
             self.abilityDict = [self.responseDict objectForKey:@"dailyMessage"];
             self.locationArray = [self.responseDict objectForKey:@"taglist"];
             self.postArray = [self.responseDict objectForKey:@"postlist"];
+            
+            self.userInfo = [self.responseDict objectForKey:@"appUser"];
+            
             [self.userInfoDict setObject:[self.abilityDict valueForKey:@"days_message"] forKey:@"days_message"];
+            
+            int time = [[self.userInfo valueForKey:@"app_user_baby_birthday"] intValue];
+            NSDate *nowDate = [NSDate date];
+            NSString *nowStamp = [NSString stringWithFormat:@"%ld", (long)[nowDate timeIntervalSince1970]];
+            int now = [nowStamp intValue];
+            
+            int babyBirthdayStamp = now - time;
+            int month = floor(babyBirthdayStamp/60/60/24/30);
+            
+            NSString *babyMonthString = [AppDelegate birthdayMonthToString:month];
+            
+            [self.userInfoDict setObject:[self.userInfo valueForKey:@"app_user_baby_sex"] forKey:@"babyGender"];
+            [self.userInfoDict setObject:babyMonthString forKey:@"babyMonthString"];
+            [self.userInfoDict setObject:[self.userInfo valueForKey:@"app_user_nickname"] forKey:@"nickName"];
             
             if(self.initialized == YES){
                 [self initViews];
                 self.initialized = NO;
             }
-            
+
             [self.homePageProfileView setDict:self.userInfoDict frame:self.view.frame];
             [self.homePageAbilityView setDict:self.abilityDict];
-            
             [self.homePageLocationView setArray:self.locationArray];
             [self.homePageTableView setArray:self.postArray];
-
         }
         
-        NSLog(@"111");
 
         [self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:0.3f];
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
@@ -313,19 +315,23 @@
           }];
     
     
-    
-    NSLog(@"111");
 
     
     
 }
--(void)resetFrames{
+-(void)resetFrame:(CGFloat)profileViewheight{
     
-    self.homePageAbilityView.frame = CGRectMake(0, self.homePageProfileView.frame.size.height + 10, self.view.frame.size.width, 160);
-    self.homePageLocationView.frame = CGRectMake(0, self.homePageAbilityView.frame.origin.y + self.homePageAbilityView.frame.size.height, self.view.frame.size.width, 175);
-    self.homePageTableView.frame = CGRectMake(0, self.homePageLocationView.frame.origin.y + self.homePageLocationView.frame.size.height, self.view.frame.size.width, 225);
+    CGFloat abilityViewHeight = 160;
+    CGFloat locationViewHeight = 175;
+    CGFloat tableViewHeight = 225;
     
+    self.homePageAbilityView.frame = CGRectMake(0, profileViewheight + 10, self.view.frame.size.width, abilityViewHeight);
+    self.homePageLocationView.frame = CGRectMake(0, self.homePageAbilityView.frame.origin.y + abilityViewHeight + 10, self.view.frame.size.width, 175);
+    self.homePageTableView.frame = CGRectMake(0, self.homePageLocationView.frame.origin.y + locationViewHeight + 10, self.view.frame.size.width, 225);
+
+    self.homeScrollView.contentSize = CGSizeMake(self.view.frame.size.width, profileViewheight + abilityViewHeight+tableViewHeight +tableViewHeight  + 40);
 }
+
 - (void)doneLoadingTableViewData{
     
     _reloading = NO;
@@ -392,17 +398,25 @@
 
 -(void)titleViewSelect:(id)sender{
     
-    TagPageViewController *tagPageViewController = [[TagPageViewController alloc]init];
-    tagPageViewController.hidesBottomBarWhenPushed = YES;
+    
     
     switch ([[sender superview] tag]) {
         case 0:
-            [self.navigationController pushViewController:tagPageViewController animated:YES];
-            break;
-        case 1:
+        {
+            TagPageViewController *tagPageViewController = [[TagPageViewController alloc]initWithType:0];
             
+            tagPageViewController.hidesBottomBarWhenPushed = YES;
+        
             [self.navigationController pushViewController:tagPageViewController animated:YES];
             break;
+        }
+        case 1:
+        {
+            TagPageViewController *tagPageViewController = [[TagPageViewController alloc]initWithType:1];
+            tagPageViewController.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:tagPageViewController animated:YES];
+            break;
+        }
         case 2:
         {
             HomePageAdviceController *adviceController = [[HomePageAdviceController alloc]initWithURL:@{@"requestRouter":@"index/getPosts"}];

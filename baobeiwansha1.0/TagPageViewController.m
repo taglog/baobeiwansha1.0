@@ -35,17 +35,20 @@
 
 @property (nonatomic,assign) BOOL isRefreshed;
 
+@property (nonatomic,assign) NSInteger type;
+
 //指示层
 @property (nonatomic,strong)JGProgressHUD *HUD;
+
 @property (nonatomic,assign)BOOL isHudShow;
 
 @end
 @implementation TagPageViewController
--(id)init{
+-(id)initWithType:(NSInteger)type{
     self = [super init];
     self.isRefreshed = NO;
     self.p = 2;
-    
+    self.type = type;
     return self;
     
 }
@@ -116,13 +119,16 @@
 -(void)initSegmentControl{
     
     NSArray *tagCategory = [NSArray arrayWithObjects:@"潜能",@"场景", nil];
+    if(!self.segmentedControl){
     self.segmentedControl = [[UISegmentedControl alloc]initWithItems:tagCategory];
     self.segmentedControl.frame = CGRectMake(15, 79, self.view.frame.size.width - 30, 30);
-    self.segmentedControl.selectedSegmentIndex = 0;
     self.segmentedControl.backgroundColor = [UIColor whiteColor];
     self.segmentedControl.tintColor = [UIColor colorWithRed:255.0/255.0f green:101.0/255.0f  blue:108.0/255.0f alpha:1.0f];
     [self.segmentedControl addTarget:self action:@selector(segmentedControlChangedValue:) forControlEvents:UIControlEventValueChanged];
-    [self.view addSubview:self.segmentedControl];
+        [self.view addSubview:self.segmentedControl];
+    }
+    self.segmentedControl.selectedSegmentIndex = self.type;
+
     
 }
 -(void)segmentedControlChangedValue:(UISegmentedControl *)sender{

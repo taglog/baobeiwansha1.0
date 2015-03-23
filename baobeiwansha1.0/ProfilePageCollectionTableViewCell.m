@@ -11,6 +11,8 @@
 
 @interface ProfilePageCollectionTableViewCell ()
 
+@property (nonatomic,assign) NSInteger type;
+
 //postID
 @property (nonatomic,assign) NSInteger ID;
 
@@ -97,6 +99,26 @@
     if(introduction != (id)[NSNull null]){
         self.introduction.text = introduction;
     }
+    if([dict objectForKey:@"post_taxonomy"]){
+        self.type = [[dict objectForKey:@"post_taxonomy"]integerValue];
+        NSLog(@"%ld",(long)[[dict objectForKey:@"post_taxonomy"]integerValue]);
+        if(self.type == 1){
+            self.typeLabel.text = @"绘本";
+            self.typeLabel.backgroundColor = [UIColor colorWithRed:255.0/255.0f green:0.0/255.0f blue:147.0/255.0f alpha:1.0f];
+            
+        }else if(self.type == 2){
+            self.typeLabel.text = @"玩具";
+            self.typeLabel.backgroundColor = [UIColor colorWithRed:0.0/255.0f green:198.0/255.0f blue:236.0/255.0f alpha:1.0f];
+            
+        }else if(self.type == 3){
+            self.typeLabel.text = @"游戏";
+            self.typeLabel.backgroundColor = [UIColor colorWithRed:145.0/255.0f green:231.0/255.0f blue:77.0/255.0f alpha:1.0f];
+            
+            
+        }
+        
+    }
+    
     [self setNeedsLayout];
     
 }
@@ -128,9 +150,7 @@
     self.title.font = [UIFont fontWithName:@"STHeitiSC-Medium" size:15.0f];
     self.title.textColor = [UIColor colorWithRed:80.0f/255.0f green:80.0f/255.0f blue:80.0f/255.0f alpha:1.0f];
     
-    self.typeLabel.text = @"玩具";
     self.typeLabel.frame = CGRectMake(self.aframe.size.width - 45,paddingTop, 30, 16.0f);
-    self.typeLabel.backgroundColor = [UIColor colorWithRed:0.0/255.0f green:198.0/255.0f blue:236.0/255.0f alpha:1.0f];
     self.typeLabel.textColor = [UIColor whiteColor];
     self.typeLabel.textAlignment = NSTextAlignmentCenter;
     self.typeLabel.layer.cornerRadius = 3;
