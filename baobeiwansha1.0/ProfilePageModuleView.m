@@ -76,7 +76,6 @@
 -(void)setFrame:(CGRect)frame{
     [super setFrame:frame];
     self.aframe = frame;
-    NSLog(@"%f",frame.size.height);
     [self setNeedsLayout];
 }
 -(void)layoutSubviews{

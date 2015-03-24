@@ -243,24 +243,6 @@
         [tagCell setDict:[self.locationData objectAtIndex:indexPath.row]];
 
     }
-    switch (indexPath.row % 4) {
-        case 0:
-            tagCell.iconView.backgroundColor = [UIColor colorWithRed:0.0/255.0 green:186.0/255.0f blue:180.0f/255.0f alpha:1.0f];
-            break;
-        case 1:
-            tagCell.iconView.backgroundColor = [UIColor colorWithRed:163.0/255.0 green:0.0/255.0f blue:130.0f/255.0f alpha:1.0f];
-            break;
-        case 2:
-            tagCell.iconView.backgroundColor = [UIColor colorWithRed:255.0/255.0 green:149.0/255.0f blue:0.0f/255.0f alpha:1.0f];
-
-            break;
-        case 3:
-            tagCell.iconView.backgroundColor = [UIColor colorWithRed:0.0/255.0 green:157.0/255.0f blue:237.0f/255.0f alpha:1.0f];
-
-            break;
-        default:
-            break;
-    }
     return tagCell;
     
 }

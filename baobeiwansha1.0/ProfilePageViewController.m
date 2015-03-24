@@ -475,7 +475,8 @@
     
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
-    
+    self.responseDict = nil;
+
     NSDictionary *requestParam = [NSDictionary dictionaryWithObjectsAndKeys:self.appDelegate.generatedUserID,@"userIdStr",nil];
     
     NSString *postRouter = @"post/my";
@@ -485,8 +486,7 @@
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     manager.requestSerializer.timeoutInterval = 20;
     [manager POST:urlString parameters:requestParam success:^(AFHTTPRequestOperation *operation,id responseObject) {
-        
-        //NSLog(@"%@",responseObject);
+
         if(responseObject != nil){
             
             if([responseObject valueForKey:@"data"] != nil){
@@ -495,17 +495,12 @@
                     [self initViews];
                     self.initialized = NO;
                 }
-                self.responseDict = [NSMutableDictionary dictionaryWithDictionary:[responseObject valueForKey:@"data"]];
-                if([self.responseDict valueForKey:@"my_collection"]){
-                    self.responseCollection = [self.responseDict valueForKey:@"my_collection"];
-                }
-                if([self.responseDict valueForKey:@"my_comment"]){
-                    self.responseComment = [self.responseDict valueForKey:@"my_comment"];
-                }
+               
+                self.responseDict = [[NSMutableDictionary alloc]initWithDictionary:[responseObject valueForKey:@"data"]];
                 
-                NSLog(@"%@",self.responseDict);
-                NSLog(@"%@",self.responseCollection);
-                NSLog(@"%@",self.responseComment);
+                self.responseCollection = [self.responseDict valueForKey:@"my_collection"];
+                
+                self.responseComment = [self.responseDict valueForKey:@"my_comment"];
                 
                 self.collectionCount = [[self.responseDict valueForKey:@"my_collection_count"] integerValue];
                 self.commentCount = [[self.responseDict valueForKey:@"my_comment_count"] integerValue];

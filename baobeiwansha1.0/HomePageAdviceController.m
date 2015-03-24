@@ -249,6 +249,7 @@
     }];
     [post showHUD];
     [self.navigationController pushViewController:post animated:YES];
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
 }
 

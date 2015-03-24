@@ -147,7 +147,7 @@
     // TODO: add a selected mark
     NSString *tag = [[self.ability objectAtIndex:indexPath.row] valueForKey:@"tag_name"];
     NSInteger tagID = [[[self.ability objectAtIndex:indexPath.row] valueForKey:@"tag_id"] integerValue];
-   
+    
     [self.delegate pushViewControllerWithSender: [NSNumber numberWithInteger:tagID] sender2:tag moduleView:self];
 }
 
