@@ -135,6 +135,10 @@
     
     switch ([sender selectedSegmentIndex]) {
         case 0:
+            if(self.isRefreshed == NO){
+                [self simulatePullDownRefresh];
+                self.isRefreshed = YES;
+            }
             [self.tagCollectionView reloadData];
             break;
         case 1:

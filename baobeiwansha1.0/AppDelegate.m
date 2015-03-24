@@ -92,7 +92,7 @@
 }
 -(void)globalSettings{
     
-    self.rootURL = @"http://localhost/baobaowansha/";
+    self.rootURL = @"http://blog.yhb360.com/baobaowansha/";
 
 }
 -(void)generateUserID{

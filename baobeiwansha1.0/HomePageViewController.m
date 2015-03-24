@@ -315,7 +315,7 @@
                 [self initViews];
                 self.initialized = NO;
             }
-            NSLog(@"%@",self.postArray);
+
             [self.homePageProfileView setDict:self.userInfoDict frame:self.view.frame];
             [self.homePageAbilityView setDict:self.abilityDict];
             [self.homePageLocationView setArray:self.locationArray];
@@ -514,7 +514,7 @@
         AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
         manager.requestSerializer.timeoutInterval = 20;
         [manager POST:urlString parameters:requestParam success:^(AFHTTPRequestOperation *operation,id responseObject) {
-            NSLog(@"%@",responseObject);
+
             NSDictionary *responseDict = [responseObject valueForKey:@"data"];
             if(responseDict != (id)[NSNull null]){
                 
@@ -563,7 +563,7 @@
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     manager.requestSerializer.timeoutInterval = 20;
     [manager POST:urlString parameters:requestParam success:^(AFHTTPRequestOperation *operation,id responseObject) {
-        NSLog(@"%@",responseObject);
+
         NSDictionary *responseDict = [responseObject valueForKey:@"data"];
         if(responseDict != (id)[NSNull null]){
             
