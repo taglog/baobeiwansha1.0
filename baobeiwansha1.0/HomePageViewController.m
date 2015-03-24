@@ -315,7 +315,7 @@
                 [self initViews];
                 self.initialized = NO;
             }
-            NSLog(@"%@",self.postArray);
+            NSLog(@"智玩建议列表: %@",self.postArray);
             [self.homePageProfileView setDict:self.userInfoDict frame:self.view.frame];
             [self.homePageAbilityView setDict:self.abilityDict];
             [self.homePageLocationView setArray:self.locationArray];
