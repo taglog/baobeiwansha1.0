@@ -79,7 +79,7 @@
     }
     [self.searchBar resignFirstResponder];
     
-    TagPostTableViewController *tagPostViewController = [[TagPostTableViewController alloc]initWithURL:@{@"requestRouter":@"post/tagsearch"} tagID:0 tag:self.searchBar.text];
+    TagPostTableViewController *tagPostViewController = [[TagPostTableViewController alloc]initWithURL:@{@"requestRouter":@"post/tagsearch"} tag:self.searchBar.text];
     [self.navigationController pushViewController: tagPostViewController animated:YES];
     
     
