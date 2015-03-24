@@ -551,7 +551,7 @@
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
     
-    PostViewController *post = [[PostViewController alloc] init];
+    HomePagePostViewController *post = [[HomePagePostViewController alloc] init];
     post.hidesBottomBarWhenPushed = YES; 
     // this is ugly, need more time
     post.currentPostID = postID;
