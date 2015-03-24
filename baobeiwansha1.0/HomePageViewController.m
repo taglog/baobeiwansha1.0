@@ -199,7 +199,7 @@
     //self.homePageAbilityView.frame = CGRectMake(0, self.homePageProfileView.frame.size.height+10, self.view.frame.size.width, 160);
     //self.homePageAbilityView = [[HomePageAbilityView alloc]init];
     
-    self.homePageAbilityView.title = @"这些潜能要大发展啦，快抓住时机跟我玩吧~";
+    self.homePageAbilityView.title = @"以下潜能要大发展啦，快抓住时机跟我玩吧~";
     self.homePageAbilityView.tag = 0;
     self.homePageAbilityView.delegate = self;
     [self.homeScrollView addSubview:self.homePageAbilityView];
@@ -290,7 +290,7 @@
             self.abilityDict = [self.responseDict objectForKey:@"dailyMessage"];
             self.locationArray = [self.responseDict objectForKey:@"taglist"];
             self.postArray = [self.responseDict objectForKey:@"postlist"];
-            
+            NSLog(@"%@",self.responseDict);
             self.userInfo = [self.responseDict objectForKey:@"appUser"];
             
             [self.userInfoDict setObject:[self.abilityDict valueForKey:@"days_message"] forKey:@"days_message"];
@@ -455,16 +455,7 @@
     TagPostTableViewController *tagPostViewController;
     switch (view.tag) {
         case 0:
-            @try {
-                NSLog(@"%ld",(long)[sender integerValue]);
-                tagPostViewController = [[TagPostTableViewController alloc]initWithURL:@{@"requestRouter":@"post/tag"} tagID:[sender integerValue] tag:sender2];
-            }
-            @catch (NSException *exception) {
-                NSLog(@"%@",exception);
-            }
-            @finally {
-                
-            }
+            tagPostViewController = [[TagPostTableViewController alloc]initWithURL:@{@"requestRouter":@"post/tag"} tagID:[sender integerValue] tag:sender2];
             
             tagPostViewController.hidesBottomBarWhenPushed = YES;
 

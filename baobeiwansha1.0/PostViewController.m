@@ -105,7 +105,8 @@
 //初始化Controlller的View
 -(void)initViewWithDict:(NSDictionary *)dict{
     
-    
+    self.p = 2;
+
     _postDict = dict;
     _postID = [[dict valueForKey:@"ID"]integerValue];
     _frame = self.view.frame;
@@ -944,21 +945,19 @@
     
     //上拉刷新的数据处理
     if(_refreshFooterView.pullUp){
-        self.p = 2;
         
         NSString *commentRouter = @"/comment/get";
         
-        NSDictionary *postParam = [[NSDictionary alloc]initWithObjectsAndKeys:self.appDelegate.generatedUserID,@"userIdStr",[NSNumber numberWithInteger:1],@"p",[NSNumber numberWithInteger:self.postID],@"id",nil];
+        NSDictionary *postParam = [[NSDictionary alloc]initWithObjectsAndKeys:self.appDelegate.generatedUserID,@"userIdStr",[NSNumber numberWithInteger:self.p],@"p",[NSNumber numberWithInteger:self.postID],@"id",nil];
         NSString *commentRequestUrl = [self.appDelegate.rootURL stringByAppendingString:commentRouter];
         AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
         manager.requestSerializer.timeoutInterval = 20;
         [manager POST:commentRequestUrl parameters:postParam success:^(AFHTTPRequestOperation *operation,id responseObject) {
-            
+
             NSArray *responseArray = [responseObject valueForKey:@"data"];
             if(responseArray != (id)[NSNull null]){
                 for(NSString *responseDict in responseArray){
-                    NSDictionary *dict = [responseArray valueForKey:responseDict];
-                    [self.commentTableViewCell addObject:dict];
+                    [self.commentTableViewCell addObject:responseDict];
                 }
                 
                 _reloading = YES;

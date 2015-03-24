@@ -15,6 +15,8 @@
 
 @property (nonatomic,assign) NSInteger tagID;
 
+@property (nonatomic,assign) BOOL isTagIDSet;
+
 @property (nonatomic,retain) UITableView *homeTableView;
 
 @property (nonatomic,strong) NSMutableArray *postTableArray;
@@ -40,7 +42,7 @@
 
 -(id)initWithURL:(NSDictionary *)dict tagID:(NSInteger)tagID tag:(NSString *)tag{
     self = [super init];
-    
+    self.isTagIDSet = YES;
     self.p = 2;
     self.requestURL = dict;
     self.tag = tag;
@@ -53,7 +55,7 @@
 
 -(id)initWithURL:(NSDictionary *)dict tag:(NSString *)tag{
     self = [super init];
-    
+    self.isTagIDSet = NO;
     self.p = 2;
     self.requestURL = dict;
     self.tag = tag;
@@ -292,14 +294,20 @@
 
     
     NSString *postRouter = [self.requestURL valueForKey:@"requestRouter"];
-    NSDictionary *postParam =[NSDictionary dictionaryWithObjectsAndKeys:self.appDelegate.generatedUserID,@"userIdStr",[NSNumber numberWithInt:1],@"p",[NSNumber numberWithInteger:self.tagID],@"tagID",nil];
+    NSDictionary *postParam;
     
+    if (self.isTagIDSet == YES) {
+        postParam = [NSDictionary dictionaryWithObjectsAndKeys:self.appDelegate.generatedUserID,@"userIdStr",[NSNumber numberWithInt:1],@"p", [NSNumber numberWithInteger:self.tagID],@"tagID",nil];
+    }else{
+        postParam = [NSDictionary dictionaryWithObjectsAndKeys:self.appDelegate.generatedUserID,@"userIdStr",[NSNumber numberWithInt:1],@"p",self.tag,@"tag",nil];
+    }
+    NSLog(@"%@",postParam);
     NSString *postRequestUrl = [self.appDelegate.rootURL stringByAppendingString:postRouter];
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     manager.requestSerializer.timeoutInterval = 20;
     [manager POST:postRequestUrl parameters:postParam success:^(AFHTTPRequestOperation *operation,id responseObject) {
-        
+        //NSLog(@"%@",responseObject);
         NSArray *responseArray = [responseObject valueForKey:@"data"];
         
         //如果存在数据，那么就初始化tableView
@@ -366,8 +374,11 @@
     
     
     postRouter = [self.requestURL valueForKey:@"requestRouter"];
-    
-    postParam = [NSDictionary dictionaryWithObjectsAndKeys:self.appDelegate.generatedUserID,@"userIdStr",[NSNumber numberWithInteger:self.p],@"p",self.tagID,@"tagID",nil];
+    if (self.isTagIDSet == YES) {
+        postParam = [NSDictionary dictionaryWithObjectsAndKeys:self.appDelegate.generatedUserID,@"userIdStr",[NSNumber numberWithInteger:self.p],@"p",[NSNumber numberWithInteger:self.tagID],@"tagID",nil];
+    }else{
+        postParam = [NSDictionary dictionaryWithObjectsAndKeys:self.appDelegate.generatedUserID,@"userIdStr",[NSNumber numberWithInteger:self.p],@"p",self.tag,@"tag",nil];
+    }
     
     
     NSString *postRequestUrl = [self.appDelegate.rootURL stringByAppendingString:postRouter];

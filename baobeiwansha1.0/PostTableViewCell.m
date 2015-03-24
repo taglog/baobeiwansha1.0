@@ -182,6 +182,8 @@
         }
     }
     
+    
+    
     NSArray *tagArray = [dict objectForKey:@"tags"];
 
     if(tagArray != (id)[NSNull null]){
@@ -252,7 +254,14 @@
     
     self.title.numberOfLines = 0;
     self.title.font = [UIFont fontWithName:@"STHeitiSC-Medium" size:15.0f];
-    self.title.textColor = [UIColor colorWithRed:80.0f/255.0f green:80.0f/255.0f blue:80.0f/255.0f alpha:1.0f];
+
+    if([self.dict objectForKey:@"isCellTapped"]&&[[self.dict objectForKey:@"isCellTapped"]integerValue]==1){
+        self.title.textColor = [UIColor colorWithRed:170.0f/255.0f green:170.0f/255.0f blue:170.0f/255.0f alpha:1.0f];
+        
+    }else{
+        self.title.textColor = [UIColor colorWithRed:80.0f/255.0f green:80.0f/255.0f blue:80.0f/255.0f alpha:1.0f];
+
+    }
     [self.title sizeToFit];
     
     

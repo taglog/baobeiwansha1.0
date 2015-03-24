@@ -165,6 +165,7 @@
     }
     
     [cell setDataWithDict:self.postTableArray[indexPath.row] frame:self.view.frame indexPath:indexPath];
+    
     cell.delegate = self;
     return cell;
 }
@@ -175,7 +176,12 @@
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    
+    //点击后更改cell的点击状态
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc]initWithDictionary:
+                                 self.postTableArray[indexPath.row]];
+    [dict setObject:[NSNumber numberWithInteger:1] forKey:@"isCellTapped"];
+    [self.postTableArray replaceObjectAtIndex:indexPath.row withObject:dict];
+    [self.postTableView reloadData];
     
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
@@ -268,7 +274,7 @@
     }
     NSLog(@"%@",postParam);
     NSLog(@"%@",urlString);
-
+    
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     manager.requestSerializer.timeoutInterval = 20;
     [manager POST:urlString parameters:postParam success:^(AFHTTPRequestOperation *operation,id responseObject) {
@@ -351,7 +357,7 @@
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     manager.requestSerializer.timeoutInterval = 20;
     [manager POST:urlString parameters:postParam success:^(AFHTTPRequestOperation *operation,id responseObject) {
-
+        
         NSArray *responseArray = [responseObject valueForKey:@"data"];
         
         if(responseArray != (id)[NSNull null]){
@@ -439,7 +445,7 @@
         
     }else{
         //如果之前已经收藏
-  
+        
         [self updateCollectionCount:indexPath type:0];
         
     }
@@ -460,9 +466,8 @@
         NSInteger status = [[responseObject valueForKey:@"status"]integerValue];
         
         if(status == 1){
-            NSLog(@"%@",responseObject);
             [[NSNotificationCenter defaultCenter] postNotificationName:@"collectionChanged" object:nil];
-
+            
         }else{
             
         }
@@ -486,7 +491,7 @@
     NSInteger collectionNumber;
     NSMutableDictionary *dict = [[NSMutableDictionary alloc]initWithDictionary:
                                  self.postTableArray[indexPath.row]];
-
+    
     //收藏成功，需+1
     if(type == 1){
         collectionNumber = [[self.postTableArray[indexPath.row] objectForKey:@"collection_count"]integerValue] + 1;
@@ -495,9 +500,10 @@
     }else{
         collectionNumber = [[self.postTableArray[indexPath.row] objectForKey:@"collection_count"]integerValue] - 1;
         [dict setObject:[NSNumber numberWithInteger:0] forKey:@"isCollection"];
-
+        
     }
-        [dict setObject:[NSNumber numberWithInteger:collectionNumber] forKey:@"collection_count"];
+    
+    [dict setObject:[NSNumber numberWithInteger:collectionNumber] forKey:@"collection_count"];
     [self.postTableArray replaceObjectAtIndex:indexPath.row withObject:dict];
     
     [cell updateCollectionCount:collectionNumber type:type];
