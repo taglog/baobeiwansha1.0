@@ -122,17 +122,19 @@
     
     for(NSUInteger i = 0;i < self.count;i++){
         UIViewController *contentViewController = [self.dataSource slidePager:self contentViewControllerForTabAtIndex:i];
-        [self.viewControllers addObject:contentViewController];
         
         [self addChildViewController:contentViewController];
         contentViewController.view.frame = CGRectMake(i * self.view.frame.size.width, 0, self.view.frame.size.width, self.view.frame.size.height - self.tabHeight);
+        [self.viewControllers addObject:contentViewController];
         [self.pageScrollView addSubview:contentViewController.view];
-        
-        
+
+
     }
+
     //选中第一个
     if ([self.delegate respondsToSelector:@selector(slidePager:didChangeTabToIndex:)]) {
         [self.delegate slidePager:self didChangeTabToIndex:0];
+
     }
     
 }

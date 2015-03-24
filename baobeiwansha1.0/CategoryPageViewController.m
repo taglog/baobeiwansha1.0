@@ -50,10 +50,12 @@
 @property (nonatomic,assign) BOOL isRefreshed3;
 
 //指示层
-@property (nonatomic,strong)JGProgressHUD *HUD;
-@property (nonatomic,assign)BOOL isHudShow;
+@property (nonatomic,strong) JGProgressHUD *HUD;
+@property (nonatomic,assign) BOOL isHudShow;
 
-@property (nonatomic,retain)AppDelegate *appDelegate;
+@property (nonatomic,retain) AppDelegate *appDelegate;
+
+@property (nonatomic,assign) BOOL isUserInfoChanged;
 
 @end
 @implementation CategoryPageViewController
@@ -63,15 +65,21 @@
     self = [super init];
     self.isFirstLoad = YES;
     self.view.backgroundColor = [UIColor whiteColor];
-    
+    self.isUserInfoChanged = NO;
     return self;
 }
-
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    if(self.isUserInfoChanged == YES){
+        [self updateUserInfo];
+    }
+    
+}
 -(void)viewDidLoad{
     [super viewDidLoad];
 
     [self defaultSettings];
-
+    [self initNotification];
     [self initViews];
     
 }
@@ -85,7 +93,36 @@
     self.automaticallyAdjustsScrollViewInsets = NO;
     
 }
-
+-(void)initNotification{
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(needToRefreshWhenAppear) name:@"userInfoChanged" object:nil];
+    
+}
+//用户修改个人信息之后，要重新设置年龄和刷新状态
+-(void)updateUserInfo{
+    
+    [self getUserInfo];
+    
+    if(self.ageTitleLabel){
+        self.ageTitleLabel.text = self.babyBirthday;
+    }
+    
+    self.activeMonth = self.babyBirthdayMonth;
+    
+    //更改目录页刷新的age
+    [self resetAgeOfContentViewController:self.babyBirthdayMonth];
+    
+    [self.ageTableView reloadData];
+    
+    [self resetRefreshStatus];
+    
+    [self refreshActiveViewController];
+    
+    
+}
+-(void)needToRefreshWhenAppear{
+    self.isUserInfoChanged = YES;
+}
 
 -(void)initViews{
     
@@ -356,6 +393,65 @@
     [self.tabView2 setTabToNormal];
     
 }
+//重置状态为未刷新
+-(void)resetRefreshStatus{
+    
+    //重新设置controller为未刷新状态，这样切换到这个页面的时候就会自动刷新
+    self.isRefreshed0 = NO;
+    self.isRefreshed1 = NO;
+    self.isRefreshed2 = NO;
+    self.isRefreshed3 = NO;
+    //更改日期之后，每个controller实例的刷新参数都要恢复为2
+    self.postTableViewController0.p = 2;
+    self.postTableViewController1.p = 2;
+    self.postTableViewController2.p = 2;
+    
+    
+}
+-(void)resetAgeOfContentViewController:(NSInteger)age{
+    
+    //更改目录页刷新的age
+    self.postTableViewController0.ageChoosen = age;
+    self.postTableViewController0.isAgeSet = YES;
+    self.postTableViewController1.ageChoosen = age;
+    self.postTableViewController1.isAgeSet = YES;
+    self.postTableViewController2.ageChoosen = age;
+    self.postTableViewController2.isAgeSet = YES;
+    
+}
+//刷新页面
+-(void)refreshActiveViewController{
+    
+    switch(self.activeTabIndex){
+        case 0:
+            if(!self.isRefreshed0){
+                [self.postTableViewController0 simulatePullDownRefresh];
+                self.isRefreshed0 = YES;
+            }
+            break;
+            
+        case 1:
+            if(!self.isRefreshed1){
+                [self.postTableViewController1 simulatePullDownRefresh];
+                self.isRefreshed1 = YES;
+            }
+            
+            break;
+            
+        case 2:
+            if(!self.isRefreshed2){
+                [self.postTableViewController2 simulatePullDownRefresh];
+                self.isRefreshed2 = YES;
+            }
+            break;
+            
+            
+            break;
+        default:
+            break;
+    }
+}
+
 #pragma mark - ageTableViewDelegate&dataSource
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     return 1;
@@ -467,64 +563,6 @@
                           }];
 }
 
-//重置状态为未刷新
--(void)resetRefreshStatus{
-    
-    //重新设置controller为未刷新状态，这样切换到这个页面的时候就会自动刷新
-    self.isRefreshed0 = NO;
-    self.isRefreshed1 = NO;
-    self.isRefreshed2 = NO;
-    self.isRefreshed3 = NO;
-    //更改日期之后，每个controller实例的刷新参数都要恢复为2
-    self.postTableViewController0.p = 2;
-    self.postTableViewController1.p = 2;
-    self.postTableViewController2.p = 2;
-    
-    
-}
--(void)resetAgeOfContentViewController:(NSInteger)age{
-    
-    //更改目录页刷新的age
-    self.postTableViewController0.ageChoosen = age;
-    self.postTableViewController0.isAgeSet = YES;
-    self.postTableViewController1.ageChoosen = age;
-    self.postTableViewController1.isAgeSet = YES;
-    self.postTableViewController2.ageChoosen = age;
-    self.postTableViewController2.isAgeSet = YES;
-    
-}
-//刷新页面
--(void)refreshActiveViewController{
-    
-    switch(self.activeTabIndex){
-        case 0:
-            if(!self.isRefreshed0){
-                [self.postTableViewController0 simulatePullDownRefresh];
-                self.isRefreshed0 = YES;
-            }
-            break;
-            
-        case 1:
-            if(!self.isRefreshed1){
-                [self.postTableViewController1 simulatePullDownRefresh];
-                self.isRefreshed1 = YES;
-            }
-            
-            break;
-            
-        case 2:
-            if(!self.isRefreshed2){
-                [self.postTableViewController2 simulatePullDownRefresh];
-                self.isRefreshed2 = YES;
-            }
-            break;
-            
-        
-            break;
-        default:
-            break;
-    }
-}
 
 
 #pragma mark - 指示层delegate

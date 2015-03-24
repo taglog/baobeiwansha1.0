@@ -76,6 +76,7 @@
     [self initSlidePagerView];
     
 }
+
 -(void)initTabViews{
     
     self.tabView0 = [[TabView alloc]initWithFrame:CGRectMake(0, 0,self.view.frame.size.width/3, 50.0)];
@@ -93,17 +94,14 @@
     self.postTableViewController0.delegate = self;
     self.postTableViewController1 = [[PostTableViewController alloc]initWithURL:self.requestUrl type:2];
     self.postTableViewController1.delegate = self;
-    
     self.postTableViewController2 = [[PostTableViewController alloc]initWithURL:self.requestUrl type:3];
     self.postTableViewController2.delegate = self;
-    
-    
     
 }
 -(void)initSlidePagerView{
     
     SlidePagerViewController *slidePager = [[SlidePagerViewController alloc]init];
-    slidePager.view.frame = CGRectMake(0, 64, self.view.frame.size.width, self.view.frame.size.height - 64 - 49);
+    slidePager.view.frame = CGRectMake(0, 64, self.view.frame.size.width, self.view.frame.size.height - 64);
     
     slidePager.delegate = self;
     slidePager.dataSource = self;
@@ -210,8 +208,6 @@
     [self.tabView2 setTabToNormal];
     
 }
-
-#pragma mark - 指示层delegate
 -(void)showHUD:(NSString*)text{
     //初始化HUD
     if(self.isHudShow == YES){

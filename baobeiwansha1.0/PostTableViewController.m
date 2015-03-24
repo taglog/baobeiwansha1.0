@@ -266,11 +266,13 @@
     }else{
         postParam =[NSDictionary dictionaryWithObjectsAndKeys:self.appDelegate.generatedUserID,@"userIdStr",[NSNumber numberWithInteger:self.type],@"type",[NSNumber numberWithInt:1],@"p",nil];
     }
-    
+    NSLog(@"%@",postParam);
+    NSLog(@"%@",urlString);
+
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     manager.requestSerializer.timeoutInterval = 20;
     [manager POST:urlString parameters:postParam success:^(AFHTTPRequestOperation *operation,id responseObject) {
-
+        NSLog(@"%@",responseObject);
         NSArray *responseArray = [responseObject valueForKey:@"data"];
         
         //如果存在数据，那么就初始化tableView
@@ -303,8 +305,7 @@
             self.p = 2;
             
         }else{
-            [self.delegate showHUD:@"没有内容~"];
-            [self.delegate dismissHUD];
+            
             [self showNoDataAlert];
         }
         
@@ -347,11 +348,10 @@
     }
     
     
-    
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     manager.requestSerializer.timeoutInterval = 20;
     [manager POST:urlString parameters:postParam success:^(AFHTTPRequestOperation *operation,id responseObject) {
-        NSLog(@"%@",responseObject);
+
         NSArray *responseArray = [responseObject valueForKey:@"data"];
         
         if(responseArray != (id)[NSNull null]){
@@ -452,7 +452,7 @@
     
     NSString *collectRouter = @"/post/collect";
     NSString *collectRequestUrl = [self.appDelegate.rootURL stringByAppendingString:collectRouter];
-    
+    NSLog(@"%@",collectParam);
     //进行收藏判断 userID,PostID
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     manager.requestSerializer.timeoutInterval = 20;
@@ -460,8 +460,9 @@
         NSInteger status = [[responseObject valueForKey:@"status"]integerValue];
         
         if(status == 1){
-            
-            
+            NSLog(@"%@",responseObject);
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"collectionChanged" object:nil];
+
         }else{
             
         }

@@ -16,8 +16,8 @@
 
 @property (nonatomic,strong)NSDictionary *requestURL;
 @property (nonatomic,retain) NSString *tag;
-
 -(id)initWithURL:(NSDictionary *)dict tag:(NSString *)tag;
+-(id)initWithURL:(NSDictionary *)dict tagID:(NSInteger)tagID tag:(NSString *)tag;
 -(void)simulatePullDownRefresh;
 
 @end

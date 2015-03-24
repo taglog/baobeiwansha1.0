@@ -206,6 +206,9 @@
                 [self.HUD dismissAfterDelay:1.0];
                 self.collectButtonEnabled = YES;
                 
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"collectionChanged" object:nil];
+
+                
             }else{
                 //否则的话，弹出一个指示层
                 self.HUD.textLabel.text = @"没有用户信息";
@@ -878,8 +881,6 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     self.commentTapIndexPath = indexPath;
-    NSLog(@"%ld",(long)indexPath.row);
-    NSLog(@"%@",[self.commentTableViewCell objectAtIndex:indexPath.row]);
     
     if([[[self.commentTableViewCell objectAtIndex:indexPath.row]valueForKey:@"canDeleteComment"]integerValue]==1){
         
@@ -915,6 +916,9 @@
         AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
         manager.requestSerializer.timeoutInterval = 20;
         [manager POST:commentRequestUrl parameters:postParam success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"commentChanged" object:nil];
+
             NSArray *responseArray = [responseObject valueForKey:@"data"];
             
             if(responseArray != (id)[NSNull null]){

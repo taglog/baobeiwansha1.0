@@ -28,17 +28,17 @@
 -(void)setDict:(NSDictionary *)dict{
     
     self.ability = [[NSMutableArray alloc]init];
-    
+
     if([dict valueForKey:@"capability_title_1"]!= (id)[NSNull null] && [dict valueForKey:@"capability_content_1"]!= (id)[NSNull null]){
-        [self.ability addObject:@{@"tag_name":[dict valueForKey:@"capability_title_1"],@"tag_description":[dict valueForKey:@"capability_content_1"]}];
+        [self.ability addObject:@{@"tag_name":[dict valueForKey:@"capability_title_1"],@"tag_description":[dict valueForKey:@"capability_content_1"],@"tag_id":[dict valueForKey:@"tag_id_1"]}];
 
     }
     if([dict valueForKey:@"capability_title_2"]!= (id)[NSNull null] && [dict valueForKey:@"capability_content_2"]!= (id)[NSNull null]){
-        [self.ability addObject:@{@"tag_name":[dict valueForKey:@"capability_title_2"],@"tag_description":[dict valueForKey:@"capability_content_2"]}];
+        [self.ability addObject:@{@"tag_name":[dict valueForKey:@"capability_title_2"],@"tag_description":[dict valueForKey:@"capability_content_2"],@"tag_id":[dict valueForKey:@"tag_id_2"]}];
         
     }
     if([dict valueForKey:@"capability_title_3"]!= (id)[NSNull null] && [dict valueForKey:@"capability_content_3"]!= (id)[NSNull null]){
-        [self.ability addObject:@{@"tag_name":[dict valueForKey:@"capability_title_3"],@"tag_description":[dict valueForKey:@"capability_content_3"]}];
+        [self.ability addObject:@{@"tag_name":[dict valueForKey:@"capability_title_3"],@"tag_description":[dict valueForKey:@"capability_content_3"],@"tag_id":[dict valueForKey:@"tag_id_3"]}];
         
     }
 
@@ -146,7 +146,9 @@
 {
     // TODO: add a selected mark
     NSString *tag = [[self.ability objectAtIndex:indexPath.row] valueForKey:@"tag_name"];
-    [self.delegate pushViewControllerWithSender:tag moduleView:self];
+    NSInteger tagID = [[[self.ability objectAtIndex:indexPath.row] valueForKey:@"tag_id"] integerValue];
+   
+    [self.delegate pushViewControllerWithSender: [NSNumber numberWithInteger:tagID] sender2:tag moduleView:self];
 }
 
 - (void)collectionView:(UICollectionView *)colView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath

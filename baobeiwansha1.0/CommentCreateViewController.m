@@ -185,6 +185,9 @@
                 //输入完成，应该跳回到上一页，同时把上一页的tableView刷新
                 [self.delegate commentCreateSuccess:commentToPostViewController];
                 [self.HUD dismiss];
+                
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"commentChanged" object:nil];
+
                 [self.navigationController popViewControllerAnimated:YES];
                 
             }else{
