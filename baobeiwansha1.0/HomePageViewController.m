@@ -314,6 +314,7 @@
             if(self.initialized == YES){
                 [self initViews];
                 self.initialized = NO;
+            }
 
             [self.homePageProfileView setDict:self.userInfoDict frame:self.view.frame];
             [self.homePageAbilityView setDict:self.abilityDict];
