@@ -10,6 +10,7 @@
 #import "AppDelegate.h"
 #import "JGProgressHUD.h"
 #import "JGProgressHUDSuccessIndicatorView.h"
+#import "JGProgressHUDErrorIndicatorView.h"
 
 @interface HomePagePostViewController ()
 
@@ -28,6 +29,7 @@
 
 @property (nonatomic,retain) UIButton *nextPostButton;
 @property (nonatomic,retain) UIButton *prevPostButton;
+
 
 @property (nonatomic) int pressCount; // 点击下一篇增加1，点击上一篇减少1
 
@@ -100,6 +102,18 @@
 
 }
 
+
+-(void)updateTextView{
+    [self.textView removeFromSuperview];
+    // 测试用
+    //NSMutableDictionary *testDict = [[NSMutableDictionary alloc]init];
+    //[testDict setObject:@"test title" forKey:@"post_title"];
+    //[testDict setObject:@"test content" forKey:@"post_content"];
+    //self.postDict = testDict;
+    [self initTextView];
+    
+}
+
 -(void)initChoiceButtons{
     
     if(!self.canButton){
@@ -152,10 +166,6 @@
     
     
     
-
-    
-    
-    
     
     [self.view addSubview:self.prevPostButton];
     [self.view addSubview:self.nextPostButton];
@@ -178,16 +188,21 @@
     
 }
 
--(void)nextPost{
+
+-(void)getRemotePost{
     
-    self.pressCount ++;
+    
+
     [self showHUD];
     
     NSDictionary *requestParam = [NSDictionary dictionaryWithObjectsAndKeys:
-                                  [NSNumber numberWithInteger:self.currentDaysIndex],@"daysIndex",
+                                  [NSNumber numberWithInteger:self.originalDaysIndex],@"daysIndex",
                                   self.appDelegate.generatedUserID,@"userIdStr",
                                   [NSNumber numberWithInteger:self.pressCount], @"pressCount",
                                   nil];
+    
+    
+    
     
     NSString *postRouter = @"dailyMessage/index";
     
@@ -202,31 +217,55 @@
         NSDictionary *responseDict = [responseObject valueForKey:@"data"];
         if(responseDict != (id)[NSNull null]){
             
-            
+            self.postDict = responseDict;
+            if (self.currentDaysIndex == [[responseDict valueForKey:@"days_index"] integerValue]) {
+                // 同一天，说明已经到顶或者到底了，提示一下，并回复presscount
+                if (self.pressCount > 0) {
+                    self.pressCount --;
+                } else {
+                    self.pressCount ++;
+                }
+                self.HUD.textLabel.text = @"没有更多了.";
+                self.HUD.detailTextLabel.text = nil;
+                //self.HUD.layoutChangeAnimationDuration = 0.4;
+                self.HUD.indicatorView = [[JGProgressHUDErrorIndicatorView alloc] init];
+                [self.HUD dismissAfterDelay:1];
+            } else {
+                self.currentDaysIndex = [[responseDict valueForKey:@"days_index"] integerValue];
+                [self updateTextView];
+                [self dismissHUD];
+            }
             
         }else{
             
-            
-            
+            NSMutableDictionary *errorDict = [[NSMutableDictionary alloc]init];
+            [errorDict setObject:@"网络连接错误" forKey:@"post_title"];
+            [errorDict setObject:@"无法从服务器端取得数据，请检查网络连接..." forKey:@"post_content"];
+            self.postDict = errorDict;
+            [self updateTextView];
+            [self dismissHUD];
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-            NSLog(@"%@",error);
-            [self dismissHUD];
-        }];
+        NSLog(@"%@",error);
+        [self dismissHUD];
+    }];
 
-        
+}
 
+
+-(void)nextPost{
+    
+    self.pressCount ++;
+    [self getRemotePost];
+    
 }
 
 
 -(void)prevPost{
     
     self.pressCount --;
-    
-    
-    
-    
-    
+    [self getRemotePost];
+
 }
 
 

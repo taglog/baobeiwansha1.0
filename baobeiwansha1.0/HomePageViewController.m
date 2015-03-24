@@ -485,13 +485,15 @@
     
     HomePagePostViewController *post = [[HomePagePostViewController alloc] init];
     post.hidesBottomBarWhenPushed = YES;
+    // this is ugly, need more time
     post.currentPostID = postID;
-    post.currentDaysIndex = [[[self.responseDict objectForKey:@"dailyMessage"] valueForKey:@"days_index"] integerValue];
+    post.originalDaysIndex = [[[self.responseDict objectForKey:@"dailyMessage"] valueForKey:@"days_index"] integerValue];
+    post.currentDaysIndex = post.originalDaysIndex;
 
     
     NSDictionary *requestParam = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInteger:postID],@"postID",self.appDelegate.generatedUserID,@"userIdStr",nil];
     
-    NSString *postRouter = @"post/post";
+    NSString *postRouter = @"post/post_remove_slash_in_title";
     
     NSString *postRequestUrl = [self.appDelegate.rootURL stringByAppendingString:postRouter];
 

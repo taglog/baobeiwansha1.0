@@ -18,6 +18,7 @@
 -(void)dismissHUD;
 
 @property (nonatomic) long currentPostID;
+@property (nonatomic) long originalDaysIndex;
 @property (nonatomic) long currentDaysIndex;
 
 @end
