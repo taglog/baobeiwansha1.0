@@ -234,7 +234,7 @@
                 self.currentDaysIndex = [[responseDict valueForKey:@"days_index"] integerValue];
                 [self updateTextView];
                 [self dismissHUD];
-            }
+            } 
             
         }else{
             

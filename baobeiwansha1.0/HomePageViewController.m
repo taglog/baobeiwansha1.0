@@ -552,7 +552,7 @@
     
     
     PostViewController *post = [[PostViewController alloc] init];
-    post.hidesBottomBarWhenPushed = YES;
+    post.hidesBottomBarWhenPushed = YES; 
     // this is ugly, need more time
     post.currentPostID = postID;
     post.originalDaysIndex = [[[self.responseDict objectForKey:@"dailyMessage"] valueForKey:@"days_index"] integerValue];
