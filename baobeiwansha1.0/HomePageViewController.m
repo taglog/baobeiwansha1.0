@@ -47,6 +47,8 @@
 @property (nonatomic,assign) CGFloat navBarAlpha;
 
 @property (nonatomic,assign) BOOL initialized;
+
+@property (nonatomic,assign) BOOL isUserInfoChanged;
 @end
 
 @implementation HomePageViewController
@@ -55,6 +57,7 @@
     self = [super init];
     self.isNavigationHidden = NO;
     self.initialized = YES;
+    self.isUserInfoChanged = NO;
     return self;
 }
 
@@ -64,7 +67,10 @@
     if(self.isNavigationHidden == NO){
         [self setNavigationBarTransparent];
     }
-    
+    if(self.isUserInfoChanged == YES){
+        [self simulatePullDownRefresh];
+        self.isUserInfoChanged = NO;
+    }
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -73,6 +79,7 @@
         [self setNavigationBarColorWithAlpha:self.navBarAlpha];
         
     }
+    
 
 }
 
@@ -120,10 +127,21 @@
     self.locationArray = [[NSArray alloc]init];
     self.postArray = [[NSArray alloc]init];
     self.userInfo = [[NSDictionary alloc]init];
-
+    
+    [self initNotification];
     [self initScrollView];
     [self initRefreshHeaderView];
     [self simulatePullDownRefresh];
+}
+
+-(void)initNotification{
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(needToRefreshWhenAppear) name:@"userInfoChanged" object:nil];
+    
+}
+-(void)needToRefreshWhenAppear{
+    
+    self.isUserInfoChanged = YES;
 }
 
 -(void)initUserInfo{
@@ -199,7 +217,7 @@
     
     [self.homeScrollView addSubview:self.homePageLocationView];
     
-    self.homePageLocationView.title = @"不同的场合，我要有不一样的玩法~";
+    self.homePageLocationView.title = @"不同的场合，我要有不一样的玩法哦~";
     
 }
 
@@ -295,7 +313,7 @@
                 [self initViews];
                 self.initialized = NO;
             }
-
+            NSLog(@"%@",responseObject);
             [self.homePageProfileView setDict:self.userInfoDict frame:self.view.frame];
             [self.homePageAbilityView setDict:self.abilityDict];
             [self.homePageLocationView setArray:self.locationArray];
@@ -432,12 +450,22 @@
 
 
 #pragma mark homePageModuleView
--(void)pushViewControllerWithSender:(id)sender moduleView:(UIView *)view{
+-(void)pushViewControllerWithSender:(id)sender sender2:(id)sender2 moduleView:(UIView *)view{
     
     TagPostTableViewController *tagPostViewController;
     switch (view.tag) {
         case 0:
-            tagPostViewController = [[TagPostTableViewController alloc]initWithURL:@{@"requestRouter":@"post/tag"} tag:sender];
+            @try {
+                NSLog(@"%ld",(long)[sender integerValue]);
+                tagPostViewController = [[TagPostTableViewController alloc]initWithURL:@{@"requestRouter":@"post/tag"} tagID:[sender integerValue] tag:sender2];
+            }
+            @catch (NSException *exception) {
+                NSLog(@"%@",exception);
+            }
+            @finally {
+                
+            }
+            
             tagPostViewController.hidesBottomBarWhenPushed = YES;
 
             [self.navigationController pushViewController:tagPostViewController animated:YES];
@@ -473,7 +501,47 @@
 -(void)pushBabyConditionViewController{
     
     if([[self.responseDict objectForKey:@"dailyMessage"] valueForKey:@"days_detail_post_id"]!= (id)[NSNull null]){
-        [self pushPostViewController:[[[self.responseDict objectForKey:@"dailyMessage"] valueForKey:@"days_detail_post_id"]integerValue]];
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+        
+        
+        HomePagePostViewController *post = [[HomePagePostViewController alloc] init];
+        post.hidesBottomBarWhenPushed = YES;
+        
+        NSDictionary *requestParam = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInteger:[[[self.responseDict objectForKey:@"dailyMessage"] valueForKey:@"days_detail_post_id"] integerValue]],@"postID",self.appDelegate.generatedUserID,@"userIdStr",nil];
+        
+        NSString *postRouter = @"post/post";
+        
+        NSString *postRequestUrl = [self.appDelegate.rootURL stringByAppendingString:postRouter];
+        
+        NSString *urlString = [postRequestUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        
+        AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+        manager.requestSerializer.timeoutInterval = 20;
+        [manager POST:urlString parameters:requestParam success:^(AFHTTPRequestOperation *operation,id responseObject) {
+            NSLog(@"%@",responseObject);
+            NSDictionary *responseDict = [responseObject valueForKey:@"data"];
+            if(responseDict != (id)[NSNull null]){
+                
+                [post initViewWithDict:responseDict];
+                
+            }else{
+                
+                [post noDataAlert];
+                
+            }
+            
+            [post dismissHUD];
+            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+            
+        }
+              failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                  NSLog(@"%@",error);
+                  [post dismissHUD];
+                  [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+              }];
+        [post showHUD];
+        
+        [self.navigationController pushViewController:post animated:YES];
 
     }
 }
@@ -483,7 +551,7 @@
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
     
-    HomePagePostViewController *post = [[HomePagePostViewController alloc] init];
+    PostViewController *post = [[PostViewController alloc] init];
     post.hidesBottomBarWhenPushed = YES;
     // this is ugly, need more time
     post.currentPostID = postID;

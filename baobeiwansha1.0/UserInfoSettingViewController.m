@@ -361,6 +361,8 @@
         NSString *filePath = [AppDelegate dataFilePath];
         [self.userInfoDict writeToFile:filePath atomically:YES];
         
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"userInfoChanged" object:nil];
+        
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             
             HUD.textLabel.text = @"保存成功";
@@ -373,11 +375,9 @@
             [HUD dismiss];
             [self.appDelegate popUserInfoSettingViewController];
             // 如果是点击过来的，需要弹出
-            @try {
-                [self.navigationController popViewControllerAnimated:YES];
-            } @catch (NSException *exception) {
-            } @finally {
-            }
+            
+            [self.navigationController popViewControllerAnimated:YES];
+            
 
             
         });

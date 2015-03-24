@@ -38,15 +38,27 @@
 @property (nonatomic,assign) NSInteger collectionCount;
 @property (nonatomic,assign) NSInteger commentCount;
 
+@property (nonatomic,assign) BOOL isUserInfoChanged;
+
 @end
 
 @implementation ProfilePageViewController
 -(id)init{
     self = [super init];
     if(self){
+        
         self.initialized = YES;
+        self.isUserInfoChanged = NO;
+
     }
     return self;
+}
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    if(self.isUserInfoChanged == YES){
+        [self simulatePullDownRefresh];
+        self.isUserInfoChanged = NO;
+    }
 }
 -(void)viewDidLoad{
     [super viewDidLoad];
@@ -58,10 +70,11 @@
     self.commentCount = 0;
     
     [self defaultSettings];
-    
+    [self initNotification];
     [self initProfilePageScrollView];
     [self initRefreshHeaderView];
     [self simulatePullDownRefresh];
+    
 }
 
 -(void)defaultSettings{
@@ -84,7 +97,15 @@
     
 }
 
-
+-(void)initNotification{
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(needToRefreshWhenAppear) name:@"collectionChanged" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(needToRefreshWhenAppear) name:@"commentChanged" object:nil];
+    
+}
+-(void)needToRefreshWhenAppear{
+    self.isUserInfoChanged = YES;
+}
 -(void)pushSettingController{
     
     ProfilePageSystemSettingViewController *profile = [[ProfilePageSystemSettingViewController alloc]init];
@@ -177,7 +198,6 @@
         default:
             break;
     }
-    NSLog(@"%ld",(long)number);
     return number;
     
 }
@@ -355,8 +375,9 @@
 }
 
 -(void)pushProfileTableViewController:(NSInteger)index{
-    
+
     ProfilePageTableViewController *profilePageTableView;
+    
     switch (index) {
         case 1:
             profilePageTableView = [[ProfilePageTableViewController alloc]initWithUrl:@{@"requestRouter":@"post/mycollection"} title:@"我的收藏"];
@@ -367,9 +388,11 @@
         default:
             break;
     }
+    profilePageTableView.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:profilePageTableView animated:YES];
 
 }
+
 -(void)pushPostViewController:(NSInteger)postID{
     
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
@@ -462,7 +485,7 @@
     manager.requestSerializer.timeoutInterval = 20;
     [manager POST:urlString parameters:requestParam success:^(AFHTTPRequestOperation *operation,id responseObject) {
         
-        NSLog(@"%@",responseObject);
+        //NSLog(@"%@",responseObject);
         if(responseObject != nil){
             
             if([responseObject valueForKey:@"data"] != nil){
@@ -479,6 +502,9 @@
                     self.responseComment = [self.responseDict valueForKey:@"my_comment"];
                 }
                 
+                NSLog(@"%@",self.responseDict);
+                NSLog(@"%@",self.responseCollection);
+                NSLog(@"%@",self.responseComment);
                 
                 self.collectionCount = [[self.responseDict valueForKey:@"my_collection_count"] integerValue];
                 self.commentCount = [[self.responseDict valueForKey:@"my_comment_count"] integerValue];

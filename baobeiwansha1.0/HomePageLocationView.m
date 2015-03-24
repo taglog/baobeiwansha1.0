@@ -136,7 +136,7 @@
 {
     // TODO: add a selected mark
     NSString *tag = [[self.location objectAtIndex:indexPath.row] valueForKey:@"name"];
-    [self.delegate pushViewControllerWithSender:tag moduleView:self];
+    [self.delegate pushViewControllerWithSender:tag sender2:nil moduleView:self];
     
 }
 

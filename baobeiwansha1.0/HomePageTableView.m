@@ -87,7 +87,7 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    [self.delegate pushViewControllerWithSender:[[self.tableArray objectAtIndex:indexPath.row] valueForKey:@"ID"] moduleView:self];
+    [self.delegate pushViewControllerWithSender:[[self.tableArray objectAtIndex:indexPath.row] valueForKey:@"ID"] sender2:nil moduleView:self];
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }

@@ -11,7 +11,7 @@
 
 -(void)titleViewSelect:(id)sender;
 
--(void)pushViewControllerWithSender:(id)sender moduleView:(UIView *)view;
+-(void)pushViewControllerWithSender:(id)sender1 sender2:(id)sender2 moduleView:(UIView *)view;
 
 @end
 @interface HomePageModuleView : UIView

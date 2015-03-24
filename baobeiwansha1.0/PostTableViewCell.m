@@ -155,7 +155,6 @@
 
     if([dict objectForKey:@"post_taxonomy"]){
         self.type = [[dict objectForKey:@"post_taxonomy"]integerValue];
-        NSLog(@"%ld",(long)[[dict objectForKey:@"post_taxonomy"]integerValue]);
         if(self.type == 1){
             self.typeLabel.text = @"绘本";
             self.typeLabel.backgroundColor = [UIColor colorWithRed:201.0/255.0f green:56.0/255.0f blue:149.0/255.0f alpha:1.0f];

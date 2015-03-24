@@ -13,6 +13,7 @@
 
 @interface TagPostTableViewController ()
 
+@property (nonatomic,assign) NSInteger tagID;
 
 @property (nonatomic,retain) UITableView *homeTableView;
 
@@ -26,7 +27,7 @@
 
 @property (nonatomic,retain) AppDelegate *appDelegate;
 
-@property(nonatomic,strong) JGProgressHUD *HUD;
+@property (nonatomic,strong) JGProgressHUD *HUD;
 
 @property (nonatomic,strong) UILabel *noDataAlert;
 
@@ -37,15 +38,31 @@
 
 @implementation TagPostTableViewController
 
--(id)initWithURL:(NSDictionary *)dict tag:(NSString *)tag{
+-(id)initWithURL:(NSDictionary *)dict tagID:(NSInteger)tagID tag:(NSString *)tag{
     self = [super init];
+    
     self.p = 2;
     self.requestURL = dict;
     self.tag = tag;
+    self.tagID = tagID;
+    
     self.view.backgroundColor = [UIColor whiteColor];
     return self;
     
 }
+
+-(id)initWithURL:(NSDictionary *)dict tag:(NSString *)tag{
+    self = [super init];
+    
+    self.p = 2;
+    self.requestURL = dict;
+    self.tag = tag;
+    
+    self.view.backgroundColor = [UIColor whiteColor];
+    return self;
+    
+}
+
 - (void)viewWillAppear:(BOOL)animated{
     
     self.navigationController.navigationBarHidden = NO;
@@ -55,7 +72,6 @@
 
 - (void)viewDidLoad{
     [super viewDidLoad];
-    
     
     [self defaultSettings];
     
@@ -155,8 +171,6 @@
 
 //如果没有数据，那么要告诉用户表是空的
 -(void)showNoDataAlert{
-    
-    
     
     self.tableViewMask = [UIView new];
     self.tableViewMask.backgroundColor =[UIColor clearColor];
@@ -278,7 +292,7 @@
 
     
     NSString *postRouter = [self.requestURL valueForKey:@"requestRouter"];
-    NSDictionary *postParam =[NSDictionary dictionaryWithObjectsAndKeys:self.appDelegate.generatedUserID,@"userIdStr",[NSNumber numberWithInt:1],@"p",self.tag,@"tag",nil];
+    NSDictionary *postParam =[NSDictionary dictionaryWithObjectsAndKeys:self.appDelegate.generatedUserID,@"userIdStr",[NSNumber numberWithInt:1],@"p",[NSNumber numberWithInteger:self.tagID],@"tagID",nil];
     
     NSString *postRequestUrl = [self.appDelegate.rootURL stringByAppendingString:postRouter];
     
@@ -353,7 +367,7 @@
     
     postRouter = [self.requestURL valueForKey:@"requestRouter"];
     
-    postParam = [NSDictionary dictionaryWithObjectsAndKeys:self.appDelegate.generatedUserID,@"userIdStr",[NSNumber numberWithInteger:self.p],@"p",self.tag,@"tag",nil];
+    postParam = [NSDictionary dictionaryWithObjectsAndKeys:self.appDelegate.generatedUserID,@"userIdStr",[NSNumber numberWithInteger:self.p],@"p",self.tagID,@"tagID",nil];
     
     
     NSString *postRequestUrl = [self.appDelegate.rootURL stringByAppendingString:postRouter];
@@ -440,9 +454,11 @@
     self.HUD.textLabel.text = text;
     [self.HUD showInView:self.view];
 }
+
 -(void)dismissHUD{
     [self.HUD dismiss];
 }
+
 -(void)collectPost:(NSIndexPath *)indexPath{
     //如果之前没有收藏
     if([[[self.postTableArray objectAtIndex:indexPath.row] valueForKey:@"isCollection"] integerValue] == 0){
@@ -473,6 +489,8 @@
         
         if(status == 1){
             
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"collectionChanged" object:nil];
+
             
         }else{
             
