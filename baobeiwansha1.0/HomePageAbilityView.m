@@ -95,13 +95,13 @@
     
     switch (indexPath.row) {
         case 0:
-            abilityCell.backgroundColor = [UIColor colorWithRed:107.0/255.0f green:226.0/255.0f blue:50.0/255.0f alpha:1.0f];
+            abilityCell.backgroundColor = [UIColor colorWithRed:139/255.0f green:195/255.0f blue:74/255.0f alpha:1.0f];
             break;
         case 1:
-            abilityCell.backgroundColor = [UIColor colorWithRed:255.0/255.0f green:78.0/255.0f blue:162.0/255.0f alpha:1.0f];
+            abilityCell.backgroundColor = [UIColor colorWithRed:255/255.0f green:112/255.0f blue:67/255.0f alpha:1.0f];
             break;
         case 2:
-            abilityCell.backgroundColor = [UIColor colorWithRed:39.0/255.0f green:212.0/255.0f blue:247.0/255.0f alpha:1.0f];
+            abilityCell.backgroundColor = [UIColor colorWithRed:3/255.0f green:169/255.0f blue:244/255.0f alpha:1.0f];
             break;
         default:
             break;

@@ -157,15 +157,15 @@
         self.type = [[dict objectForKey:@"post_taxonomy"]integerValue];
         if(self.type == 1){
             self.typeLabel.text = @"绘本";
-            self.typeLabel.backgroundColor = [UIColor colorWithRed:255.0/255.0f green:0.0/255.0f blue:147.0/255.0f alpha:1.0f];
+            self.typeLabel.backgroundColor = [UIColor colorWithRed:201.0/255.0f green:56.0/255.0f blue:149.0/255.0f alpha:1.0f];
             
         }else if(self.type == 2){
             self.typeLabel.text = @"玩具";
-            self.typeLabel.backgroundColor = [UIColor colorWithRed:0.0/255.0f green:198.0/255.0f blue:236.0/255.0f alpha:1.0f];
+            self.typeLabel.backgroundColor = [UIColor colorWithRed:184.0/255.0f green:220.0/255.0f blue:90.0/255.0f alpha:1.0f];
             
         }else if(self.type == 3){
             self.typeLabel.text = @"游戏";
-            self.typeLabel.backgroundColor = [UIColor colorWithRed:145.0/255.0f green:231.0/255.0f blue:77.0/255.0f alpha:1.0f];
+            self.typeLabel.backgroundColor = [UIColor colorWithRed:124.0/255.0f green:195.0/255.0f blue:231.0/255.0f alpha:1.0f];
             
             
         }
@@ -373,22 +373,28 @@
     
     }
     
-    self.tagLabel1.backgroundColor = [UIColor colorWithRed:212.0/255.0f green:202.0/255.0f blue:189.0/255.0f alpha:1.0f];
-    self.tagLabel1.textColor = [UIColor whiteColor];
+    self.tagLabel1.layer.borderWidth  = 0.5f;
+    self.tagLabel1.layer.borderColor  = [UIColor colorWithRed:212.0/255.0f green:202.0/255.0f blue:189.0/255.0f alpha:1.0f].CGColor;
+    
+    self.tagLabel1.textColor = [UIColor colorWithRed:212.0/255.0f green:202.0/255.0f blue:189.0/255.0f alpha:1.0f];
     self.tagLabel1.textAlignment = NSTextAlignmentCenter;
     self.tagLabel1.layer.cornerRadius = 2;
     self.tagLabel1.font = [UIFont systemFontOfSize:12.0f];
     self.tagLabel1.layer.masksToBounds = YES;
 
-    self.tagLabel2.backgroundColor = [UIColor colorWithRed:212.0/255.0f green:202.0/255.0f blue:189.0/255.0f alpha:1.0f];
-    self.tagLabel2.textColor = [UIColor whiteColor];
+    self.tagLabel2.layer.borderWidth  = 0.5f;
+    self.tagLabel2.layer.borderColor  = [UIColor colorWithRed:212.0/255.0f green:202.0/255.0f blue:189.0/255.0f alpha:1.0f].CGColor;
+    //self.tagLabel2.backgroundColor = [UIColor colorWithRed:212.0/255.0f green:202.0/255.0f blue:189.0/255.0f alpha:1.0f];
+    self.tagLabel2.textColor = [UIColor colorWithRed:212.0/255.0f green:202.0/255.0f blue:189.0/255.0f alpha:1.0f];
     self.tagLabel2.textAlignment = NSTextAlignmentCenter;
     self.tagLabel2.layer.cornerRadius = 2;
     self.tagLabel2.font = [UIFont systemFontOfSize:12.0f];
     self.tagLabel2.layer.masksToBounds = YES;
     
-    self.tagLabel3.backgroundColor = [UIColor colorWithRed:212.0/255.0f green:202.0/255.0f blue:189.0/255.0f alpha:1.0f];
-    self.tagLabel3.textColor = [UIColor whiteColor];
+    self.tagLabel3.layer.borderWidth  = 0.5f;
+    self.tagLabel3.layer.borderColor  = [UIColor colorWithRed:212.0/255.0f green:202.0/255.0f blue:189.0/255.0f alpha:1.0f].CGColor;
+    //self.tagLabel3.backgroundColor = [UIColor colorWithRed:212.0/255.0f green:202.0/255.0f blue:189.0/255.0f alpha:1.0f];
+    self.tagLabel3.textColor = [UIColor colorWithRed:212.0/255.0f green:202.0/255.0f blue:189.0/255.0f alpha:1.0f];
     self.tagLabel3.textAlignment = NSTextAlignmentCenter;
     self.tagLabel3.layer.cornerRadius = 2;
     self.tagLabel3.font = [UIFont systemFontOfSize:12.0f];

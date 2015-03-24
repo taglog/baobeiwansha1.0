@@ -27,15 +27,17 @@
 @property (nonatomic,retain) UIButton *cantButton;
 
 @property (nonatomic,retain) UIButton *nextPostButton;
-@property (nonatomic,retain) UILabel *nextPostTitleLabel;
+@property (nonatomic,retain) UIButton *prevPostButton;
 
+@property (nonatomic) int pressCount; // 点击下一篇增加1，点击上一篇减少1
 
 @end
 @implementation HomePagePostViewController
 -(void)viewDidLoad{
     [super viewDidLoad];
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-
+    self.navigationItem.title = @"宝贝成长";
+    self.pressCount = 0;
     [self defaultSettings];
 }
 
@@ -120,38 +122,49 @@
 
 -(void)initBottomButton{
     
-    self.nextPostButton = [[UIButton alloc]initWithFrame:CGRectMake(0, self.view.frame.size.height - 50, self.view.frame.size.width, 50)];
+    self.prevPostButton = [[UIButton alloc]initWithFrame:CGRectMake(0, self.view.frame.size.height - 50, self.view.frame.size.width/2, 50)];
+    
+    [self.prevPostButton addTarget:self action:@selector(prevPost) forControlEvents:UIControlEventTouchUpInside];
+    
+    
+    [self.prevPostButton setBackgroundImage:[UIImage imageNamed:@"searchbg"] forState:UIControlStateNormal];
+    [self.prevPostButton setBackgroundImage:[UIImage imageNamed:@"pressedcolor"] forState:UIControlStateSelected];
+    UILabel *labelp = [[UILabel alloc]initWithFrame:CGRectMake(15, 0, self.view.frame.size.width/2, 50)];
+    labelp.text = @"上一篇";
+    labelp.textColor = [UIColor colorWithRed:185.0/255.0f green:185.0/255.0f blue:185.0/255.0f alpha:1.0f];
+    labelp.font = [UIFont systemFontOfSize:15.0f];
+    labelp.textAlignment = NSTextAlignmentLeft;
+    [self.prevPostButton addSubview:labelp];
+    
+    
+    self.nextPostButton = [[UIButton alloc]initWithFrame:CGRectMake(self.view.frame.size.width/2, self.view.frame.size.height - 50, self.view.frame.size.width/2, 50)];
     
     [self.nextPostButton addTarget:self action:@selector(nextPost) forControlEvents:UIControlEventTouchUpInside];
-    [self.nextPostButton setBackgroundColor:[UIColor colorWithRed:249.0/255.0f green:248.0/255.0f blue:244.0/255.0f alpha:1.0f]];
+    [self.nextPostButton setBackgroundImage:[UIImage imageNamed:@"searchbg"] forState:UIControlStateNormal];
+    [self.nextPostButton setBackgroundImage:[UIImage imageNamed:@"pressedcolor"] forState:UIControlStateSelected];
     
-    UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(15, 0, self.view.frame.size.width, 50)];
-    label.text = @"点击进入下一篇";
-    label.textColor = [UIColor colorWithRed:185.0/255.0f green:185.0/255.0f blue:185.0/255.0f alpha:1.0f];
-    label.font = [UIFont systemFontOfSize:15.0f];
-    label.textAlignment = NSTextAlignmentLeft;
-    [self.nextPostButton addSubview:label];
+    UILabel *labeln = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width/2-15, 50)];
+    labeln.text = @"下一篇";
+    labeln.textColor = [UIColor colorWithRed:185.0/255.0f green:185.0/255.0f blue:185.0/255.0f alpha:1.0f];
+    labeln.font = [UIFont systemFontOfSize:15.0f];
+    labeln.textAlignment = NSTextAlignmentRight;
+    [self.nextPostButton addSubview:labeln];
     
     
-    self.nextPostTitleLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width - 15, 50)];
-    self.nextPostTitleLabel.text = @"五岁三个月-数学启蒙";
-    self.nextPostTitleLabel.textColor = [UIColor colorWithRed:51.0/255.0f green:51.0/255.0f blue:51.0/255.0f alpha:1.0f];
-    self.nextPostTitleLabel.font = [UIFont fontWithName:@"STHeitiSC-Medium" size:15.0f];
-    self.nextPostTitleLabel.textAlignment = NSTextAlignmentRight;
+    
+
+    
+    
+    
+    
+    [self.view addSubview:self.prevPostButton];
+    [self.view addSubview:self.nextPostButton];
+    
     
     CALayer *topBorder = [CALayer layer];
-    topBorder.frame = CGRectMake(0, 0, self.view.frame.size.width, 0.5f);
+    topBorder.frame = CGRectMake(0, self.view.frame.size.height-50, self.view.frame.size.width, 0.5f);
     topBorder.backgroundColor = [UIColor colorWithWhite:0.85f alpha:1.0f].CGColor;
-    [self.nextPostButton.layer addSublayer:topBorder];
-    
-    
-    
-    
-    [self.nextPostButton addSubview:self.nextPostTitleLabel];
-    
-    
-    
-    [self.view addSubview:self.nextPostButton];
+    [self.view.layer addSublayer:topBorder];
     
     
     
@@ -167,13 +180,55 @@
 
 -(void)nextPost{
     
+    self.pressCount ++;
+    [self showHUD];
     
+    NSDictionary *requestParam = [NSDictionary dictionaryWithObjectsAndKeys:
+                                  [NSNumber numberWithInteger:self.currentDaysIndex],@"daysIndex",
+                                  self.appDelegate.generatedUserID,@"userIdStr",
+                                  [NSNumber numberWithInteger:self.pressCount], @"pressCount",
+                                  nil];
+    
+    NSString *postRouter = @"dailyMessage/index";
+    
+    NSString *postRequestUrl = [self.appDelegate.rootURL stringByAppendingString:postRouter];
+    
+    NSString *urlString = [postRequestUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    manager.requestSerializer.timeoutInterval = 20;
+    [manager POST:urlString parameters:requestParam success:^(AFHTTPRequestOperation *operation,id responseObject) {
+        NSLog(@"%@",responseObject);
+        NSDictionary *responseDict = [responseObject valueForKey:@"data"];
+        if(responseDict != (id)[NSNull null]){
+            
+            
+            
+        }else{
+            
+            
+            
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            NSLog(@"%@",error);
+            [self dismissHUD];
+        }];
+
+        
+
+}
+
+
+-(void)prevPost{
+    
+    self.pressCount --;
     
     
     
     
     
 }
+
 
 
 -(void)noDataAlert{
@@ -197,4 +252,5 @@
 -(void)dismissHUD{
     [self.HUD dismiss];
 }
+     
 @end

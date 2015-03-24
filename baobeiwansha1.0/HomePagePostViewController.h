@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "PostTextView.h"
+#import "AFNetworking.h"
 
 @interface HomePagePostViewController : UIViewController<PostTextViewDelegate>
 
@@ -15,5 +16,8 @@
 -(void)noDataAlert;
 -(void)showHUD;
 -(void)dismissHUD;
+
+@property (nonatomic) long currentPostID;
+@property (nonatomic) long currentDaysIndex;
 
 @end
