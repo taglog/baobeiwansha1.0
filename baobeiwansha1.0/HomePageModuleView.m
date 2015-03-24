@@ -70,7 +70,7 @@
     [self.layer addSublayer:titleViewTopBorder];
     
     CALayer *titleViewBottomBorder = [CALayer layer];
-    titleViewBottomBorder.frame = CGRectMake(0.0f, self.aframe.size.height, self.aframe.size.width, 0.5f);
+    titleViewBottomBorder.frame = CGRectMake(0.0f, self.aframe.size.height-0.5, self.aframe.size.width, 0.5f);
     titleViewBottomBorder.backgroundColor = [UIColor colorWithWhite:0.8f
                                                               alpha:1.0f].CGColor;
     [self.layer addSublayer:titleViewBottomBorder];

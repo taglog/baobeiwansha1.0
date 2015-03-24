@@ -241,6 +241,7 @@
     if(!self.refreshHeaderView){
         self.refreshHeaderView = [[EGORefreshView alloc] initWithScrollView:self.homeScrollView position:EGORefreshHeader ];
         self.refreshHeaderView.delegate = self;
+        //TODO
         
         [self.homeScrollView addSubview:self.refreshHeaderView];
         
@@ -269,6 +270,7 @@
 -(void)performPullDownRefresh{
     
     [self initUserInfo];
+    
 
     _reloading = YES;
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
@@ -313,7 +315,7 @@
                 [self initViews];
                 self.initialized = NO;
             }
-            NSLog(@"%@",responseObject);
+            NSLog(@"%@",self.postArray);
             [self.homePageProfileView setDict:self.userInfoDict frame:self.view.frame];
             [self.homePageAbilityView setDict:self.abilityDict];
             [self.homePageLocationView setArray:self.locationArray];
@@ -354,7 +356,7 @@
     
     _reloading = NO;
     [self.refreshHeaderView egoRefreshScrollViewDataSourceDidFinishedLoading:self.homeScrollView];
-    
+    //self.navigationItem.title = @"宝贝玩啥";
     
 }
 
@@ -377,13 +379,12 @@
         
         //[self setNavigationBarColorWithAlpha:1.0f];
         
-    }else if(scrollView.contentOffset.y <= startPointY){
+    }else if(scrollView.contentOffset.y < startPointY){
         
         [self setNavigationBarTransparent];
         self.isNavigationHidden = NO;
     }
     
-
     [self.refreshHeaderView egoRefreshScrollViewDidScroll:scrollView];
     
 }
@@ -506,10 +507,14 @@
         
         HomePagePostViewController *post = [[HomePagePostViewController alloc] init];
         post.hidesBottomBarWhenPushed = YES;
+        // this is ugly, need more time
+        //post.currentPostID = postID;
+        post.originalDaysIndex = [[[self.responseDict objectForKey:@"dailyMessage"] valueForKey:@"days_index"] integerValue];
+        post.currentDaysIndex = post.originalDaysIndex;
         
         NSDictionary *requestParam = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInteger:[[[self.responseDict objectForKey:@"dailyMessage"] valueForKey:@"days_detail_post_id"] integerValue]],@"postID",self.appDelegate.generatedUserID,@"userIdStr",nil];
         
-        NSString *postRouter = @"post/post";
+        NSString *postRouter = @"post/post_remove_slash_in_title";
         
         NSString *postRequestUrl = [self.appDelegate.rootURL stringByAppendingString:postRouter];
         
@@ -551,17 +556,14 @@
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
     
-    HomePagePostViewController *post = [[HomePagePostViewController alloc] init];
+    PostViewController *post = [[PostViewController alloc] init];
     post.hidesBottomBarWhenPushed = YES; 
-    // this is ugly, need more time
-    post.currentPostID = postID;
-    post.originalDaysIndex = [[[self.responseDict objectForKey:@"dailyMessage"] valueForKey:@"days_index"] integerValue];
-    post.currentDaysIndex = post.originalDaysIndex;
+    
 
     
     NSDictionary *requestParam = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInteger:postID],@"postID",self.appDelegate.generatedUserID,@"userIdStr",nil];
     
-    NSString *postRouter = @"post/post_remove_slash_in_title";
+    NSString *postRouter = @"post/post";
     
     NSString *postRequestUrl = [self.appDelegate.rootURL stringByAppendingString:postRouter];
 

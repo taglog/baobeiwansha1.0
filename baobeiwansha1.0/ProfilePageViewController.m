@@ -82,12 +82,12 @@
     self.view.backgroundColor = [UIColor colorWithRed:250.0/255.0f green:250.0/255.0f blue:250.0/255.0f alpha:1.0f];
     
     self.navigationController.navigationBar.barTintColor = [UIColor whiteColor];
-    NSDictionary * dict=[NSDictionary dictionaryWithObject:[UIColor colorWithRed:255.0/255.0f green:78.0/255.0f blue:162.0/255.0f alpha:1.0f] forKey:NSForegroundColorAttributeName];
+    NSDictionary * dict=[NSDictionary dictionaryWithObject:[UIColor colorWithRed:255.0/255.0f green:119/255.0f blue:119/255.0f alpha:1.0f] forKey:NSForegroundColorAttributeName];
     self.navigationController.navigationBar.titleTextAttributes = dict;
     
     
     UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"setting"] style:UIBarButtonItemStylePlain target:self action:@selector(pushSettingController)];
-    rightBarButton.tintColor = [UIColor colorWithRed:255.0/255.0f green:78.0/255.0f blue:162.0/255.0f alpha:1.0f];
+    rightBarButton.tintColor = [UIColor colorWithRed:255.0/255.0f green:119/255.0f blue:119/255.0f alpha:1.0f];
     
     self.navigationItem.rightBarButtonItem = rightBarButton;
     
@@ -134,6 +134,7 @@
 -(void)initProfilePageNoticeView{
     
     self.profilePageNoticeView = [[ProfilePageModuleView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 105)];
+
     self.profilePageNoticeView.moduleTitleLabel.text = @"我的消息";
     self.profilePageNoticeView.moduleDetailLabel.text = @"共有0条未读消息";
     self.profilePageNoticeView.contentTableView.delegate = self;

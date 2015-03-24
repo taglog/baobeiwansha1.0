@@ -136,30 +136,30 @@
 
 -(void)initBottomButton{
     
-    self.prevPostButton = [[UIButton alloc]initWithFrame:CGRectMake(0, self.view.frame.size.height - 50, self.view.frame.size.width/2, 50)];
+    self.prevPostButton = [[UIButton alloc]initWithFrame:CGRectMake(0, self.view.frame.size.height - 49, self.view.frame.size.width/2, 50)];
     
     [self.prevPostButton addTarget:self action:@selector(prevPost) forControlEvents:UIControlEventTouchUpInside];
     
     
     [self.prevPostButton setBackgroundImage:[UIImage imageNamed:@"searchbg"] forState:UIControlStateNormal];
-    [self.prevPostButton setBackgroundImage:[UIImage imageNamed:@"pressedcolor"] forState:UIControlStateSelected];
+    [self.prevPostButton setBackgroundImage:[UIImage imageNamed:@"pressedcolor"] forState:UIControlStateHighlighted];
     UILabel *labelp = [[UILabel alloc]initWithFrame:CGRectMake(15, 0, self.view.frame.size.width/2, 50)];
     labelp.text = @"上一篇";
-    labelp.textColor = [UIColor colorWithRed:185.0/255.0f green:185.0/255.0f blue:185.0/255.0f alpha:1.0f];
+    labelp.textColor = [UIColor blackColor];
     labelp.font = [UIFont systemFontOfSize:15.0f];
     labelp.textAlignment = NSTextAlignmentLeft;
     [self.prevPostButton addSubview:labelp];
     
     
-    self.nextPostButton = [[UIButton alloc]initWithFrame:CGRectMake(self.view.frame.size.width/2, self.view.frame.size.height - 50, self.view.frame.size.width/2, 50)];
+    self.nextPostButton = [[UIButton alloc]initWithFrame:CGRectMake(self.view.frame.size.width/2, self.view.frame.size.height - 49, self.view.frame.size.width/2, 50)];
     
     [self.nextPostButton addTarget:self action:@selector(nextPost) forControlEvents:UIControlEventTouchUpInside];
     [self.nextPostButton setBackgroundImage:[UIImage imageNamed:@"searchbg"] forState:UIControlStateNormal];
-    [self.nextPostButton setBackgroundImage:[UIImage imageNamed:@"pressedcolor"] forState:UIControlStateSelected];
+    [self.nextPostButton setBackgroundImage:[UIImage imageNamed:@"pressedcolor"] forState:UIControlStateHighlighted];
     
     UILabel *labeln = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width/2-15, 50)];
     labeln.text = @"下一篇";
-    labeln.textColor = [UIColor colorWithRed:185.0/255.0f green:185.0/255.0f blue:185.0/255.0f alpha:1.0f];
+    labeln.textColor = [UIColor blackColor];
     labeln.font = [UIFont systemFontOfSize:15.0f];
     labeln.textAlignment = NSTextAlignmentRight;
     [self.nextPostButton addSubview:labeln];
@@ -172,7 +172,7 @@
     
     
     CALayer *topBorder = [CALayer layer];
-    topBorder.frame = CGRectMake(0, self.view.frame.size.height-50, self.view.frame.size.width, 0.5f);
+    topBorder.frame = CGRectMake(0, self.view.frame.size.height-49, self.view.frame.size.width, 0.5f);
     topBorder.backgroundColor = [UIColor colorWithWhite:0.85f alpha:1.0f].CGColor;
     [self.view.layer addSublayer:topBorder];
     

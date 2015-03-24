@@ -47,7 +47,7 @@
 -(void)initViews{
     
     if(!self.tableView){
-        self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width,368)];
+        self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width,280)];
         self.tableView.separatorInset = UIEdgeInsetsZero;
         self.tableView.scrollEnabled = NO;
         self.tableView.delegate = self;
@@ -69,7 +69,7 @@
     if (section == 0) {
         number = 1;
     }else if(section == 1){
-        number = 5;
+        number = 3;
     }
     return number;
     
@@ -87,35 +87,35 @@
         }else{
             
             switch (indexPath.row) {
+//                case 0:
+//                {
+//                    cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identity];
+//                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+//                    cell.textLabel.text = @"接受推送消息";
+//                    UISwitch *switchview = [[UISwitch alloc] initWithFrame:CGRectZero];
+//                    [switchview addTarget:self action:@selector(pushNotificationON:) forControlEvents:UIControlEventValueChanged];
+//                    cell.accessoryView = switchview;
+//                    break;
+//                }
                 case 0:
-                {
-                    cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identity];
-                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-                    cell.textLabel.text = @"接受推送消息";
-                    UISwitch *switchview = [[UISwitch alloc] initWithFrame:CGRectZero];
-                    [switchview addTarget:self action:@selector(pushNotificationON:) forControlEvents:UIControlEventValueChanged];
-                    cell.accessoryView = switchview;
-                    break;
-                }
-                case 1:
                 {
                     cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identity];
                     cell.textLabel.text = @"意见反馈";
                     break;
                 }
-                case 2:
+                case 1:
                 {
                     cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identity];
                     cell.textLabel.text = @"去APPstore评价";
                     break;
                 }
-                case 3:
-                {
-                    cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identity];
-                    cell.textLabel.text = @"检测新版本";
-                    break;
-                }
-                case 4:
+//                case 3:
+//                {
+//                    cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identity];
+//                    cell.textLabel.text = @"检测新版本";
+//                    break;
+//                }
+                case 2:
                 {
                     cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identity];
                     cell.textLabel.text = @"关于我们";
@@ -144,7 +144,7 @@
             [cell.layer addSublayer:titleViewTopBorder];
             
         }
-        if(indexPath.row == 4){
+        if(indexPath.row == 2){
             [cell.layer addSublayer:titleViewBottomBorder];
         }
         if(indexPath.section == 0 && indexPath.row == 0){
@@ -164,17 +164,17 @@
         
     }else{
         switch (indexPath.row) {
+//            case 0:
+//                break;
+//                
             case 0:
-                break;
-                
-            case 1:
             {
                 FeedbackViewController *feedback = [[FeedbackViewController alloc]initWithStyle:UITableViewStyleGrouped];
                 [self.navigationController pushViewController:feedback animated:YES];
                 break;
             }
             
-            case 2:
+            case 1:
             {
                 NSURL * urlStr = [NSURL URLWithString:@"itms-apps://itunes.apple.com/app/id961562218"];//后面为参数
                 if ([[UIApplication sharedApplication] canOpenURL:urlStr]) {
@@ -187,20 +187,20 @@
                 break;
             }
                 
-            case 3:
-            {
-                NSURL * urlStr = [NSURL URLWithString:@"itms-apps://itunes.apple.com/app/id961562218"];//后面为参数
-                if ([[UIApplication sharedApplication] canOpenURL:urlStr]) {
-                    NSLog(@"going to url");
-                    [[UIApplication sharedApplication] openURL:urlStr];
-                }else{
-                    NSLog(@"can not go to url");
-                }
-                
-                break;
-            }
-                
-            case 4:
+//            case 3:
+//            {
+//                NSURL * urlStr = [NSURL URLWithString:@"itms-apps://itunes.apple.com/app/id961562218"];//后面为参数
+//                if ([[UIApplication sharedApplication] canOpenURL:urlStr]) {
+//                    NSLog(@"going to url");
+//                    [[UIApplication sharedApplication] openURL:urlStr];
+//                }else{
+//                    NSLog(@"can not go to url");
+//                }
+//                
+//                break;
+//            }
+//                
+            case 2:
             {   AboutUsViewController *aboutus = [[AboutUsViewController alloc]init];
                 [self.navigationController pushViewController:aboutus animated:YES];
                 break;
