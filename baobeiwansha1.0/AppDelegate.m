@@ -378,4 +378,27 @@
     return string;
 }
 
+//数字月份转换字符串
++(NSString *)birthdayToString:(NSInteger)days{
+    NSString *string;
+    int month = floor(days/30);
+    if(month < 0) {
+        string = [NSString stringWithFormat:@"%d个月后出生",days*(-1)];
+    } else if(month == 0){
+        if(days < 0) string = [NSString stringWithFormat:@"%d天后出生",days*(-1)];
+        else string = [NSString stringWithFormat:@"%d天",days];
+        
+    }else if(month<24){ // >0 and < 24
+        string = [NSString stringWithFormat:@"%d个月",month];
+    }else{
+        string = [NSString stringWithFormat:@"%d岁%d个月",month / 12,month % 12];
+        if(month %12 == 0){
+            string = [NSString stringWithFormat:@"%d岁",month / 12];
+        }
+        
+    }
+    return string;
+}
+
+
 @end

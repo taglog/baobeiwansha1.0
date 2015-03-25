@@ -308,9 +308,10 @@
             int now = [nowStamp intValue];
             
             int babyBirthdayStamp = now - time;
-            int month = floor(babyBirthdayStamp/60/60/24/30);
+            int days = round(babyBirthdayStamp/60/60/24);
+            //int month = floor(day/30);
             
-            NSString *babyMonthString = [AppDelegate birthdayMonthToString:month];
+            NSString *babyMonthString = [AppDelegate birthdayToString:days];
             
             [self.userInfoDict setObject:[self.userInfo valueForKey:@"app_user_baby_sex"] forKey:@"babyGender"];
             [self.userInfoDict setObject:babyMonthString forKey:@"babyMonthString"];

@@ -319,8 +319,8 @@
         NSArray *responseArray = [responseObject valueForKey:@"data"];
         
         //如果存在数据，那么就初始化tableView
-        if(responseArray != (id)[NSNull null] ){
-            
+        if(responseArray != (id)[NSNull null] && responseArray.count > 0){
+            NSLog(@"returned array is : %@",responseArray);
             [self.postTableArray removeAllObjects];
             
             if(self.noDataAlert){

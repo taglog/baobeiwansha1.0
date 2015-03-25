@@ -19,7 +19,8 @@
 @property (nonatomic, retain) NSString *generatedUserID;
 
 +(NSString *)dataFilePath;
-+(NSString *)birthdayMonthToString:(NSInteger)month;
++(NSString *)birthdayMonthToString:(NSInteger)months;
++(NSString *)birthdayToString:(NSInteger)days;
 
 @end
 

@@ -209,14 +209,15 @@
         int now = [nowStamp intValue];
         
         int babyBirthdayStamp = now - time;
-        self.babyBirthdayMonth = floor(babyBirthdayStamp/60/60/24/30);
+        int days = round(babyBirthdayStamp/60/60/24);
+        self.babyBirthdayMonth = floor(days/30);
         
-        self.babyBirthday = [AppDelegate birthdayMonthToString:self.babyBirthdayMonth];
+        self.babyBirthday = [AppDelegate birthdayToString:days];
         
     }else{
         self.babyBirthdayMonth = 0;
         
-        self.babyBirthday = [AppDelegate birthdayMonthToString:0];
+        self.babyBirthday = [AppDelegate birthdayToString:0];
         
     }
 }
