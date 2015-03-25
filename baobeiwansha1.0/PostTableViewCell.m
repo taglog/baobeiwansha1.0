@@ -29,6 +29,7 @@
 
 //@property (nonatomic,retain) UIImageView *collectionIcon;
 @property (nonatomic,retain) UIButton *collectionButton;
+@property (nonatomic,retain) UIImageView *collectionButtonImage;
 
 @property (nonatomic,retain) CALayer *bottomBorder;
 //传入的frame
@@ -97,6 +98,10 @@
         self.collectionButton = [[UIButton alloc] init];
         [self.contentView addSubview:self.collectionButton];
                                  
+    }
+    if(!self.collectionButtonImage){
+        self.collectionButtonImage = [[UIImageView alloc]init];
+        [self.collectionButton addSubview:self.collectionButtonImage];
     }
     if(!self.bottomBorder){
         self.bottomBorder = [CALayer layer];
@@ -175,9 +180,9 @@
     if([dict objectForKey:@"isCollection"] != (id)[NSNull null]){
         
         if([[self.dict objectForKey:@"isCollection"] integerValue] == 0){
-            [self.collectionButton setImage:[UIImage imageNamed:@"unstar"] forState:UIControlStateNormal];
+            self.collectionButtonImage.image = [UIImage imageNamed:@"unstar"];
         }else{
-            [self.collectionButton setImage:[UIImage imageNamed:@"star"] forState:UIControlStateNormal];
+            self.collectionButtonImage.image = [UIImage imageNamed:@"star"];
 
         }
     }
@@ -210,13 +215,13 @@
     //取消收藏
         [self.dict setObject:[NSNumber numberWithInteger:0] forKey:@"isCollection"];
         
-        [self.collectionButton setImage:[UIImage imageNamed:@"unstar"] forState:UIControlStateNormal];
+        self.collectionButtonImage.image = [UIImage imageNamed:@"unstar"];
  
     }else{
         
         [self.dict setObject:[NSNumber numberWithInteger:1] forKey:@"isCollection"];
 
-        [self.collectionButton setImage:[UIImage imageNamed:@"star"] forState:UIControlStateNormal];
+        self.collectionButtonImage.image = [UIImage imageNamed:@"star"];
 
     }
     [self setNeedsLayout];
@@ -416,8 +421,9 @@
 
     
     self.collectionButton.frame = CGRectMake(self.aframe.size.width - 40,
-                                    paddingTop + self.title.frame.size.height + self.introduction.frame.size.height + 16,
-                                    28, 28);
+                                    paddingTop + self.title.frame.size.height + self.introduction.frame.size.height ,
+                                    50, 50);
+    self.collectionButtonImage.frame = CGRectMake(5, 22, 18, 18);
     [self.collectionButton addTarget:self action:@selector(collectionBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     //self.collectionIcon.frame = CGRectMake(self.aframe.size.w idth - 40,
     //                                       paddingTop + self.title.frame.size.height + self.introduction.frame.size.height + 20,
