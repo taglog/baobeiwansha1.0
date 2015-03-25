@@ -179,14 +179,13 @@
     _homeTableView.tableFooterView = self.tableViewMask;
     
     if(self.noDataAlert == nil){
-        self.noDataAlert = [[UILabel alloc]initWithFrame:CGRectMake(20, self.view.frame.size.height/2-80, self.view.frame.size.width-40, 9999)];
-        self.noDataAlert.text = @"这里目前还没有内容, 小编正在玩命为您赶工，过几天再回来看哦！";
+        self.noDataAlert = [[UILabel alloc]initWithFrame:CGRectMake(0, self.view.frame.size.height/2-80, self.view.frame.size.width, 40)];
+        self.noDataAlert.text = @"这里目前还没有内容\n 小编正在玩命为您赶工，过几天再回来看哦！";
         self.noDataAlert.textAlignment = NSTextAlignmentCenter;
         self.noDataAlert.textColor = [UIColor colorWithRed:102.0f/255.0f green:102.0f/255.0f blue:102.0f/255.0f alpha:1.0f];
-        self.noDataAlert.textAlignment = NSTextAlignmentCenter;
         self.noDataAlert.font = [UIFont systemFontOfSize:14.0f];
-        self.noDataAlert.numberOfLines = 0;
-        [self.noDataAlert sizeToFit];
+        self.noDataAlert.numberOfLines = 2;
+        //[self.noDataAlert sizeToFit];
         [_homeTableView addSubview:self.noDataAlert];
     }
     
