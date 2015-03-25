@@ -13,10 +13,18 @@
 #import "HomePageViewController.h"
 #import "CategoryPageViewController.h"
 #import "ProfilePageViewController.h"
+#import "Reachability.h"
 
 @interface AppDelegate ()
 @property (nonatomic,retain) UINavigationController *userInfoNav;
 @property (nonatomic,retain) UITabBarController *mainTabBarController;
+//判断是否有网络
+@property (nonatomic) Reachability *internetReachability;
+@property (nonatomic) Reachability *wifiReachability;
+
+@property (nonatomic,assign) int reachability;
+@property (nonatomic,retain) UILabel *reachabilitySign;
+
 @end
 
 @implementation AppDelegate
@@ -24,7 +32,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
-    
+    [self initReachability];
     [self globalSettings];
     [self generateUserID];
     [self pushNotificationSettings:launchOptions];
@@ -230,6 +238,115 @@
 }
 - (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
     NSLog(@"register notification failed with code: %@", error);
+}
+#pragma mark - 判断网络情况
+-(void)initReachability{
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(reachabilityChanged:)
+                                                 name:kReachabilityChangedNotification
+                                               object:nil];
+    
+    __weak __block typeof(self) weakself = self;
+    
+    
+    self.internetReachability = [Reachability reachabilityForInternetConnection];
+    
+    self.internetReachability.reachableBlock = ^(Reachability * reachability)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSLog(@"reachable");
+        });
+    };
+    
+    self.internetReachability.unreachableBlock = ^(Reachability * reachability)
+    {
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakself showReachabilitySign];
+            NSLog(@"1111111");
+            
+        });
+    };
+    
+    [self.internetReachability startNotifier];
+    
+    self.wifiReachability = [Reachability reachabilityForLocalWiFi];
+    // we ONLY want to be reachable on WIFI - cellular is NOT an acceptable connectivity
+    self.wifiReachability.reachableOnWWAN = NO;
+    
+    self.wifiReachability.reachableBlock = ^(Reachability * reachability)
+    {
+        
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+        });
+    };
+    
+    //无wifi连接的时候，是不是要通知用户
+    self.wifiReachability.unreachableBlock = ^(Reachability * reachability)
+    {
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSLog(@"reachable");
+            
+        });
+    };
+    
+    [self.wifiReachability startNotifier];
+    
+    
+}
+//连接状态发生改变
+-(void)reachabilityChanged:(NSNotification *)note{
+    
+    Reachability * reach = [note object];
+    
+    if (reach == self.internetReachability)
+    {
+        if([reach isReachable])
+        {
+            if(self.reachability == YES){
+                [self hideReachabilitySign];
+            }
+            
+        }
+        else
+        {
+            
+            [self showReachabilitySign];
+            
+        }
+    }
+    
+    
+    
+}
+-(void)showReachabilitySign{
+    
+    if(!self.reachabilitySign){
+        self.reachabilitySign = [[UILabel alloc]initWithFrame:CGRectMake(0, -40, self.window.frame.size.width, 40.0f)];
+        self.reachabilitySign.backgroundColor = [UIColor redColor];
+        self.reachabilitySign.text = @"没有网络连接哦~";
+        self.reachabilitySign.textColor = [UIColor whiteColor];
+        self.reachabilitySign.font = [UIFont systemFontOfSize:12.0f];
+        self.reachabilitySign.textAlignment = NSTextAlignmentCenter;
+        [self.window addSubview:self.reachabilitySign];
+        [self.window bringSubviewToFront:self.reachabilitySign];
+    }
+    [UIView animateWithDuration:0.2 animations:^{
+        self.reachabilitySign.frame = CGRectMake(0, 0, self.window.frame.size.width, 40.0f);
+    } completion:^(BOOL finished) {
+        self.reachability = YES;
+    }];
+}
+
+-(void)hideReachabilitySign{
+    [UIView animateWithDuration:0.2 animations:^{
+        self.reachabilitySign.frame = CGRectMake(0, -40, self.window.frame.size.width, 40.0f);
+    } completion:^(BOOL finished) {
+        self.reachability = NO;
+    }];
 }
 
 #pragma mark - 公有函数

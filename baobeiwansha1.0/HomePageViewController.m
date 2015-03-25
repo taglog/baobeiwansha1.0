@@ -16,6 +16,7 @@
 #import "AFNetworking.h"
 #import "ButtonCanDragScrollView.h"
 #import "HomePagePostViewController.h"
+#import "JGProgressHUD.h"
 
 @interface HomePageViewController ()
 
@@ -35,6 +36,7 @@
 @property (nonatomic,assign) BOOL reloading;
 @property (nonatomic,retain) EGORefreshView *refreshHeaderView;
 
+@property (nonatomic,strong) JGProgressHUD *HUD;
 
 @property (nonatomic,retain) NSDictionary *responseDict;
 
@@ -45,6 +47,7 @@
 
 @property (nonatomic,retain) AppDelegate *appDelegate;
 @property (nonatomic,assign) CGFloat navBarAlpha;
+
 
 @property (nonatomic,assign) BOOL initialized;
 
@@ -139,6 +142,8 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(needToRefreshWhenAppear) name:@"userInfoChanged" object:nil];
     
 }
+
+
 -(void)needToRefreshWhenAppear{
     
     self.isUserInfoChanged = YES;
@@ -330,6 +335,8 @@
           failure:^(AFHTTPRequestOperation *operation, NSError *error) {
               
               NSLog(@"%@",error);
+              [self showHUD:@"没有网络连接哦~"];
+              [self dismissHUD];
               [self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:0.3f];
               [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
           }];
@@ -589,5 +596,14 @@
     [self.navigationController pushViewController:post animated:YES];
 
 }
+-(void)showHUD:(NSString *)text{
+    //显示hud层
+    self.HUD = [JGProgressHUD progressHUDWithStyle:JGProgressHUDStyleDark];
+    self.HUD.textLabel.text = text;
+    [self.HUD showInView:self.view];
+}
 
+-(void)dismissHUD{
+    [self.HUD dismissAfterDelay:3.0];
+}
 @end
