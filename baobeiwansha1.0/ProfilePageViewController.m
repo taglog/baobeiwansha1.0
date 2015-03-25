@@ -104,8 +104,10 @@
     
 }
 -(void)needToRefreshWhenAppear{
+    
     self.isUserInfoChanged = YES;
 }
+
 -(void)pushSettingController{
     
     ProfilePageSystemSettingViewController *profile = [[ProfilePageSystemSettingViewController alloc]init];
@@ -497,6 +499,7 @@
                 }
                 NSLog(@"%@",responseObject);
                 NSLog(@"%@",self.responseComment);
+
                 self.responseDict = [[NSMutableDictionary alloc]initWithDictionary:[responseObject valueForKey:@"data"]];
                 
                 self.responseCollection = [self.responseDict valueForKey:@"my_collection"];

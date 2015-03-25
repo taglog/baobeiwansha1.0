@@ -93,7 +93,6 @@
     [self initSearchBar];
     [self initSegmentControl];
     
-    [self initCollectionView];
     [self initRefreshHeaderView];
     [self simulatePullDownRefresh];
 
@@ -154,11 +153,12 @@
 }
 -(void)initCollectionView{
     
+    if(!self.tagCollectionView){
+
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
     flowLayout.scrollDirection = UICollectionViewScrollDirectionVertical;
     flowLayout.minimumInteritemSpacing = 0;
     flowLayout.minimumLineSpacing = 20;
-    
     self.tagCollectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, 124, self.view.frame.size.width, self.view.frame.size.height - 114) collectionViewLayout:flowLayout];
     
     [self.tagCollectionView registerClass:[TagPageCollectionViewCell class] forCellWithReuseIdentifier:@"tagcell"];
@@ -168,6 +168,7 @@
     self.tagCollectionView.dataSource = self;
     
     [self.view addSubview:self.tagCollectionView];
+    }
 
 }
 
@@ -346,6 +347,8 @@
     
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
+    [self showHUD:@"正在加载~"];
+    
     //请求的地址
     NSString *postRouter = [self.requestURL valueForKey:@"requestRouter"];
     NSString *postRequestUrl = [self.appDelegate.rootURL stringByAppendingString:postRouter];
@@ -362,7 +365,8 @@
         
         //如果存在数据，那么就初始化tableView
         if(responseArray != (id)[NSNull null] ){
-            
+            [self initCollectionView];
+            [self dismissHUD];
             if([self.segmentedControl selectedSegmentIndex] == 0){
                 [self.abilityData removeAllObjects];
                 for(NSDictionary *responseDict in responseArray){
