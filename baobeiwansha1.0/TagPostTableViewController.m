@@ -226,6 +226,12 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
+    //点击后更改cell的点击状态
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc]initWithDictionary:
+                                 self.postTableArray[indexPath.row]];
+    [dict setObject:[NSNumber numberWithInteger:1] forKey:@"isCellTapped"];
+    [self.postTableArray replaceObjectAtIndex:indexPath.row withObject:dict];
+    [self.homeTableView reloadData];
     
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
 
