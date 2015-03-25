@@ -899,14 +899,18 @@
     
     //删除评论
     if(buttonIndex == 0){
+        
         NSInteger commentID = [[[self.commentTableViewCell objectAtIndex:self.commentTapIndexPath.row]valueForKey:@"comment_ID"]integerValue];
         
         [self.commentTableViewCell removeObjectAtIndex:self.commentTapIndexPath.row];
         [self.commentTableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:self.commentTapIndexPath]
                          withRowAnimation:UITableViewRowAnimationAutomatic];
         
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"commentDelete" object:nil];
+
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
         
+
         NSString *commentRouter = @"/comment/delete";
         
         
@@ -918,7 +922,6 @@
         manager.requestSerializer.timeoutInterval = 20;
         [manager POST:commentRequestUrl parameters:postParam success:^(AFHTTPRequestOperation *operation, id responseObject) {
             
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"commentChanged" object:nil];
 
             NSArray *responseArray = [responseObject valueForKey:@"data"];
             

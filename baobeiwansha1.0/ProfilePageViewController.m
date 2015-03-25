@@ -101,6 +101,8 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(needToRefreshWhenAppear) name:@"collectionChanged" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(needToRefreshWhenAppear) name:@"commentChanged" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(needToRefreshWhenAppear) name:@"commentDelete" object:nil];
+
     
 }
 -(void)needToRefreshWhenAppear{

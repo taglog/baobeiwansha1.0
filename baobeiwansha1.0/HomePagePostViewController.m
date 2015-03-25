@@ -41,6 +41,7 @@
     self.navigationItem.title = @"宝贝成长";
     self.pressCount = 0;
     [self defaultSettings];
+    self.automaticallyAdjustsScrollViewInsets = NO;
 }
 
 -(void)defaultSettings{

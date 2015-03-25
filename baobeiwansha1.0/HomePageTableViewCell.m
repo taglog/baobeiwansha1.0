@@ -79,7 +79,8 @@
     [super layoutSubviews];
     
     self.iconView.frame = CGRectMake(15, 10, 40, 40);
-
+    self.iconView.layer.borderWidth = 1.0f;
+    self.iconView.layer.borderColor = [UIColor colorWithRed:222.0/255.0f green:222.0/255.0f blue:222.0/255.0f alpha:1.0f].CGColor;
     self.iconView.layer.cornerRadius = 3;
     self.iconView.layer.masksToBounds = YES;
     self.iconView.contentMode = UIViewContentModeScaleAspectFit;
