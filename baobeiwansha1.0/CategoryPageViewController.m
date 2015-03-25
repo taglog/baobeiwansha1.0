@@ -72,6 +72,7 @@
     [super viewWillAppear:animated];
     if(self.isUserInfoChanged == YES){
         [self updateUserInfo];
+        self.isUserInfoChanged = NO;
     }
     
 }
