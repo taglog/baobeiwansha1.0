@@ -77,6 +77,7 @@
     
     //module的titleview
     self.titleView.frame = CGRectMake(0, 0 ,self.aframe.size.width, 45);
+    [self.titleView setBackgroundImage:[UIImage imageNamed:@"pressedcolor"] forState:UIControlStateHighlighted];
     
     self.titleLabel.frame = CGRectMake(15, 0, self.aframe.size.width, 45);
     self.titleLabel.text = self.title;

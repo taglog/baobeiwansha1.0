@@ -319,14 +319,18 @@
         
 
         //初始化collectButton
-        self.collectionButton = [[UIButton alloc]initWithFrame:CGRectMake(self.view.frame.size.width - 40, 12, 24, 24)];
-        [self.collectionButton setBackgroundImage:[UIImage imageNamed:@"unstar"] forState:UIControlStateNormal];
+        self.collectionButton = [[UIButton alloc]initWithFrame:CGRectMake(self.view.frame.size.width - 40, 0, 60, 60)];
+        UIImageView *collectionButtonImage = [[UIImageView alloc]initWithFrame:CGRectMake(0, 12, 24, 24)];
+        collectionButtonImage.image = [UIImage imageNamed:@"unstar"];
+        [self.collectionButton addSubview:collectionButtonImage];
         [self.collectionButton addTarget:self action:@selector(collectPost:) forControlEvents:UIControlEventTouchUpInside];
         self.collectionButton.tag = 0;
         
         
-        self.collectionButtonSelected = [[UIButton alloc]initWithFrame:CGRectMake(self.view.frame.size.width - 40, 12, 24, 24)];
-        [self.collectionButtonSelected setBackgroundImage:[UIImage imageNamed:@"star"] forState:UIControlStateNormal];
+        self.collectionButtonSelected = [[UIButton alloc]initWithFrame:CGRectMake(self.view.frame.size.width - 40, 0, 60, 60)];
+        UIImageView *collectionButtonSelectedImage = [[UIImageView alloc]initWithFrame:CGRectMake(0, 12, 24, 24)];
+        collectionButtonSelectedImage.image = [UIImage imageNamed:@"star"];
+        [self.collectionButtonSelected addSubview:collectionButtonSelectedImage];
         [self.collectionButtonSelected addTarget:self action:@selector(collectPost:) forControlEvents:UIControlEventTouchUpInside];
         self.collectionButtonSelected.tag = 1;
         

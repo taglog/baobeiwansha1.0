@@ -243,7 +243,7 @@
 -(void)initSubmitButton{
     
     if(!self.submitButton){
-        self.submitButton = [[UIButton alloc]initWithFrame:CGRectMake(50, (SHORT_SCREEN)?360:440, self.view.frame.size.width - 100, 50)];
+        self.submitButton = [[UIButton alloc]initWithFrame:CGRectMake(50, (SHORT_SCREEN)?350:430, self.view.frame.size.width - 100, 50)];
         self.submitButton.backgroundColor = [UIColor colorWithRed:255.0f/255.0f green:126.0f/255.0f blue:131.0f/255.0f alpha:1.0];
         [self.submitButton setTitle:@"保   存" forState:UIControlStateNormal];
         self.submitButton.titleLabel.font = [UIFont fontWithName:@"STHeitiSC-Medium" size:23.0f];
@@ -309,7 +309,15 @@
         [HUD dismissAfterDelay:2.0];
         return;
     }
-
+    //nickname字符长度
+    if([[self.userInfoDict objectForKey:@"nickName"] length]>7){
+        JGProgressHUD *HUD = [JGProgressHUD progressHUDWithStyle:JGProgressHUDStyleDark];
+        HUD.indicatorView = [[JGProgressHUDErrorIndicatorView alloc] init];
+        HUD.textLabel.text = @"昵称不能小于7个字";
+        [HUD showInView:self.view];
+        [HUD dismissAfterDelay:2.0];
+        return;
+    }
     if(![self.userInfoDict objectForKey:@"userGender"]){
         NSLog(@"no userGender");
         JGProgressHUD *HUD = [JGProgressHUD progressHUDWithStyle:JGProgressHUDStyleDark];
