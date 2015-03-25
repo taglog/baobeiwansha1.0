@@ -363,7 +363,9 @@
 //数字月份转换字符串
 +(NSString *)birthdayMonthToString:(NSInteger)month{
     NSString *string;
-    if(month < 24){
+    if(month < 0) {
+        string = [NSString stringWithFormat:@"%ld个月后出生",(long)month*(-1)];
+    } else if(month < 24){
         string = [NSString stringWithFormat:@"%ld个月",(long)month];
         
     }else{

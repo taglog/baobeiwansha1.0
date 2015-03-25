@@ -11,6 +11,7 @@
 #import "AFHTTPRequestOperationManager.h"
 #import "JGProgressHUD.h"
 #import "JGProgressHUDSuccessIndicatorView.h"
+#import "JGProgressHUDErrorIndicatorView.h"
 
 
 #define ORIGINAL_MAX_WIDTH 640.0f
@@ -387,11 +388,11 @@
         
         NSLog(@"Sync Error: %@", error);
         
-        HUD.textLabel.text = @"网络失败，请重试";
+        HUD.textLabel.text = @"网络连接失败，请重试一下吧~";
         HUD.detailTextLabel.text = nil;
         HUD.layoutChangeAnimationDuration = 0.4;
-        HUD.indicatorView = [[JGProgressHUDSuccessIndicatorView alloc] init];
-        [HUD dismissAfterDelay:1];
+        HUD.indicatorView = [[JGProgressHUDErrorIndicatorView alloc] init];
+        [HUD dismissAfterDelay:2];
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         
     }];
