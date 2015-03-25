@@ -495,7 +495,8 @@
                     [self initViews];
                     self.initialized = NO;
                 }
-               
+                NSLog(@"%@",responseObject);
+                NSLog(@"%@",self.responseComment);
                 self.responseDict = [[NSMutableDictionary alloc]initWithDictionary:[responseObject valueForKey:@"data"]];
                 
                 self.responseCollection = [self.responseDict valueForKey:@"my_collection"];
@@ -537,7 +538,7 @@
     
     self.profilePageCommentView.frame = CGRectMake(0, 105 + self.profilePageCollectionView.frame.size.height, self.view.frame.size.width, 60 + [self.responseComment count]*150 + 45);
     
-    //self.profilePageScrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.profilePageNoticeView.frame.size.height + self.profilePageCollectionView.frame.size.height + self.profilePageCommentView.frame.size.height);
+    self.profilePageScrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.profilePageNoticeView.frame.size.height + self.profilePageCollectionView.frame.size.height + self.profilePageCommentView.frame.size.height + 50);
     
 }
 - (void)doneLoadingTableViewData{

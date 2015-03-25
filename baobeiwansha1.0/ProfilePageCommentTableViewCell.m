@@ -10,6 +10,7 @@
 #import "UIImageView+AFNetworking.h"
 
 @interface ProfilePageCommentTableViewCell ()
+@property (nonatomic,assign) NSInteger type;
 
 @property (nonatomic,retain) UIImageView *image;
 @property (nonatomic,retain) UILabel *title;
@@ -17,6 +18,7 @@
 @property (nonatomic,retain) UILabel *commentContentLabel;
 @property (nonatomic,retain) NSDictionary *dict;
 @property (nonatomic,assign) CGRect aframe;
+@property (nonatomic,retain) UILabel *typeLabel;
 
 @end
 @implementation ProfilePageCommentTableViewCell
@@ -45,6 +47,10 @@
     if(!self.commentContentLabel){
         self.commentContentLabel = [[UILabel alloc]init];
         [self.contentView addSubview:self.commentContentLabel];
+    }
+    if(!self.typeLabel){
+        self.typeLabel = [[UILabel alloc]init];
+        [self.contentView addSubview:self.typeLabel];
     }
     
 }
@@ -89,7 +95,25 @@
         [attributedString2 addAttribute:NSParagraphStyleAttributeName value:paragraphStyle2 range:NSMakeRange(0, [comment length])];
         [self.commentContentLabel setAttributedText:attributedString2];
     }
-    
+    if([dict objectForKey:@"post_taxonomy"]){
+        self.type = [[dict objectForKey:@"post_taxonomy"]integerValue];
+        if(self.type == 1){
+            self.typeLabel.text = @"绘本";
+            self.typeLabel.backgroundColor = [UIColor colorWithRed:201.0/255.0f green:56.0/255.0f blue:149.0/255.0f alpha:1.0f];
+            
+        }else if(self.type == 2){
+            self.typeLabel.text = @"玩具";
+            self.typeLabel.backgroundColor = [UIColor colorWithRed:184.0/255.0f green:220.0/255.0f blue:90.0/255.0f alpha:1.0f];
+            
+        }else if(self.type == 3){
+            self.typeLabel.text = @"游戏";
+            self.typeLabel.backgroundColor = [UIColor colorWithRed:124.0/255.0f green:195.0/255.0f blue:231.0/255.0f alpha:1.0f];
+            
+            
+        }
+        
+    }
+
     [self setNeedsLayout];
     
 }
@@ -104,6 +128,13 @@
     self.title.font = [UIFont fontWithName:@"STHeitiSC-Medium" size:15.0f];
     self.title.numberOfLines = 2;
     self.title.textColor = [UIColor colorWithRed:80.0f/255.0f green:80.0f/255.0f blue:80.0f/255.0f alpha:1.0f];
+    
+    self.typeLabel.frame = CGRectMake(self.aframe.size.width - 45,15, 30, 16.0f);
+    self.typeLabel.textColor = [UIColor whiteColor];
+    self.typeLabel.textAlignment = NSTextAlignmentCenter;
+    self.typeLabel.layer.cornerRadius = 3;
+    self.typeLabel.font = [UIFont systemFontOfSize:12.0f];
+    self.typeLabel.layer.masksToBounds = YES;
     
     self.commentLabel.frame = CGRectMake(15, 70, 50,17);
     self.commentLabel.layer.cornerRadius = 4;
