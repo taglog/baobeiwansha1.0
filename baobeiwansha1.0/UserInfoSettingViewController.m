@@ -729,15 +729,19 @@
 -(void)showDatePicker{
     
     [self showMaskView];
-    
     if(!self.datePicker){
         
         self.datePicker = [[UIDatePicker alloc]initWithFrame:CGRectMake(0, self.view.frame.size.height + 30, self.view.frame.size.width, 200)];
         self.datePicker.datePickerMode = UIDatePickerModeDate;
-        [self.datePicker setDate:[NSDate date]];
+        if([self.userInfoDict objectForKey:@"babyBirthday"]){
+            [self.datePicker setDate:[self.userInfoDict objectForKey:@"babyBirthday"]];
+
+        }else{
+            [self.datePicker setDate:[NSDate date]];
+        }
         self.datePicker.backgroundColor = [UIColor whiteColor];
         self.datePicker.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"zh_CN"];
-        self.datePicker.maximumDate = [NSDate dateWithTimeIntervalSinceNow:2* 365 * 24 * 60 * 60]; // 设置最大时间
+        self.datePicker.maximumDate = [NSDate dateWithTimeIntervalSinceNow:10 * 30 * 24 * 60 * 60]; // 设置最大时间
         self.datePicker.minimumDate = [NSDate dateWithTimeIntervalSinceNow:6* 365 * 24 * 60 * 60 * -1]; // 设置最小时间
         
         self.toolBar = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height, self.view.frame.size.width, 40)];
