@@ -364,14 +364,14 @@
 +(NSString *)birthdayMonthToString:(NSInteger)month{
     NSString *string;
     if(month < 0) {
-        string = [NSString stringWithFormat:@"%ld个月后出生",(long)month*(-1)];
+        string = [NSString stringWithFormat:@"%d个月后出生",month*(-1)];
     } else if(month < 24){
-        string = [NSString stringWithFormat:@"%ld个月",(long)month];
+        string = [NSString stringWithFormat:@"%d个月",month];
         
     }else{
-        string = [NSString stringWithFormat:@"%ld岁%ld个月",month / 12,month % 12];
+        string = [NSString stringWithFormat:@"%d岁%d个月",month / 12,month % 12];
         if(month %12 == 0){
-            string = [NSString stringWithFormat:@"%ld岁",month / 12];
+            string = [NSString stringWithFormat:@"%d岁",month / 12];
         }
         
     }

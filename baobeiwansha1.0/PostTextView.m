@@ -39,7 +39,7 @@
     self.postContent = [_postDict valueForKey:@"post_content"];
     
     //初始化PostTitle
-    NSString *htmlPostTitleStart = @"<h2 style='font-size:24px;color:#33333;margin:10px 0'>";
+    NSString *htmlPostTitleStart = @"<h2 style='font-size:20px;color:#33333;margin:10px 0'>";
     NSString *htmlPostTitleWithStart = [htmlPostTitleStart stringByAppendingString:self.postTitle];
     NSString *htmlPostTItleWithEnd = [htmlPostTitleWithStart stringByAppendingString:@"</h2>"];
     self.htmlPostContent = [htmlPostTItleWithEnd stringByAppendingString:self.postContent];

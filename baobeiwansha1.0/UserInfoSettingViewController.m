@@ -293,35 +293,39 @@
     
     if(![self.userInfoDict objectForKey:@"babyGender"]){
         JGProgressHUD *HUD = [JGProgressHUD progressHUDWithStyle:JGProgressHUDStyleDark];
+        HUD.indicatorView = [[JGProgressHUDErrorIndicatorView alloc] init];
         HUD.textLabel.text = @"请选择宝贝性别";
         [HUD showInView:self.view];
-        [HUD dismissAfterDelay:1.0];
+        [HUD dismissAfterDelay:2.0];
         return;
     }
 
     //没有填nickname
     if(![self.userInfoDict objectForKey:@"nickName"] || [[self.userInfoDict objectForKey:@"nickName"] isEqual:@""]){
         JGProgressHUD *HUD = [JGProgressHUD progressHUDWithStyle:JGProgressHUDStyleDark];
+        HUD.indicatorView = [[JGProgressHUDErrorIndicatorView alloc] init];
         HUD.textLabel.text = @"请填写宝贝昵称";
         [HUD showInView:self.view];
-        [HUD dismissAfterDelay:1.0];
+        [HUD dismissAfterDelay:2.0];
         return;
     }
 
     if(![self.userInfoDict objectForKey:@"userGender"]){
         NSLog(@"no userGender");
         JGProgressHUD *HUD = [JGProgressHUD progressHUDWithStyle:JGProgressHUDStyleDark];
+        HUD.indicatorView = [[JGProgressHUDErrorIndicatorView alloc] init];
         HUD.textLabel.text = @"请选择您的身份";
         [HUD showInView:self.view];
-        [HUD dismissAfterDelay:1.0];
+        [HUD dismissAfterDelay:2.0];
         return;
     }
 
     if(![self.userInfoDict objectForKey:@"babyBirthday"]){
         JGProgressHUD *HUD = [JGProgressHUD progressHUDWithStyle:JGProgressHUDStyleDark];
+        HUD.indicatorView = [[JGProgressHUDErrorIndicatorView alloc] init];
         HUD.textLabel.text = @"请选择宝贝生日";
         [HUD showInView:self.view];
-        [HUD dismissAfterDelay:1.0];
+        [HUD dismissAfterDelay:2.0];
         return;
     }
 

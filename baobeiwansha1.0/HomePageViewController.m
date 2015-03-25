@@ -204,7 +204,7 @@
     //self.homePageAbilityView.frame = CGRectMake(0, self.homePageProfileView.frame.size.height+10, self.view.frame.size.width, 160);
     //self.homePageAbilityView = [[HomePageAbilityView alloc]init];
     
-    self.homePageAbilityView.title = @"以下潜能要大发展啦，快抓住时机跟我玩吧~";
+    self.homePageAbilityView.title = @"下面3个方面要发展啦，赶紧跟我玩吧~";
     self.homePageAbilityView.tag = 0;
     self.homePageAbilityView.delegate = self;
     [self.homeScrollView addSubview:self.homePageAbilityView];

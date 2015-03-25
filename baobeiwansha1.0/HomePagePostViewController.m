@@ -225,10 +225,11 @@
                 } else {
                     self.pressCount ++;
                 }
-                self.HUD.textLabel.text = @"没有更多了.";
+                self.HUD.indicatorView = [[JGProgressHUDErrorIndicatorView alloc] init];
+                self.HUD.textLabel.text = @"没有更多了";
                 self.HUD.detailTextLabel.text = nil;
                 //self.HUD.layoutChangeAnimationDuration = 0.4;
-                self.HUD.indicatorView = [[JGProgressHUDErrorIndicatorView alloc] init];
+                
                 [self.HUD dismissAfterDelay:1];
             } else {
                 self.currentDaysIndex = [[responseDict valueForKey:@"days_index"] integerValue];
