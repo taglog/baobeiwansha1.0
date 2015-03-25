@@ -179,12 +179,14 @@
     _homeTableView.tableFooterView = self.tableViewMask;
     
     if(self.noDataAlert == nil){
-        self.noDataAlert = [[UILabel alloc]initWithFrame:CGRectMake(0, 164, self.view.frame.size.width, 40.0f)];
-        self.noDataAlert.text = @"暂时没有内容哦~";
+        self.noDataAlert = [[UILabel alloc]initWithFrame:CGRectMake(20, self.view.frame.size.height/2-80, self.view.frame.size.width-40, 9999)];
+        self.noDataAlert.text = @"这里目前还没有内容, 小编正在玩命为您赶工，过几天再回来看哦！";
         self.noDataAlert.textAlignment = NSTextAlignmentCenter;
         self.noDataAlert.textColor = [UIColor colorWithRed:102.0f/255.0f green:102.0f/255.0f blue:102.0f/255.0f alpha:1.0f];
         self.noDataAlert.textAlignment = NSTextAlignmentCenter;
         self.noDataAlert.font = [UIFont systemFontOfSize:14.0f];
+        self.noDataAlert.numberOfLines = 0;
+        [self.noDataAlert sizeToFit];
         [_homeTableView addSubview:self.noDataAlert];
     }
     
@@ -301,7 +303,7 @@
     }else{
         postParam = [NSDictionary dictionaryWithObjectsAndKeys:self.appDelegate.generatedUserID,@"userIdStr",[NSNumber numberWithInt:1],@"p",self.tag,@"tag",nil];
     }
-    NSLog(@"%@",postParam);
+    NSLog(@"performPullDownRefresh: %@",postParam);
     NSString *postRequestUrl = [self.appDelegate.rootURL stringByAppendingString:postRouter];
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
@@ -391,7 +393,7 @@
         if(responseArray == (id)[NSNull null]){
             //如果是最后一页
             [self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:0.0f];
-            [self showHUD:@"已经是最后一页了~"];
+            [self showHUD:@"没有更多了,小编努力中..."];
             [self dismissHUD];
             
         }else{
