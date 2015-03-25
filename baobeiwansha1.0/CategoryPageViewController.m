@@ -104,7 +104,11 @@
     [self getUserInfo];
     
     if(self.ageTitleLabel){
-        self.ageTitleLabel.text = self.babyBirthday;
+        if (self.babyBirthdayMonth < 0) {
+            self.ageTitleLabel.text = @"0个月";
+        } else {
+            self.ageTitleLabel.text = self.babyBirthday;
+        }
     }
     
     self.activeMonth = self.babyBirthdayMonth;
@@ -185,7 +189,12 @@
     
     if(self.babyBirthday){
         if(self.ageTitleLabel){
-            self.ageTitleLabel.text = self.babyBirthday;
+            //self.ageTitleLabel.text = self.babyBirthday;
+            if (self.babyBirthdayMonth < 0) {
+                self.ageTitleLabel.text = @"0个月";
+            } else {
+                self.ageTitleLabel.text = self.babyBirthday;
+            }
         }
         self.beforeMonth = self.babyBirthdayMonth;
         self.activeMonth = self.babyBirthdayMonth;
@@ -212,12 +221,12 @@
         int days = round(babyBirthdayStamp/60/60/24);
         self.babyBirthdayMonth = floor(days/30);
         
-        self.babyBirthday = [AppDelegate birthdayToString:days];
+        self.babyBirthday = [AppDelegate birthdayMonthToString:self.babyBirthdayMonth];
         
     }else{
         self.babyBirthdayMonth = 0;
         
-        self.babyBirthday = [AppDelegate birthdayToString:0];
+        self.babyBirthday = [AppDelegate birthdayMonthToString:0];
         
     }
 }

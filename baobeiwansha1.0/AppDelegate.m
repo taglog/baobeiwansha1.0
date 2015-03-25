@@ -383,7 +383,7 @@
     NSString *string;
     int month = floor(days/30);
     if(month < 0) {
-        string = [NSString stringWithFormat:@"%d个月后出生",days*(-1)];
+        string = [NSString stringWithFormat:@"%d个月后出生",month*(-1)];
     } else if(month == 0){
         if(days < 0) string = [NSString stringWithFormat:@"%d天后出生",days*(-1)];
         else string = [NSString stringWithFormat:@"%d天",days];

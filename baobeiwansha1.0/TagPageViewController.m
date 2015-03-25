@@ -100,7 +100,7 @@
 }
 -(void)initSearchBar{
     
-    UIButton *searchBarButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 240, 30)];
+    UIButton *searchBarButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 275, 28)];
     [searchBarButton setBackgroundImage:[UIImage imageNamed:@"searchbar"] forState:UIControlStateNormal];
     [searchBarButton addTarget:self action:@selector(pushSearchViewController) forControlEvents:UIControlEventTouchUpInside];
     searchBarButton.adjustsImageWhenHighlighted = NO;
