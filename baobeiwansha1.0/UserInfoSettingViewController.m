@@ -313,7 +313,7 @@
     if([[self.userInfoDict objectForKey:@"nickName"] length]>7){
         JGProgressHUD *HUD = [JGProgressHUD progressHUDWithStyle:JGProgressHUDStyleDark];
         HUD.indicatorView = [[JGProgressHUDErrorIndicatorView alloc] init];
-        HUD.textLabel.text = @"昵称不能小于7个字";
+        HUD.textLabel.text = @"昵称不能大于7个字";
         [HUD showInView:self.view];
         [HUD dismissAfterDelay:2.0];
         return;
