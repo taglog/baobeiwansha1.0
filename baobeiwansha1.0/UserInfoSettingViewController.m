@@ -78,7 +78,7 @@
     self.view.backgroundColor = [UIColor whiteColor];
     
     [self initLeftBarButtonItem];
-
+    
     self.title = @"设置宝贝信息";
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     
@@ -87,21 +87,24 @@
     
     
 }
+//如果设置self.showLeftBarButtonItem为NO，就不显示返回按钮
 -(void)initLeftBarButtonItem{
     
     if(self.showLeftBarButtonItem == YES){
         
-    UIBarButtonItem *leftBarButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back.png"] style:UIBarButtonItemStylePlain target:self action:@selector(popViewController)];
-    leftBarButton.tintColor = [UIColor colorWithRed:255.0/255.0f green:119.0/255.0f blue:119.0/255.0f alpha:1.0f];
+        UIBarButtonItem *leftBarButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back.png"] style:UIBarButtonItemStylePlain target:self action:@selector(popViewController)];
+        leftBarButton.tintColor = [UIColor colorWithRed:255.0/255.0f green:119.0/255.0f blue:119.0/255.0f alpha:1.0f];
         self.navigationItem.leftBarButtonItem = leftBarButton;
     }else{
         self.navigationItem.leftBarButtonItem = nil;
-
+        
     }
 }
+
 -(void)popViewController{
     [self.navigationController popViewControllerAnimated:YES];
 }
+
 
 #pragma  mark - 初始化views
 -(void)initViews{
@@ -119,7 +122,7 @@
     [self initSubmitButton];
     
 }
-
+//初始化scrollview
 -(void)initScrollView{
     
     if(!self.scrollView){
@@ -129,7 +132,7 @@
     }
     
 }
-
+//头像
 -(void)initHeadImage{
     
     if(!self.headImage){
@@ -147,7 +150,7 @@
     
 }
 
-
+//宝贝性别的两个按钮
 -(void)initBabyGenderButton{
     
     if(!self.boyButton){
@@ -181,11 +184,14 @@
     
     
 }
+
+//tableViewCell里显示的label
 -(void)initCellLabels{
     
     UIColor *fontColor = [UIColor colorWithRed:159.0/255.0f green:159.0/255.0f blue:159.0/255.0f alpha:1.0f];
     UIFont *font = [UIFont systemFontOfSize:16.0f];
-
+    
+    //宝贝昵称
     if(!self.babyNickName){
         self.babyNickName = [[UITextField alloc]init];
         self.babyNickName.frame = CGRectMake(0, 0, self.view.frame.size.width - 100, 40);
@@ -197,10 +203,10 @@
         self.babyNickName.font = font;
         self.babyNickName.returnKeyType = UIReturnKeyDone;
         self.babyNickName.delegate = self;
-
+        
     }
     
-
+    //用户性别
     if(!self.userGender){
         self.userGender = [[UILabel alloc]init];
         self.userGender.text = @"你是爸爸，妈妈，或者？";
@@ -208,20 +214,23 @@
         self.userGender.textAlignment = NSTextAlignmentCenter;
         self.userGender.textColor = fontColor;
         self.userGender.font = font;
-
+        
     }
     
+    //宝贝生日
     if(!self.babyBirthday){
         self.babyBirthday = [[UILabel alloc]init];
-            self.babyBirthday.frame = CGRectMake(0, 0, self.view.frame.size.width - 100, 40);
-            self.babyBirthday.text = @"请选择宝贝的生日或预产期";
-            self.babyBirthday.textAlignment = NSTextAlignmentCenter;
-            self.babyBirthday.textColor = fontColor;
-            self.babyBirthday.font = font;
+        self.babyBirthday.frame = CGRectMake(0, 0, self.view.frame.size.width - 100, 40);
+        self.babyBirthday.text = @"请选择宝贝的生日或预产期";
+        self.babyBirthday.textAlignment = NSTextAlignmentCenter;
+        self.babyBirthday.textColor = fontColor;
+        self.babyBirthday.font = font;
         
     }
     
 }
+
+//初始化表格
 -(void)initForm{
     
     if(!self.tableView){
@@ -240,6 +249,7 @@
     }
 }
 
+//提交按钮
 -(void)initSubmitButton{
     
     if(!self.submitButton){
@@ -254,8 +264,10 @@
     }
     
 }
+
+//从userinfo。plist获得用户信息
 -(void)initUserInfo{
-   
+    
     NSString *filePath = [AppDelegate dataFilePath];
     
     if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
@@ -287,10 +299,11 @@
     [self setBabyGender:[[self.userInfoDict valueForKey:@"babyGender"]integerValue]];
     
 }
+
 #pragma  mark - 同步信息
 -(void)syncUserInfo{
     
-    
+    //没有选择宝贝性别
     if(![self.userInfoDict objectForKey:@"babyGender"]){
         JGProgressHUD *HUD = [JGProgressHUD progressHUDWithStyle:JGProgressHUDStyleDark];
         HUD.indicatorView = [[JGProgressHUDErrorIndicatorView alloc] init];
@@ -299,7 +312,7 @@
         [HUD dismissAfterDelay:2.0];
         return;
     }
-
+    
     //没有填nickname
     if(![self.userInfoDict objectForKey:@"nickName"] || [[self.userInfoDict objectForKey:@"nickName"] isEqual:@""]){
         JGProgressHUD *HUD = [JGProgressHUD progressHUDWithStyle:JGProgressHUDStyleDark];
@@ -327,7 +340,7 @@
         [HUD dismissAfterDelay:2.0];
         return;
     }
-
+    
     if(![self.userInfoDict objectForKey:@"babyBirthday"]){
         JGProgressHUD *HUD = [JGProgressHUD progressHUDWithStyle:JGProgressHUDStyleDark];
         HUD.indicatorView = [[JGProgressHUDErrorIndicatorView alloc] init];
@@ -336,7 +349,7 @@
         [HUD dismissAfterDelay:2.0];
         return;
     }
-
+    
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
     JGProgressHUD *HUD = [JGProgressHUD progressHUDWithStyle:JGProgressHUDStyleDark];
@@ -391,7 +404,7 @@
             
             [self.navigationController popViewControllerAnimated:YES];
             
-
+            
             
         });
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
@@ -417,13 +430,13 @@
 -(void)changeHeadImage{
     
     UIActionSheet *headSheet = [[UIActionSheet alloc] initWithTitle:nil
-                                                             delegate:self
-                                                    cancelButtonTitle:@"取消"
-                                               destructiveButtonTitle:nil
-                                                    otherButtonTitles:@"拍照", @"从相册中选取",@"默认", nil];
-   
-        [headSheet showInView:self.view];
-
+                                                           delegate:self
+                                                  cancelButtonTitle:@"取消"
+                                             destructiveButtonTitle:nil
+                                                  otherButtonTitles:@"拍照", @"从相册中选取",@"默认", nil];
+    
+    [headSheet showInView:self.view];
+    
 }
 
 
@@ -453,7 +466,7 @@
 
 -(void)setBabyGender:(NSInteger)babyGender{
     //选择了男孩
-
+    
     if(babyGender == 1){
         [self boyButtonSelected];
     }
@@ -463,17 +476,19 @@
         
         [self girlButtonSelected];
     }
-
-
-
+    
+    
+    
 }
+
+//选择了男孩
 -(void)boyButtonSelected{
     
     if(self.isBabyGenderSelected == NO){
         self.boyButton.selected = YES;
         [self initCrown:1];
         self.isBabyGenderSelected = YES;
-
+        
     }
     
     if(self.isGirlSelected == YES){
@@ -483,16 +498,17 @@
             self.crown.frame = CGRectMake(self.view.frame.size.width/2 - 55, (SHORT_SCREEN)?110:128, 20, 18);
             
         }];
-
+        
     }
     if(self.isHeadImageSet == NO){
         self.headImage.image = [UIImage imageNamed:@"boyhead"];
     }
     self.isGirlSelected = NO;
     [self.userInfoDict setValue:[NSNumber numberWithInt:1] forKey:@"babyGender"];
-
+    
 }
 
+//选择了女孩
 -(void)girlButtonSelected{
     
     if(self.isBabyGenderSelected == NO){
@@ -679,7 +695,7 @@
             self.isHeadImageSet = NO;
             [self.userInfoDict setObject:[NSNumber numberWithBool:NO] forKey:@"isHeadImageSet"];
         }
-
+        
     }
 }
 
@@ -695,16 +711,16 @@
         
         self.userGender.text = @"我是爸爸";
         self.userGender.textColor = color;
-
+        
     } else if (buttonIndex == 2){
         
         self.userGender.text = @"其他";
         self.userGender.textColor = color;
-
+        
     }
     
-
-
+    
+    
 }
 
 -(void)setUserGenderToDict:(NSInteger)buttonIndex{
@@ -713,7 +729,7 @@
         [self.userInfoDict setValue:[NSNumber numberWithInt:0] forKey:@"userGender"];
         
     } else if (buttonIndex == 1) {
-       
+        
         [self.userInfoDict setValue:[NSNumber numberWithInt:1] forKey:@"userGender"];
     } else if (buttonIndex == 2){
         
@@ -743,7 +759,7 @@
         self.datePicker.datePickerMode = UIDatePickerModeDate;
         if([self.userInfoDict objectForKey:@"babyBirthday"]){
             [self.datePicker setDate:[self.userInfoDict objectForKey:@"babyBirthday"]];
-
+            
         }else{
             [self.datePicker setDate:[NSDate date]];
         }
@@ -883,12 +899,12 @@
     self.headImage.image = editedImage;
     self.isHeadImageSet = YES;
     [self.userInfoDict setObject:[NSNumber numberWithBool:YES] forKey:@"isHeadImageSet"];
-
+    
     [self.userInfoDict setObject:UIImagePNGRepresentation(editedImage) forKey:@"headImage"];
     
     //self.userAvatarImageView.image = editedImage;
     //[self.delegate updateAvatarImage:editedImage];
-
+    
     
     [cropperViewController dismissViewControllerAnimated:YES completion:^{
         // TO DO

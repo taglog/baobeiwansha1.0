@@ -20,10 +20,11 @@
     CGFloat padding;
     CGRect _frame;
     
+    
 }
 //scrollView里放入textView和评论的tableView
 @property(nonatomic,retain) UIScrollView *postScrollView;
-@property(nonatomic,retain) DTAttributedTextView *textView;
+@property(nonatomic,retain) PostView *postView;
 @property(nonatomic,strong) UIView *commentTableHeader;
 @property(nonatomic,retain) UITableView *commentTableView;
 
@@ -42,7 +43,7 @@
 @property(nonatomic,strong)NSString *htmlPostContent;
 
 //得到计算过后的textViewSize
-@property(nonatomic,assign)CGSize textViewSize;
+@property(nonatomic,assign)CGFloat postViewHeight;
 
 //评论的上拉刷新
 @property (nonatomic,retain)EGORefreshView *refreshFooterView;
@@ -92,6 +93,18 @@
     self.automaticallyAdjustsScrollViewInsets = NO;
 }
 
+-(void)initLeftBarButton{
+    
+    UIBarButtonItem *leftBarButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back.png"] style:UIBarButtonItemStylePlain target:self action:@selector(popViewController)];
+    leftBarButton.tintColor = [UIColor colorWithRed:255.0/255.0f green:119.0/255.0f blue:119.0/255.0f alpha:1.0f];
+    self.navigationItem.leftBarButtonItem = leftBarButton;
+    
+}
+
+-(void)popViewController{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
@@ -113,46 +126,164 @@
     
     [PostViewTimeAnalytics beginLogPageView:self.postID];
     
-    //初始化textView
-    [self initTextView];
-    
     //初始化postScrollView
     [self initScrollView];
     
-    //初始化底部的bar
-    [self initBottomBar];
+    //初始化PostView
+    [self initPostView];
+    
+    
+}
+
+
+-(void)initScrollView{
+    if(_postScrollView == nil){
+        _postScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 64.0f, self.view.frame.size.width, self.view.frame.size.height - 64.0f)];
+        _postScrollView.contentSize = CGSizeMake(self.view.frame.size.width, 1000);
+        _postScrollView.delegate = self;
+        [self.view addSubview:_postScrollView];
+        
+    }
+}
+
+
+//初始化textView
+-(void)initPostView{
+    
+    self.postView = [[PostView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 700) dict:self.postDict];
+    self.postView.delegate = self;
+    [_postScrollView addSubview:self.postView];
+
+    
+}
+-(void)postWebViewDidFinishLoading:(CGFloat)height{
+    
+    self.postViewHeight = height;
     
     //初始化评论tableview
     [self initTableView];
     [self initCommentTableView];
+    //初始化底部的bar
+    [self initBottomBar];
     
-    [_postScrollView addSubview:_textView];
+    self.postView.frame = CGRectMake(0, 0, self.view.frame.size.width, height);
+    
+    [self relayoutCommentTableView];
     
     
+}
+-(void)relayoutCommentTableView{
+    
+    CGFloat d = 40.0f;
+    
+    CGFloat commentTableHeight = [self getCommentTableViewHeight:self.commentTableViewCell];
+    
+    [_postScrollView setContentSize:CGSizeMake(self.view.frame.size.width, self.postViewHeight + commentTableHeight)];
+    
+    [_commentTableView setFrame:CGRectMake(0, self.postViewHeight + d, self.view.frame.size.width, commentTableHeight)];
+    
+    [_refreshFooterView setFrame:CGRectMake(0, _postScrollView.contentSize.height + d, self.view.frame.size.width, 100.0f)];
+
+}
+-(void)initBottomBar{
+    self.bottomBarHeight = 50.0f;
+    //初始化底部的bar
+    if(!self.bottomBar){
+        
+        
+        self.bottomBar = [[UIView alloc]initWithFrame:CGRectMake(0, self.view.frame.size.height - self.bottomBarHeight, self.view.frame.size.width, self.bottomBarHeight)];
+        self.bottomBar.backgroundColor = [UIColor whiteColor];
+        
+        //初始化底部的Button
+        if(_commentCreateButton == nil){
+            
+            _commentCreateButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width - 60, self.bottomBarHeight)];
+            _commentCreateButton.backgroundColor = [UIColor whiteColor];
+            [_commentCreateButton addTarget:self action:@selector(showCommentCreateViewController) forControlEvents:UIControlEventTouchUpInside];
+            _commentCreateButton.adjustsImageWhenHighlighted = NO;
+            
+            UILabel *commentCreateLabel = [[UILabel alloc]initWithFrame:CGRectMake(9.0f, 9.0f, self.view.frame.size.width - 60, self.bottomBarHeight-18)];
+            commentCreateLabel.backgroundColor = [UIColor colorWithRed:230.0/255.0f green:225.0/255.0f blue:218.0/255.0f alpha:1.0f];
+            commentCreateLabel.layer.cornerRadius = 5;
+            commentCreateLabel.layer.masksToBounds = YES;
+            
+            UILabel *commentLabel = [[UILabel alloc]initWithFrame:CGRectMake(12.0f, 0.0f, self.view.frame.size.width - 60, self.bottomBarHeight-18)];
+            commentLabel.text = @"输入内容";
+            commentLabel.font = [UIFont systemFontOfSize:14.0f];
+            
+            commentLabel.textColor = [UIColor colorWithRed:80.0f/255.0f green:80.0f/255.0f blue:80.0f/255.0f alpha:1.0f];
+            
+            [commentCreateLabel addSubview:commentLabel];
+            [_commentCreateButton addSubview:commentCreateLabel];
+            
+            [self.bottomBar addSubview:_commentCreateButton];
+            
+            CALayer *topBorder = [CALayer layer];
+            
+            topBorder.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, 0.5f);
+            topBorder.backgroundColor = [UIColor colorWithWhite:0.8f
+                                                          alpha:1.0f].CGColor;
+            [self.bottomBar.layer addSublayer:topBorder];
+        }
+        
+        
+        
+        //初始化collectButton
+        self.collectionButton = [[UIButton alloc]initWithFrame:CGRectMake(self.view.frame.size.width - 40, 0, 60, 60)];
+        UIImageView *collectionButtonImage = [[UIImageView alloc]initWithFrame:CGRectMake(0, 12, 24, 24)];
+        collectionButtonImage.image = [UIImage imageNamed:@"unstar"];
+        [self.collectionButton addSubview:collectionButtonImage];
+        [self.collectionButton addTarget:self action:@selector(collectPost:) forControlEvents:UIControlEventTouchUpInside];
+        self.collectionButton.tag = 0;
+        
+        
+        self.collectionButtonSelected = [[UIButton alloc]initWithFrame:CGRectMake(self.view.frame.size.width - 40, 0, 60, 60)];
+        UIImageView *collectionButtonSelectedImage = [[UIImageView alloc]initWithFrame:CGRectMake(0, 12, 24, 24)];
+        collectionButtonSelectedImage.image = [UIImage imageNamed:@"star"];
+        [self.collectionButtonSelected addSubview:collectionButtonSelectedImage];
+        [self.collectionButtonSelected addTarget:self action:@selector(collectPost:) forControlEvents:UIControlEventTouchUpInside];
+        self.collectionButtonSelected.tag = 1;
+        
+        [self.bottomBar addSubview:self.collectionButton];
+        [self.bottomBar addSubview:self.collectionButtonSelected];
+        
+        
+        //是否已收藏该Post,设置收藏按钮的显示
+        if([[_postDict valueForKey:@"isCollection"]integerValue] == 1){
+            //已收藏
+            self.collectionButton.hidden = YES;
+            self.collectionButtonSelected.hidden = NO;
+        }else{
+            //未收藏
+            self.collectionButton.hidden = NO;
+            self.collectionButtonSelected.hidden = YES;
+        }
+        
+        
+        [self.view addSubview:self.bottomBar];
+        
+    }
     
 }
 
 
--(void)initLeftBarButton{
+-(CGFloat)getCommentTableViewHeight:(NSMutableArray *)commentTableViewCell{
     
-    UIBarButtonItem *leftBarButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back.png"] style:UIBarButtonItemStylePlain target:self action:@selector(popViewController)];
-    leftBarButton.tintColor = [UIColor colorWithRed:255.0/255.0f green:119.0/255.0f blue:119.0/255.0f alpha:1.0f];
-    self.navigationItem.leftBarButtonItem = leftBarButton;
+    CGFloat height = 0;
+    NSUInteger length = [commentTableViewCell count];
+    for(int i = 0;i < length ; i++){
+        height  += [CommentTableViewCell heightForCellWithDict:commentTableViewCell[i] frame:_frame];
+    }
+    return height;
     
 }
-
--(void)popViewController{
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
-
 -(IBAction)collectPost:(id)sender{
     
     if(self.collectButtonEnabled == YES){
         self.collectButtonEnabled = NO;
         
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-
+        
         
         UIButton *collectButtonSender =(UIButton *)sender;
         self.HUD = [JGProgressHUD progressHUDWithStyle:JGProgressHUDStyleDark];
@@ -208,7 +339,7 @@
                 self.collectButtonEnabled = YES;
                 
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"collectionChanged" object:nil];
-
+                
                 
             }else{
                 //否则的话，弹出一个指示层
@@ -222,7 +353,7 @@
                 });
             }
             [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-
+            
         }failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             
             NSLog(@"%@",error);
@@ -252,501 +383,7 @@
 }
 
 
--(void)showHUD{
-    //显示hud层
-    self.HUD = [JGProgressHUD progressHUDWithStyle:JGProgressHUDStyleDark];
-    self.HUD.textLabel.text = @"正在加载";
-    [self.HUD showInView:self.view];
-}
 
--(void)dismissHUD{
-    [self.HUD dismiss];
-}
-
-
-
--(void)initScrollView{
-    if(_postScrollView == nil){
-        _postScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 64.0f, self.view.frame.size.width, self.view.frame.size.height - 64.0f)];
-        _postScrollView.contentSize = CGSizeMake(self.view.frame.size.width, _textViewSize.height + 400);
-        _postScrollView.delegate = self;
-        [self.view addSubview:_postScrollView];
-        
-    }
-}
-
--(void)initBottomBar{
-    self.bottomBarHeight = 50.0f;
-    //初始化底部的bar
-    if(!self.bottomBar){
-        
-        
-        self.bottomBar = [[UIView alloc]initWithFrame:CGRectMake(0, self.view.frame.size.height - self.bottomBarHeight, self.view.frame.size.width, self.bottomBarHeight)];
-        self.bottomBar.backgroundColor = [UIColor whiteColor];
-        
-        //初始化底部的Button
-        if(_commentCreateButton == nil){
-            
-            _commentCreateButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width - 60, self.bottomBarHeight)];
-            _commentCreateButton.backgroundColor = [UIColor whiteColor];
-            [_commentCreateButton addTarget:self action:@selector(showCommentCreateViewController) forControlEvents:UIControlEventTouchUpInside];
-            _commentCreateButton.adjustsImageWhenHighlighted = NO;
-            
-            UILabel *commentCreateLabel = [[UILabel alloc]initWithFrame:CGRectMake(9.0f, 9.0f, self.view.frame.size.width - 60, self.bottomBarHeight-18)];
-            commentCreateLabel.backgroundColor = [UIColor colorWithRed:230.0/255.0f green:225.0/255.0f blue:218.0/255.0f alpha:1.0f];
-            commentCreateLabel.layer.cornerRadius = 5;
-            commentCreateLabel.layer.masksToBounds = YES;
-            
-            UILabel *commentLabel = [[UILabel alloc]initWithFrame:CGRectMake(12.0f, 0.0f, self.view.frame.size.width - 60, self.bottomBarHeight-18)];
-            commentLabel.text = @"输入内容";
-            commentLabel.font = [UIFont systemFontOfSize:14.0f];
-
-            commentLabel.textColor = [UIColor colorWithRed:80.0f/255.0f green:80.0f/255.0f blue:80.0f/255.0f alpha:1.0f];
-
-            [commentCreateLabel addSubview:commentLabel];
-            [_commentCreateButton addSubview:commentCreateLabel];
-            
-            [self.bottomBar addSubview:_commentCreateButton];
-            
-            CALayer *topBorder = [CALayer layer];
-            
-            topBorder.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, 0.5f);
-            topBorder.backgroundColor = [UIColor colorWithWhite:0.8f
-                                                          alpha:1.0f].CGColor;
-            [self.bottomBar.layer addSublayer:topBorder];
-        }
-        
-        
-
-        //初始化collectButton
-        self.collectionButton = [[UIButton alloc]initWithFrame:CGRectMake(self.view.frame.size.width - 40, 0, 60, 60)];
-        UIImageView *collectionButtonImage = [[UIImageView alloc]initWithFrame:CGRectMake(0, 12, 24, 24)];
-        collectionButtonImage.image = [UIImage imageNamed:@"unstar"];
-        [self.collectionButton addSubview:collectionButtonImage];
-        [self.collectionButton addTarget:self action:@selector(collectPost:) forControlEvents:UIControlEventTouchUpInside];
-        self.collectionButton.tag = 0;
-        
-        
-        self.collectionButtonSelected = [[UIButton alloc]initWithFrame:CGRectMake(self.view.frame.size.width - 40, 0, 60, 60)];
-        UIImageView *collectionButtonSelectedImage = [[UIImageView alloc]initWithFrame:CGRectMake(0, 12, 24, 24)];
-        collectionButtonSelectedImage.image = [UIImage imageNamed:@"star"];
-        [self.collectionButtonSelected addSubview:collectionButtonSelectedImage];
-        [self.collectionButtonSelected addTarget:self action:@selector(collectPost:) forControlEvents:UIControlEventTouchUpInside];
-        self.collectionButtonSelected.tag = 1;
-        
-        [self.bottomBar addSubview:self.collectionButton];
-        [self.bottomBar addSubview:self.collectionButtonSelected];
-        
-        
-        //是否已收藏该Post,设置收藏按钮的显示
-        if([[_postDict valueForKey:@"isCollection"]integerValue] == 1){
-            //已收藏
-            self.collectionButton.hidden = YES;
-            self.collectionButtonSelected.hidden = NO;
-        }else{
-            //未收藏
-            self.collectionButton.hidden = NO;
-            self.collectionButtonSelected.hidden = YES;
-        }
-        
-        
-        [self.view addSubview:self.bottomBar];
-        
-    }
-    
-}
-
-//初始化textView
--(void)initTextView{
-    
-    self.postTitle = [_postDict valueForKey:@"post_title"];
-    self.postContent = [_postDict valueForKey:@"post_content"];
-    
-    //初始化PostTitle
-    NSString *htmlPostTitleStart = @"<h2 style='font-size:24px;color:#33333;margin:10px 0'>";
-    NSString *htmlPostTitleWithStart = [htmlPostTitleStart stringByAppendingString:self.postTitle];
-    NSString *htmlPostTItleWithEnd = [htmlPostTitleWithStart stringByAppendingString:@"</h2>"];
-    self.htmlPostContent = [htmlPostTItleWithEnd stringByAppendingString:self.postContent];
-    
-    //初始化DTTextView
-    if(_textView == nil){
-        _textView = [[DTAttributedTextView alloc] init];
-        
-        
-        _textView.shouldDrawImages = NO;
-        _textView.shouldDrawLinks = NO;
-        _textView.scrollEnabled = NO;
-        _textView.textDelegate = self;
-        
-        
-        [_textView setScrollIndicatorInsets:UIEdgeInsetsMake(0, 0, 0, 0)];
-        _textView.contentInset = UIEdgeInsetsMake(10, 15, 14, 15);
-        
-        _textView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        
-        
-        _textView.attributedString = [self _attributedStringForSnippetUsingiOS6Attributes:NO];
-        
-        _textViewSize = [self getTextViewHeight:_textView.attributedString];
-        
-        if(_textViewSize.height* 0.052 < 100){
-            _textView.frame = CGRectMake(0, 0, _frame.size.width, _textViewSize.height +100);
-        }else{
-            _textView.frame = CGRectMake(0, 0, _frame.size.width, _textViewSize.height +_textViewSize.height* 0.052);
-        }
-        
-    }
-    
-}
-
-
-//获取_textView的高度
--(CGSize)getTextViewHeight:(NSAttributedString *)string{
-    
-    DTCoreTextLayouter *layouter = [[DTCoreTextLayouter alloc] initWithAttributedString:string];
-    
-    CGRect maxRect = CGRectMake(10, 20, _frame.size.width, CGFLOAT_HEIGHT_UNKNOWN);
-    NSRange entireString = NSMakeRange(0, [string length]);
-    DTCoreTextLayoutFrame *layoutFrame = [layouter layoutFrameWithRect:maxRect range:entireString];
-    
-    CGSize sizeNeeded = [layoutFrame frame].size;
-
-    
-    return sizeNeeded;
-}
-
-#pragma mark _textView的委托
-
-- (NSAttributedString *)_attributedStringForSnippetUsingiOS6Attributes:(BOOL)useiOS6Attributes
-{
-    // Load HTML data
-    NSString *html = self.htmlPostContent;
-    NSData *data = [html dataUsingEncoding:NSUTF8StringEncoding];
-    
-    // Create attributed string from HTML
-    CGSize maxImageSize = CGSizeMake(_frame.size.width-30.0, 1.1*(_frame.size.width-30.0));
-    
-    // example for setting a willFlushCallback, that gets called before elements are written to the generated attributed string
-    void (^callBackBlock)(DTHTMLElement *element) = ^(DTHTMLElement *element) {
-        
-        // the block is being called for an entire paragraph, so we check the individual elements
-        
-        for (DTHTMLElement *oneChildElement in element.childNodes)
-        {
-            // if an element is larger than twice the font size put it in it's own block
-            if (oneChildElement.displayStyle == DTHTMLElementDisplayStyleInline && oneChildElement.textAttachment.displaySize.height > 2.0 * oneChildElement.fontDescriptor.pointSize)
-            {
-                oneChildElement.displayStyle = DTHTMLElementDisplayStyleBlock;
-                oneChildElement.paragraphStyle.minimumLineHeight = element.textAttachment.displaySize.height;
-                oneChildElement.paragraphStyle.maximumLineHeight = element.textAttachment.displaySize.height;
-            }
-        }
-    };
-    
-    NSMutableDictionary *options = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                                    [NSNumber numberWithFloat:1.0], NSTextSizeMultiplierDocumentOption,
-                                    [NSValue valueWithCGSize:maxImageSize], DTMaxImageSize,
-                                    @"Helvetica Neue", DTDefaultFontFamily,
-                                    @"purple", DTDefaultLinkColor,
-                                    @"red", DTDefaultLinkHighlightColor,
-                                    callBackBlock, DTWillFlushBlockCallBack,
-                                    [NSNumber numberWithFloat:1.5], DTDefaultLineHeightMultiplier,
-                                    [NSNumber numberWithInt:16],DTDefaultFontSize,
-                                    nil];
-    
-    if (useiOS6Attributes)
-    {
-        [options setObject:[NSNumber numberWithBool:YES] forKey:DTUseiOS6Attributes];
-    }
-    
-    //[options setObject:[NSURL fileURLWithPath:readmePath] forKey:NSBaseURLDocumentOption];
-    
-    NSAttributedString *string = [[NSAttributedString alloc] initWithHTMLData:data options:options documentAttributes:NULL];
-    
-    
-    return string;
-}
-
-
-
-- (UIView *)attributedTextContentView:(DTAttributedTextContentView *)attributedTextContentView viewForAttributedString:(NSAttributedString *)string frame:(CGRect)frame
-{
-    NSDictionary *attributes = [string attributesAtIndex:0 effectiveRange:NULL];
-    
-    NSURL *URL = [attributes objectForKey:DTLinkAttribute];
-    NSString *identifier = [attributes objectForKey:DTGUIDAttribute];
-    
-    
-    DTLinkButton *button = [[DTLinkButton alloc] initWithFrame:frame];
-    button.URL = URL;
-    button.minimumHitSize = CGSizeMake(25, 25); // adjusts it's bounds so that button is always large enough
-    button.GUID = identifier;
-    
-    // get image with normal link text
-    UIImage *normalImage = [attributedTextContentView contentImageWithBounds:frame options:DTCoreTextLayoutFrameDrawingDefault];
-    [button setImage:normalImage forState:UIControlStateNormal];
-    
-    // get image for highlighted link text
-    UIImage *highlightImage = [attributedTextContentView contentImageWithBounds:frame options:DTCoreTextLayoutFrameDrawingDrawLinksHighlighted];
-    [button setImage:highlightImage forState:UIControlStateHighlighted];
-    
-    // use normal push action for opening URL
-    [button addTarget:self action:@selector(linkPushed:) forControlEvents:UIControlEventTouchUpInside];
-    
-    // demonstrate combination with long press
-    UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(linkLongPressed:)];
-    [button addGestureRecognizer:longPress];
-    
-    return button;
-}
-
-- (UIView *)attributedTextContentView:(DTAttributedTextContentView *)attributedTextContentView viewForAttachment:(DTTextAttachment *)attachment frame:(CGRect)frame
-{
-    if ([attachment isKindOfClass:[DTVideoTextAttachment class]])
-    {
-        // removed temp for no video is supported
-    }
-    else if ([attachment isKindOfClass:[DTImageTextAttachment class]])
-    {
-        // if the attachment has a hyperlinkURL then this is currently ignored
-        DTLazyImageView *imageView = [[DTLazyImageView alloc] initWithFrame:frame];
-        imageView.delegate = self;
-        
-        // sets the image if there is one
-        imageView.image = [(DTImageTextAttachment *)attachment image];
-        
-        // url for deferred loading
-        imageView.url = attachment.contentURL;
-        
-        // if there is a hyperlink then add a link button on top of this image
-        if (attachment.hyperLinkURL)
-        {
-            // NOTE: this is a hack, you probably want to use your own image view and touch handling
-            // also, this treats an image with a hyperlink by itself because we don't have the GUID of the link parts
-            imageView.userInteractionEnabled = NO;
-            
-            DTLinkButton *button = [[DTLinkButton alloc] initWithFrame:imageView.bounds];
-            button.URL = attachment.hyperLinkURL;
-            button.minimumHitSize = CGSizeMake(25, 25); // adjusts it's bounds so that button is always large enough
-            button.GUID = attachment.hyperLinkGUID;
-            
-            // use normal push action for opening URL
-            [button addTarget:self action:@selector(linkPushed:) forControlEvents:UIControlEventTouchUpInside];
-            
-            // demonstrate combination with long press
-            UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(linkLongPressed:)];
-            [button addGestureRecognizer:longPress];
-            
-            [imageView addSubview:button];
-        }
-        
-        return imageView;
-    }
-    else if ([attachment isKindOfClass:[DTIframeTextAttachment class]])
-    {
-        DTWebVideoView *videoView = [[DTWebVideoView alloc] initWithFrame:frame];
-        videoView.attachment = attachment;
-        
-        return videoView;
-    }
-    else if ([attachment isKindOfClass:[DTObjectTextAttachment class]])
-    {
-        // somecolorparameter has a HTML color
-        NSString *colorName = [attachment.attributes objectForKey:@"somecolorparameter"];
-        UIColor *someColor = DTColorCreateWithHTMLName(colorName);
-        
-        UIView *someView = [[UIView alloc] initWithFrame:frame];
-        someView.backgroundColor = someColor;
-        someView.layer.borderWidth = 1;
-        someView.layer.borderColor = [UIColor blackColor].CGColor;
-        
-        someView.accessibilityLabel = colorName;
-        someView.isAccessibilityElement = YES;
-        
-        return someView;
-    }
-    
-    return nil;
-}
-
-- (BOOL)attributedTextContentView:(DTAttributedTextContentView *)attributedTextContentView shouldDrawBackgroundForTextBlock:(DTTextBlock *)textBlock frame:(CGRect)frame context:(CGContextRef)context forLayoutFrame:(DTCoreTextLayoutFrame *)layoutFrame
-{
-    UIBezierPath *roundedRect = [UIBezierPath bezierPathWithRoundedRect:CGRectInset(frame,1,1) cornerRadius:10];
-    
-    CGColorRef color = [textBlock.backgroundColor CGColor];
-    if (color)
-    {
-        CGContextSetFillColorWithColor(context, color);
-        CGContextAddPath(context, [roundedRect CGPath]);
-        CGContextFillPath(context);
-        
-        CGContextAddPath(context, [roundedRect CGPath]);
-        CGContextSetRGBStrokeColor(context, 0, 0, 0, 1);
-        CGContextStrokePath(context);
-        return NO;
-    }
-    
-    return YES; // draw standard background
-}
-
-
-#pragma mark Actions
-
-- (void)linkPushed:(DTLinkButton *)button
-{
-    NSURL *URL = button.URL;
-    
-    if ([[UIApplication sharedApplication] canOpenURL:[URL absoluteURL]])
-    {
-        [[UIApplication sharedApplication] openURL:[URL absoluteURL]];
-    }
-    else
-    {
-        if (![URL host] && ![URL path])
-        {
-            
-            // possibly a local anchor link
-            NSString *fragment = [URL fragment];
-            
-            if (fragment)
-            {
-                [_textView scrollToAnchorNamed:fragment animated:NO];
-            }
-        }
-    }
-}
-
-
-- (void)linkLongPressed:(UILongPressGestureRecognizer *)gesture
-{
-    if (gesture.state == UIGestureRecognizerStateBegan)
-    {
-        DTLinkButton *button = (id)[gesture view];
-        button.highlighted = NO;
-        
-        if ([[UIApplication sharedApplication] canOpenURL:[button.URL absoluteURL]])
-        {
-            //UIActionSheet *action = [[UIActionSheet alloc] initWithTitle:[[button.URL absoluteURL] description] delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Open in Safari", nil];
-            //[action showFromRect:button.frame inView:button.superview animated:YES];
-        }
-    }
-}
-
-- (void)handleTap:(UITapGestureRecognizer *)gesture
-{
-    if (gesture.state == UIGestureRecognizerStateRecognized)
-    {
-        CGPoint location = [gesture locationInView:_textView];
-        NSUInteger tappedIndex = [_textView closestCursorIndexToPoint:location];
-        
-        NSString *plainText = [_textView.attributedString string];
-        NSString *tappedChar = [plainText substringWithRange:NSMakeRange(tappedIndex, 1)];
-        
-        __block NSRange wordRange = NSMakeRange(0, 0);
-        
-        [plainText enumerateSubstringsInRange:NSMakeRange(0, [plainText length]) options:NSStringEnumerationByWords usingBlock:^(NSString *substring, NSRange substringRange, NSRange enclosingRange, BOOL *stop) {
-            if (NSLocationInRange(tappedIndex, enclosingRange))
-            {
-                *stop = YES;
-                wordRange = substringRange;
-            }
-        }];
-        
-        NSString *word = [plainText substringWithRange:wordRange];
-        NSLog(@"%lu: '%@' word: '%@'", (unsigned long)tappedIndex, tappedChar, word);
-    }
-}
-
-
-#pragma mark - DTLazyImageViewDelegate
-
-- (void)lazyImageView:(DTLazyImageView *)lazyImageView didChangeImageSize:(CGSize)size {
-    NSURL *url = lazyImageView.url;
-    CGSize imageSize = size;
-    
-    NSPredicate *pred = [NSPredicate predicateWithFormat:@"contentURL == %@", url];
-    
-    
-    // update all attachments that matchin this URL (possibly multiple images with same size)
-    for (DTTextAttachment *oneAttachment in [_textView.attributedTextContentView.layoutFrame textAttachmentsWithPredicate:pred])
-    {
-        // update attachments that have no original size, that also sets the display size
-        
-        oneAttachment.originalSize = imageSize;
-        float ratio = imageSize.height/imageSize.width;
-        CGFloat imageHeight = (_frame.size.width - 30) * ratio;
-        if(ratio > 1.2){
-            imageHeight = (_frame.size.width - 100) * ratio;
-            oneAttachment.displaySize = CGSizeMake(_frame.size.width - 100, imageHeight);
-        }else{
-            oneAttachment.displaySize = CGSizeMake(_frame.size.width - 30, imageHeight);
-            
-        }
-        
-        
-    }
-    
-    // layout might have changed due to image sizes
-    [_textView relayoutText];
-    _textViewSize = [self getTextViewHeight:_textView.attributedString];
-    [self relayoutView:_textViewSize];
-    
-}
--(void)relayoutView:(CGSize)textViewSize{
-    
-    CGFloat d;
-    if(_textViewSize.height* 0.052 < 100){
-        d = 100;
-    }else{
-        d = _textViewSize.height* 0.052;
-    }
-    
-    //重新设置_textView的frame
-    _textView.frame = CGRectMake(0, 0, _frame.size.width, textViewSize.height + d + 20);
-    
-    //用户评论分隔栏
-    _commentTableHeader.frame = CGRectMake(0, textViewSize.height + d + 20, self.view.frame.size.width, 40.0f);
-    
-    
-    //根据改变的textViewSize，调整commentTableView的位置和scrollView的contentSize
-    if(_commentTableView){
-        [self relayoutCommentTableView:textViewSize];
-    }
-    if(_noCommentLabel){
-        _noCommentLabel.frame = CGRectMake(0, textViewSize.height + d + 100, self.view.frame.size.width, 20.0f);
-        [_postScrollView setContentSize:CGSizeMake(self.view.frame.size.width, textViewSize.height  + 200 + d)];
-    }
-    
-    
-}
--(void)relayoutCommentTableView:(CGSize)textViewSize{
-    
-    CGFloat height = [self getCommentTableViewHeight:self.commentTableViewCell];
-    
-    CGFloat d;
-    if(_textViewSize.height* 0.052 < 100){
-        d = 100;
-    }else{
-        d = _textViewSize.height* 0.052;
-    }
-    [_postScrollView setContentSize:CGSizeMake(self.view.frame.size.width, textViewSize.height + height + d + 60)];
-    
-    [_commentTableView setFrame:CGRectMake(0, textViewSize.height + d + 60, self.view.frame.size.width, height)];
-    
-    [_refreshFooterView setFrame:CGRectMake(0, _postScrollView.contentSize.height, self.view.frame.size.width, 100.0f)];
-}
-
-
--(CGFloat)getCommentTableViewHeight:(NSMutableArray *)commentTableViewCell{
-    
-    CGFloat height = 0;
-    NSUInteger length = [commentTableViewCell count];
-    for(int i = 0;i < length ; i++){
-        height  += [CommentTableViewCell heightForCellWithDict:commentTableViewCell[i] frame:_frame];
-    }
-    return height;
-    
-}
 //初始化评论栏
 #pragma  mark 评论 tableView delegate
 -(void)initCommentTableView{
@@ -774,28 +411,15 @@
                 [self.commentTableViewCell addObject:responseDict];
             }
             [_commentTableView reloadData];
-            [self relayoutCommentTableView:_textViewSize];
+            [self relayoutCommentTableView];
             [_refreshFooterView removeFromSuperview];
             [self initRefreshView];
             
         }else{
             //没有评论的时候,显示一个label，说没有评论
             
-            CGFloat d;
-            if(_textViewSize.height* 0.052 < 100){
-                d = 100;
-            }else{
-                d = _textViewSize.height* 0.052;
-            }
             _commentTableView.hidden = YES;
-            _noCommentLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, _textViewSize.height + d + 100, self.view.frame.size.width, 20.0f)];
-            _noCommentLabel.text = @"还没有人评论哦，快来第一个评论吧~";
-            _noCommentLabel.textColor = [UIColor colorWithRed:102.0f/255.0f green:102.0f/255.0f blue:102.0f/255.0f alpha:1.0f];
-            _noCommentLabel.textAlignment = NSTextAlignmentCenter;
-            _noCommentLabel.font = [UIFont systemFontOfSize:14.0f];
-            
-            [_postScrollView addSubview:_noCommentLabel];
-            [_postScrollView setContentSize:CGSizeMake(self.view.frame.size.width, _textViewSize.height  + d + 230)];
+            [self initNoCommentLabel];
             
             
             [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
@@ -812,15 +436,10 @@
 //初始化tableView
 -(void)initTableView{
     
-    CGFloat d;
-    if(_textViewSize.height* 0.052 < 100){
-        d = 100;
-    }else{
-        d = _textViewSize.height* 0.052;
-    }
+
     //初始化tableView
     if(_commentTableView == nil){
-        _commentTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, _textViewSize.height + d + 60, self.view.frame.size.width, 100.0)];
+        _commentTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, self.postViewHeight + 60, self.view.frame.size.width, 100.0)];
         
         _commentTableView.scrollEnabled = NO;
         
@@ -833,7 +452,7 @@
     
     //初始化用户评论分隔栏
     if(_commentTableHeader == nil){
-        _commentTableHeader = [[UIView alloc]initWithFrame:CGRectMake(0, _textViewSize.height + d + 20, self.view.frame.size.width, 40.0f)];
+        _commentTableHeader = [[UIView alloc]initWithFrame:CGRectMake(0, self.postViewHeight, self.view.frame.size.width, 40.0f)];
         _commentTableHeader.backgroundColor = [UIColor colorWithRed:236.0f/255.0f green:236.0f/255.0f blue:236.0f/255.0 alpha:1.0];
         UILabel *commentTableHeaderLabel = [[UILabel alloc] initWithFrame:CGRectMake(15.0f, 10.0f, 100.0f, 20.0f)];
         commentTableHeaderLabel.text = @"用户评论";
@@ -845,12 +464,25 @@
     }
 }
 
+-(void)initNoCommentLabel{
+    
+    _noCommentLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, self.postViewHeight + 100, self.view.frame.size.width, 20.0f)];
+    _noCommentLabel.text = @"还没有人评论哦，快来第一个评论吧~";
+    _noCommentLabel.textColor = [UIColor colorWithRed:102.0f/255.0f green:102.0f/255.0f blue:102.0f/255.0f alpha:1.0f];
+    _noCommentLabel.textAlignment = NSTextAlignmentCenter;
+    _noCommentLabel.font = [UIFont systemFontOfSize:14.0f];
+    
+    [_postScrollView addSubview:_noCommentLabel];
+    [_postScrollView setContentSize:CGSizeMake(self.view.frame.size.width,self.postViewHeight+200)];
+}
+
+
 //初始化下拉刷新header
 -(void)initRefreshView{
     
     _refreshFooterView = [[EGORefreshView alloc] initWithScrollView:_postScrollView position:EGORefreshFooter];
     _refreshFooterView.delegate = self;
-    _refreshFooterView.frame = CGRectMake(0, _postScrollView.contentSize.height, self.view.frame.size.width, 100.0f);
+    _refreshFooterView.frame = CGRectMake(0, _postScrollView.contentSize.height + 30, self.view.frame.size.width, 100.0f);
     [_postScrollView addSubview:_refreshFooterView];
     
 }
@@ -969,7 +601,8 @@
                 
                 _reloading = YES;
                 [_commentTableView reloadData];
-                [self relayoutCommentTableView:_textViewSize];
+                [self relayoutCommentTableView];
+
                 
             }else{
                 
@@ -1125,11 +758,20 @@
     NSArray *commentAddRow = [NSArray arrayWithObject:[NSIndexPath indexPathForRow:0 inSection:0]];
     [_commentTableView insertRowsAtIndexPaths:commentAddRow withRowAnimation:UITableViewRowAnimationNone];
     [_commentTableView endUpdates];
-    [_postScrollView setContentOffset:CGPointMake(0, _textViewSize.height) animated:YES];
-    [self relayoutCommentTableView:_textViewSize];
+    [_postScrollView setContentOffset:CGPointMake(0, self.postViewHeight) animated:YES];
     
 }
 
+-(void)showHUD{
+    //显示hud层
+    self.HUD = [JGProgressHUD progressHUDWithStyle:JGProgressHUDStyleDark];
+    self.HUD.textLabel.text = @"正在加载";
+    [self.HUD showInView:self.view];
+}
+
+-(void)dismissHUD{
+    [self.HUD dismiss];
+}
 
 
 - (void)didReceiveMemoryWarning {

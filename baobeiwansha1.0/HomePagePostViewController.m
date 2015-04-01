@@ -14,8 +14,7 @@
 
 @interface HomePagePostViewController ()
 
-@property (nonatomic,retain) PostTextView *textView;
-@property (nonatomic,assign) CGSize textViewSize;
+@property (nonatomic,retain) PostView *postView;
 
 @property (nonatomic,retain) AppDelegate *appDelegate;
 
@@ -86,39 +85,44 @@
         [self.view addSubview:self.scrollView];
     }
     
-    [self initTextView];
+    [self initPostView];
     
 }
 
--(void)initTextView{
+-(void)initPostView{
     
-    self.textView = [[PostTextView alloc]initWithDict:self.postDict frame:self.view.frame];
-    self.textView.delegate = self;
-    self.textViewSize = [self.textView getTextViewHeight];
+    self.postView = [[PostView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 700) dict:self.postDict];
     
-    self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.textViewSize.height + 60);
+    self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width,self.view.frame.size.height);
     
-    [self.scrollView addSubview:self.textView];
-    //[self initChoiceButtons];
+    [self.scrollView addSubview:self.postView];
 
 }
 
-
+-(void)postWebViewDidFinishLoading:(CGFloat)height{
+    
+    self.postView.frame = CGRectMake(0, 0, self.view.frame.size.width, height);
+    if(height > self.view.frame.size.height){
+        self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width,height);
+    }
+    
+    
+}
 -(void)updateTextView{
-    [self.textView removeFromSuperview];
+    [self.postView removeFromSuperview];
     // 测试用
     //NSMutableDictionary *testDict = [[NSMutableDictionary alloc]init];
     //[testDict setObject:@"test title" forKey:@"post_title"];
     //[testDict setObject:@"test content" forKey:@"post_content"];
     //self.postDict = testDict;
-    [self initTextView];
+    [self initPostView];
     
 }
 
 -(void)initChoiceButtons{
     
     if(!self.canButton){
-        self.canButton = [[UIButton alloc]initWithFrame:CGRectMake(self.view.frame.size.width/2 - 85, self.textViewSize.height + 10, 70, 35)];
+        self.canButton = [[UIButton alloc]initWithFrame:CGRectMake(self.view.frame.size.width/2 - 85, 500 + 10, 70, 35)];
         [self.canButton setBackgroundImage:[UIImage imageNamed:@"skill_select_able"] forState:UIControlStateNormal];
         [self.canButton setBackgroundImage:[UIImage imageNamed:@"skill_able"] forState:UIControlStateSelected];
 
@@ -126,7 +130,7 @@
     }
     
     if(!self.cantButton){
-        self.cantButton = [[UIButton alloc]initWithFrame:CGRectMake(self.view.frame.size.width/2 + 15, self.textViewSize.height + 10, 70, 35)];
+        self.cantButton = [[UIButton alloc]initWithFrame:CGRectMake(self.view.frame.size.width/2 + 15, 500 + 10, 70, 35)];
         [self.cantButton setBackgroundImage:[UIImage imageNamed:@"skill_select_unable"] forState:UIControlStateNormal];
         [self.cantButton setBackgroundImage:[UIImage imageNamed:@"skill_unable"] forState:UIControlStateSelected];
         [self.scrollView addSubview:self.cantButton];

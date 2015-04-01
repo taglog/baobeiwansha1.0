@@ -10,8 +10,9 @@
 
 #define FLIP_ANIMATION_DURATION 0.18f
 #define TEXT_COLOR	 [UIColor colorWithRed:119.0/255.0 green:119.0/255.0 blue:119.0/255.0 alpha:1.0]
-@interface EGORefreshView (Private)
+#define TEXT_COLOR2	 [UIColor whiteColor]
 
+@interface EGORefreshView (Private)
 
 @end
 @implementation EGORefreshView
@@ -19,7 +20,7 @@
 -(id)initWithScrollView:(UIScrollView *)scrollView position:(EGORefreshPosition)position{
     _scrollView = scrollView;
     _position = position;
-    
+    self.isTextColorBlack = YES;
     if (_position == EGORefreshHeader) {
         
         self = [self initWithFrame:CGRectMake(0.0f, 10.0f - _scrollView.bounds.size.height, _scrollView.bounds.size.width, _scrollView.bounds.size.height)];
@@ -34,26 +35,29 @@
     
     if(self = [super initWithFrame:frame]){
         
+
         self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         self.backgroundColor = [UIColor clearColor];
         if(_position == EGORefreshHeader){
             //上次更新label
-            UILabel *lastUpdateLabel = [[UILabel alloc] init];
+            self.lastUpdateLabel = [[UILabel alloc] init];
             if(_position == EGORefreshHeader){
-                lastUpdateLabel.frame = CGRectMake(0.0f, frame.size.height - 37.0f, self.frame.size.width, 20.0f);
+                self.lastUpdateLabel.frame = CGRectMake(0.0f, frame.size.height - 37.0f, self.frame.size.width, 20.0f);
             }
             else{
-                lastUpdateLabel.frame = CGRectMake(0.0f, 0.0f, self.frame.size.width, 20.0f);
+                self.lastUpdateLabel.frame = CGRectMake(0.0f, 0.0f, self.frame.size.width, 20.0f);
             }
-            lastUpdateLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-            lastUpdateLabel.font = [UIFont systemFontOfSize:12.0f];
-            lastUpdateLabel.textColor = TEXT_COLOR;
-            lastUpdateLabel.shadowColor = [UIColor colorWithWhite:0.9f alpha:1.0f];
-            lastUpdateLabel.shadowOffset = CGSizeMake(0.0f, 1.0f);
-            lastUpdateLabel.backgroundColor = [UIColor clearColor];
-            lastUpdateLabel.textAlignment = NSTextAlignmentCenter;
-            [self addSubview:lastUpdateLabel];
-            _lastUpdatedLabel = lastUpdateLabel;
+            self.lastUpdateLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+            self.lastUpdateLabel.font = [UIFont systemFontOfSize:12.0f];
+            
+            self.lastUpdateLabel.textColor = TEXT_COLOR;
+            
+            self.lastUpdateLabel.shadowColor = [UIColor colorWithWhite:0.9f alpha:1.0f];
+            self.lastUpdateLabel.shadowOffset = CGSizeMake(0.0f, 1.0f);
+            self.lastUpdateLabel.backgroundColor = [UIColor clearColor];
+            self.lastUpdateLabel.textAlignment = NSTextAlignmentCenter;
+            [self addSubview:self.lastUpdateLabel];
+            _lastUpdateLabel = self.lastUpdateLabel;
             
             //箭头
             CALayer *layer = [CALayer layer];
@@ -73,22 +77,25 @@
         }
         
         //状态label
-        UILabel *statusLabel = [[UILabel alloc] init];
+        self.statusLabel = [[UILabel alloc] init];
         if(_position == EGORefreshHeader){
-            statusLabel.frame = CGRectMake(0.0f, frame.size.height - 60.0f, self.frame.size.width, 20.0f);
+            self.statusLabel.frame = CGRectMake(0.0f, frame.size.height - 60.0f, self.frame.size.width, 20.0f);
         }
         else{
-            statusLabel.frame = CGRectMake(0.0f, frame.size.height - 7.0f, self.frame.size.width, 20.0f);
+            self.statusLabel.frame = CGRectMake(0.0f, frame.size.height - 7.0f, self.frame.size.width, 20.0f);
         }
-        statusLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        statusLabel.font = [UIFont boldSystemFontOfSize:13.0f];
-        statusLabel.textColor = TEXT_COLOR;
-        statusLabel.shadowColor = [UIColor colorWithWhite:0.9f alpha:1.0f];
-        statusLabel.shadowOffset = CGSizeMake(0.0f, 1.0f);
-        statusLabel.backgroundColor = [UIColor clearColor];
-        statusLabel.textAlignment = NSTextAlignmentCenter;
-        [self addSubview:statusLabel];
-        _statusLabel = statusLabel;
+        self.statusLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        self.statusLabel.font = [UIFont boldSystemFontOfSize:13.0f];
+        
+        self.statusLabel.textColor = TEXT_COLOR;
+
+        
+        self.statusLabel.shadowColor = [UIColor colorWithWhite:0.9f alpha:1.0f];
+        self.statusLabel.shadowOffset = CGSizeMake(0.0f, 1.0f);
+        self.statusLabel.backgroundColor = [UIColor clearColor];
+        self.statusLabel.textAlignment = NSTextAlignmentCenter;
+        [self addSubview:self.statusLabel];
+        _statusLabel = self.statusLabel;
         
         
         //开始加载的指示
@@ -109,7 +116,19 @@
     }
     return self;
 }
+-(void)setIsTextColorBlack:(BOOL)isTextColorBlack{
+    
+    if(isTextColorBlack == NO){
+        
+        self.statusLabel.textColor = TEXT_COLOR2;
+        self.statusLabel.shadowColor = [UIColor clearColor];
 
+        self.lastUpdateLabel.textColor = TEXT_COLOR2;
+        self.lastUpdateLabel.shadowColor = [UIColor clearColor];
+
+
+    }
+}
 - (void)refreshLastUpdatedDate {
     
     if(_position == EGORefreshHeader){
@@ -121,13 +140,13 @@
             NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
             
             [formatter setDateFormat:@"yyyy/MM/dd HH:mm"];
-            _lastUpdatedLabel.text = [NSString stringWithFormat:@"上次更新: %@", [formatter stringFromDate:date]];
-            [[NSUserDefaults standardUserDefaults] setObject:_lastUpdatedLabel.text forKey:@"EGORefreshTableView_LastRefresh"];
+            _lastUpdateLabel.text = [NSString stringWithFormat:@"上次更新: %@", [formatter stringFromDate:date]];
+            [[NSUserDefaults standardUserDefaults] setObject:_lastUpdateLabel.text forKey:@"EGORefreshTableView_LastRefresh"];
             [[NSUserDefaults standardUserDefaults] synchronize];
             
         } else {
             
-            _lastUpdatedLabel.text = nil;
+            _lastUpdateLabel.text = nil;
             
         }
     }

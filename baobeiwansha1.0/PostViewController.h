@@ -7,21 +7,19 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "DTAttributedTextView.h"
-#import "DTLazyImageView.h"
-#import "DTCoreText.h"
+#import "PostView.h"
 #import "EGORefreshView.h"
 #import "CommentCreateViewController.h"
 
-@protocol PostViewDelegate
+@protocol PostViewControllerDelegate
 //type = 1 收藏成功 type = 0 取消成功
 -(void)updateCollectionCount:(NSIndexPath *)indexPath type:(NSInteger)type;
 
 @end
-@interface PostViewController : UIViewController<UITableViewDelegate,UITableViewDataSource,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,EGORefreshViewDelegate,CommentCreateDelegate,UIActionSheetDelegate>
+@interface PostViewController : UIViewController<UITableViewDelegate,UITableViewDataSource,EGORefreshViewDelegate,CommentCreateDelegate,UIActionSheetDelegate,PostViewDelegate>
 
 @property (nonatomic,retain) NSIndexPath *indexPath;
-@property (nonatomic,retain) id<PostViewDelegate>delegate;
+@property (nonatomic,retain) id<PostViewControllerDelegate>delegate;
 -(void)initViewWithDict:(NSDictionary *)dict;
 -(void)noDataAlert;
 -(void)showHUD;

@@ -28,6 +28,8 @@
 @property (nonatomic,assign) int babyDay;
 @property (nonatomic,assign) int babyMonth;
 
+@property (nonatomic,retain) UIImageView *refreshBackground;
+
 @property (nonatomic,retain) HomePageProfileView *homePageProfileView;
 @property (nonatomic,retain) HomePageAbilityView *homePageAbilityView;
 @property (nonatomic,retain) HomePageLocationView *homePageLocationView;
@@ -47,7 +49,6 @@
 
 @property (nonatomic,retain) AppDelegate *appDelegate;
 @property (nonatomic,assign) CGFloat navBarAlpha;
-
 
 @property (nonatomic,assign) BOOL initialized;
 
@@ -185,6 +186,7 @@
     [self initViewSection1];
     [self initViewSection2];
     [self initViewSection3];
+    [self initRefreshBackground];
     
 }
 
@@ -247,13 +249,20 @@
         self.refreshHeaderView = [[EGORefreshView alloc] initWithScrollView:self.homeScrollView position:EGORefreshHeader ];
         self.refreshHeaderView.delegate = self;
         //TODO
-        
+        self.refreshHeaderView.isTextColorBlack = NO;
         [self.homeScrollView addSubview:self.refreshHeaderView];
         
     }
     
 }
 
+-(void)initRefreshBackground{
+    
+    self.refreshBackground = [[UIImageView alloc]initWithFrame:CGRectMake(0, -300, self.view.frame.size.width, 420.0)];
+    self.refreshBackground.image = [UIImage imageNamed:@"topbackground"];
+    [self.homeScrollView insertSubview:self.refreshBackground belowSubview:self.refreshHeaderView];
+    
+}
 #pragma mark EGORefreshReloadData
 - (void)reloadTableViewDataSource{
     
@@ -358,6 +367,7 @@
     self.homePageTableView.frame = CGRectMake(0, self.homePageLocationView.frame.origin.y + locationViewHeight + 10, self.view.frame.size.width, 225);
 
     self.homeScrollView.contentSize = CGSizeMake(self.view.frame.size.width, profileViewheight + abilityViewHeight+tableViewHeight +tableViewHeight  + 40);
+    self.refreshBackground.frame = CGRectMake(0, -300, self.view.frame.size.width, 300 + profileViewheight);
 }
 
 - (void)doneLoadingTableViewData{

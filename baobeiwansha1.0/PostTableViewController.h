@@ -20,7 +20,7 @@
 
 @end
 
-@interface PostTableViewController : UIViewController<UITableViewDelegate,UITableViewDataSource,EGORefreshViewDelegate,PostViewDelegate,PostTableViewCellDelegate>
+@interface PostTableViewController : UIViewController<UITableViewDelegate,UITableViewDataSource,EGORefreshViewDelegate,PostViewControllerDelegate,PostTableViewCellDelegate>
 @property (nonatomic,assign) NSInteger p;
 @property (nonatomic,assign) NSInteger type;
 @property (nonatomic,strong) NSDictionary *requestURL;

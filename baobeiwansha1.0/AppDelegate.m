@@ -26,13 +26,16 @@
 
 
 @interface AppDelegate ()
+
 @property (nonatomic,retain) UINavigationController *userInfoNav;
+//主tabBarController
 @property (nonatomic,retain) UITabBarController *mainTabBarController;
+
 //判断是否有网络
 @property (nonatomic) Reachability *internetReachability;
 @property (nonatomic) Reachability *wifiReachability;
 
-@property (nonatomic,assign) int reachability;
+@property (nonatomic,assign) NSInteger reachability;
 @property (nonatomic,retain) UILabel *reachabilitySign;
 
 @end
@@ -42,19 +45,25 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    
+    
+    //初始化网络监测
     [self initReachability];
+    //全局变量设置
     [self globalSettings];
+    //uuid
     [self generateUserID];
+    //第三方代码
     [self thirdPartiesCode:launchOptions];
     
     
-
-    
     self.window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
     self.window.backgroundColor = [UIColor clearColor];
-    //第一次启动
+    
+    //初始化主viewControllers
     [self initViewControllers];
     
+    //第一次启动
     if (![[NSUserDefaults standardUserDefaults] boolForKey:@"firstStart"]) {
         
         [self showIntroView];
@@ -108,11 +117,13 @@
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
+
 -(void)globalSettings{
     
     self.rootURL = @"http://blog.yhb360.com/baobaowansha/";
 
 }
+
 -(void)generateUserID{
     
     // generate UserID using VenderID
@@ -170,7 +181,6 @@
 }
 
 
-
 -(void)initViewControllers{
     
     if(!self.mainTabBarController){
@@ -184,23 +194,24 @@
     UITabBarItem *mainTabThird = [[UITabBarItem alloc]initWithTitle:@"我的" image:[UIImage imageNamed:@"tabbar_aboutme_gray"] tag:2];
     
     HomePageViewController *homePageViewController = [[HomePageViewController alloc]init];
-    PanPopNavigationController *homePageNav = [[PanPopNavigationController alloc]initWithRootViewController:homePageViewController];
+    UINavigationController *homePageNav = [[UINavigationController alloc]initWithRootViewController:homePageViewController];
     homePageViewController.tabBarItem = mainTabFirst;
     homePageViewController.tabBarItem.title = @"首页";
 
     CategoryPageViewController *categoryPageViewController = [[CategoryPageViewController alloc]init];
-    PanPopNavigationController *playPageNav = [[PanPopNavigationController alloc]initWithRootViewController:categoryPageViewController];
+    UINavigationController *playPageNav = [[UINavigationController alloc]initWithRootViewController:categoryPageViewController];
     categoryPageViewController.tabBarItem = mainTabSecond;
     categoryPageViewController.tabBarItem.title = @"分类";
     
     ProfilePageViewController *profilePageViewController = [[ProfilePageViewController alloc]init];
-    PanPopNavigationController *profilePageNav = [[PanPopNavigationController alloc]initWithRootViewController:profilePageViewController];
+    UINavigationController *profilePageNav = [[UINavigationController alloc]initWithRootViewController:profilePageViewController];
     profilePageViewController.tabBarItem = mainTabThird;
     profilePageViewController.tabBarItem.title = @"我的";
     
     self.mainTabBarController.viewControllers = [NSArray arrayWithObjects:homePageNav,playPageNav,profilePageNav,nil];
     
 }
+
 -(void)showIntroView{
     
     IntroductionViewController *introViewController = [[IntroductionViewController alloc]init];
@@ -209,7 +220,7 @@
     
     
 }
-
+//introview结束delegate方法
 -(void)introViewFinished{
     
     UserInfoSettingViewController  *userInfoSettingViewController = [[UserInfoSettingViewController alloc]init];
@@ -220,6 +231,8 @@
     self.window.rootViewController = nav;
     
 }
+
+//设置完用户信息之后
 -(void)popUserInfoSettingViewController{
     
     //NSLog(@"to pop");
@@ -230,6 +243,7 @@
     }];
     
 }
+
 - (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     // 去掉了avos的代码
     AVInstallation *currentInstallation = [AVInstallation currentInstallation];
@@ -262,6 +276,7 @@
 - (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
     NSLog(@"register notification failed with code: %@", error);
 }
+
 #pragma mark - 判断网络情况
 -(void)initReachability{
     
@@ -287,7 +302,7 @@
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [weakself showReachabilitySign];
-            NSLog(@"1111111");
+            NSLog(@"not reachable");
             
         });
     };
@@ -320,6 +335,7 @@
     
     
 }
+
 //连接状态发生改变
 -(void)reachabilityChanged:(NSNotification *)note{
     
@@ -336,7 +352,6 @@
         }
         else
         {
-            
             [self showReachabilitySign];
             
         }
@@ -345,6 +360,7 @@
     
     
 }
+
 -(void)showReachabilitySign{
     
     if(!self.reachabilitySign){
@@ -372,6 +388,7 @@
     }];
 }
 
+//获取用户信息的plist
 #pragma mark - 公有函数
 
 +(NSString *)dataFilePath

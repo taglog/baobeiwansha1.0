@@ -24,6 +24,7 @@
     [self initViews];
     
 }
+//初始化views
 -(void)initViews{
     
     self.paddingX = (self.view.frame.size.width - 220.0)/2.0;
@@ -36,7 +37,8 @@
     [self initIntroView];
     
 }
-
+//没有针对不同大小屏幕进行适配
+//第一页的views
 -(void)initIntroPageViewController1{
     
     UILabel *titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 24, self.view.frame.size.width, 60.0f)];
@@ -152,6 +154,7 @@
     
 }
 
+//
 -(void)initIntroView{
     
     self.introViewController = [[IntroViewController alloc]init];

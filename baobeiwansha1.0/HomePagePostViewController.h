@@ -7,11 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "PostTextView.h"
+#import "PostView.h"
 #import "AFNetworking.h"
 
-@interface HomePagePostViewController : UIViewController<PostTextViewDelegate>
-
+@interface HomePagePostViewController : UIViewController<PostViewDelegate>
 -(void)initViewWithDict:(NSDictionary *)dict;
 -(void)noDataAlert;
 -(void)showHUD;

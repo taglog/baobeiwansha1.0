@@ -95,6 +95,7 @@
         [attributedString2 addAttribute:NSParagraphStyleAttributeName value:paragraphStyle2 range:NSMakeRange(0, [comment length])];
         [self.commentContentLabel setAttributedText:attributedString2];
     }
+    
     if([dict objectForKey:@"post_taxonomy"]){
         self.type = [[dict objectForKey:@"post_taxonomy"]integerValue];
         if(self.type == 1){

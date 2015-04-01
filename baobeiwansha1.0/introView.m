@@ -14,17 +14,21 @@
 
 @end
 @implementation IntroView
+//初始化view
 -(id)initWithFrame:(CGRect)frame customViews:(NSArray *)customViews background:(UIImage *)backgroundImage{
     
     self = [super initWithFrame:frame];
+    
     self.layer.contents = (id) backgroundImage.CGImage;
     self.layer.backgroundColor = [UIColor clearColor].CGColor;;
     
     self.customViews = customViews;
     self.isAnimated = NO;
+    
     return self;
 }
 
+//遍历views，根据传入的参数设置动画
 -(void)performAnimation{
     
     if(self.isAnimated == NO){
@@ -49,6 +53,8 @@
         self.isAnimated = YES;
     }
 }
+
+//初始化动画效果
 -(void)performInitialAnimation:(UIView *)view{
     
     float initialDuration = 0.5;

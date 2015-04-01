@@ -193,11 +193,16 @@
 
     if(tagArray != (id)[NSNull null]){
         NSInteger count = [tagArray count];
+
         if(count > 0){
             self.tagLabel1.text = [tagArray objectAtIndex:0];
-
+        }
+        if(count > 1){
             self.tagLabel2.text = [tagArray objectAtIndex:1];
+        }
+        if(count>2){
             self.tagLabel3.text = [tagArray objectAtIndex:2];
+
         }
         
     }

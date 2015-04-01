@@ -254,10 +254,7 @@
     // 最终得到整个section的高度
     self.frame = CGRectMake(0, 0, self.aframe.size.width, profileViewInitialHeight + self.babyConditionTextView.frame.size.height);
     
-    self.backgroundView.frame = CGRectMake(0, 0, self.aframe.size.width, profileViewInitialHeight + self.babyConditionTextView.frame.size.height);
-    self.backgroundView.image = [UIImage imageNamed:@"topbackground"];
-    
-    [self.delegate resetFrame:self.backgroundView.frame.size.height];
+    [self.delegate resetFrame:profileViewInitialHeight + self.babyConditionTextView.frame.size.height];
 }
 
 -(void)pushProfilePageSetting{

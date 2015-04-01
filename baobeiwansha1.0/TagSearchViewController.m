@@ -14,8 +14,9 @@
 @interface TagSearchViewController ()
 
 @property (nonatomic,retain) UISearchBar *searchBar;
-@property (nonatomic,strong)JGProgressHUD *HUD;
-
+@property (nonatomic,strong) JGProgressHUD *HUD;
+@property (nonatomic,retain) UITableView *tableView;
+@property (nonatomic,retain) NSMutableArray *historyArray;
 @end
 
 
@@ -25,7 +26,7 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
     [self initBarButtonItem];
-    [self initSearchBar];
+    [self initViews];
     
 }
 
@@ -37,12 +38,31 @@
     
 }
 
+
 -(void)popViewController{
 
     [self.navigationController popViewControllerAnimated:YES];
 
 }
+-(void)initViews{
+    [self initHistoryArray];
+    [self initSearchBar];
+    [self initTableView];
 
+}
+-(void)initHistoryArray{
+    NSString *filePath = [self dataFilePath];
+    
+    if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
+        NSLog(@"will load persisted data from file");
+        self.historyArray = [[NSMutableArray alloc]initWithContentsOfFile:filePath];
+        
+    } else {
+        NSLog(@"file is not exist and need init self.dict");
+        self.historyArray = [[NSMutableArray alloc]init];
+    }
+
+}
 -(void)initSearchBar{
     
     self.searchBar = [[UISearchBar alloc]init];
@@ -54,12 +74,20 @@
 
 
 }
+-(void)initTableView{
+    
+    self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width,self.view.frame.size.height)];
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    [self.view addSubview:self.tableView];
+    
+}
+
 
 #pragma mark - searchBar delegate
 
 -(void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar{
-    
-    
+
     
 }
 
@@ -69,6 +97,7 @@
     
 }
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar{
+    
     if([self.searchBar.text isEqualToString:@""]){
         //初始化HUD
         self.HUD = [JGProgressHUD progressHUDWithStyle:JGProgressHUDStyleDark];
@@ -78,6 +107,16 @@
         return;
     }
     [self.searchBar resignFirstResponder];
+    
+    
+    //把新增加的搜索词存入历史记录里面
+    [self.tableView beginUpdates];
+    [self.historyArray insertObject:self.searchBar.text atIndex:0];
+    NSArray *historyAddRow = [NSArray arrayWithObject:[NSIndexPath indexPathForRow:0 inSection:0]];
+    [self.tableView insertRowsAtIndexPaths:historyAddRow withRowAnimation:UITableViewRowAnimationNone];
+    [self.tableView endUpdates];
+    NSString *filePath = [self dataFilePath];
+    [self.historyArray writeToFile:filePath atomically:YES];
     
     TagPostTableViewController *tagPostViewController = [[TagPostTableViewController alloc]initWithURL:@{@"requestRouter":@"post/tagsearch"} tag:self.searchBar.text];
     [self.navigationController pushViewController: tagPostViewController animated:YES];
@@ -91,4 +130,30 @@
 
 }
 
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    return 1;
+}
+
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    return self.historyArray.count;
+}
+
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    static NSString *identity = @"historyCell";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identity];
+    if(!cell){
+        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identity];
+    }
+    cell.textLabel.text = [self.historyArray objectAtIndex:indexPath.row];
+    
+    return cell;
+}
+-(NSString *)dataFilePath
+{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(
+                                                         NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    return [documentsDirectory stringByAppendingPathComponent:@"searchhistoy.plist"];
+}
 @end

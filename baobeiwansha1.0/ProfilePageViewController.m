@@ -542,8 +542,11 @@
     self.profilePageCollectionView.frame = CGRectMake(0, self.profilePageNoticeView.frame.size.height, self.view.frame.size.width, 60 + [self.responseCollection count]*110 + 45);
     
     self.profilePageCommentView.frame = CGRectMake(0, 105 + self.profilePageCollectionView.frame.size.height, self.view.frame.size.width, 60 + [self.responseComment count]*150 + 45);
-    
-    self.profilePageScrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.profilePageNoticeView.frame.size.height + self.profilePageCollectionView.frame.size.height + self.profilePageCommentView.frame.size.height + 50);
+    CGFloat height = self.profilePageNoticeView.frame.size.height + self.profilePageCollectionView.frame.size.height + self.profilePageCommentView.frame.size.height + 50;
+    if(height < self.view.frame.size.height + 50){
+        height = self.view.frame.size.height + 50;
+    }
+    self.profilePageScrollView.contentSize = CGSizeMake(self.view.frame.size.width, height);
     
 }
 - (void)doneLoadingTableViewData{

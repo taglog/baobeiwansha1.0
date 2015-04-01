@@ -33,10 +33,11 @@ typedef enum{
 @property(nonatomic,assign) BOOL pullUp;
 @property(nonatomic,assign) BOOL pullDown;
 
+@property (nonatomic,assign) BOOL isTextColorBlack;
 
 @property(nonatomic,retain) UIScrollView *scrollView;
 
-@property(nonatomic,strong) UILabel *lastUpdatedLabel;
+@property(nonatomic,strong) UILabel *lastUpdateLabel;
 
 @property(nonatomic,strong) UILabel *statusLabel;
 
