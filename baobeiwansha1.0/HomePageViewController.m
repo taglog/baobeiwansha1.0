@@ -385,7 +385,7 @@
     CGFloat endPointY = 200;
     
     
-    if(scrollView.contentOffset.y >startPointY && scrollView.contentOffset.y < endPointY){
+    if(scrollView.contentOffset.y > startPointY && scrollView.contentOffset.y < endPointY){
         
         self.navBarAlpha = scrollView.contentOffset.y/(endPointY - startPointY);
         
@@ -397,10 +397,15 @@
         
         //[self setNavigationBarColorWithAlpha:1.0f];
         
-    }else if(scrollView.contentOffset.y < startPointY){
+    }else if(scrollView.contentOffset.y >= startPointY - 40 && scrollView.contentOffset.y <= startPointY){
         
         [self setNavigationBarTransparent];
         self.isNavigationHidden = NO;
+        
+    }else if(scrollView.contentOffset.y < startPointY - 40){
+        [self setNavigationBarColorWithAlpha:0];
+        self.isNavigationHidden = YES;
+
     }
     
     [self.refreshHeaderView egoRefreshScrollViewDidScroll:scrollView];
