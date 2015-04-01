@@ -146,8 +146,15 @@
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identity];
     }
     cell.textLabel.text = [self.historyArray objectAtIndex:indexPath.row];
-    
+    cell.textLabel.font = [UIFont systemFontOfSize:14.0f];
     return cell;
+}
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    TagPostTableViewController *tagPostViewController = [[TagPostTableViewController alloc]initWithURL:@{@"requestRouter":@"post/tagsearch"} tag:[self.historyArray objectAtIndex:indexPath.row]];
+    [self.navigationController pushViewController: tagPostViewController animated:YES];
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 -(NSString *)dataFilePath
 {

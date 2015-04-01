@@ -120,7 +120,7 @@
 
 -(void)globalSettings{
     
-    self.rootURL = @"http://blog.yhb360.com/baobaowansha/";
+    self.rootURL = @"http://blog.yhb360.com/baobaowansha1.1/";
 
 }
 
