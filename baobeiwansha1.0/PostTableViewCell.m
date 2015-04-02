@@ -173,6 +173,10 @@
             self.typeLabel.text = @"游戏";
             self.typeLabel.backgroundColor = [UIColor colorWithRed:124.0/255.0f green:195.0/255.0f blue:231.0/255.0f alpha:1.0f];
             
+        }else if(self.type == 190){
+            self.typeLabel.text = @"建议";
+            self.typeLabel.backgroundColor = [UIColor colorWithRed:124.0/255.0f green:195.0/255.0f blue:231.0/255.0f alpha:1.0f];
+            
             
         }
 

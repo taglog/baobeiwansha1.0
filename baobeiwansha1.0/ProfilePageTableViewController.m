@@ -81,14 +81,14 @@
 
 -(void)initTabViews{
     
-    self.tabView0 = [[TabView alloc]initWithFrame:CGRectMake(0, 0,self.view.frame.size.width/3, 50.0)];
+    self.tabView0 = [[TabView alloc]initWithFrame:CGRectMake(0, 0,self.view.frame.size.width/4, 50.0)];
     [self.tabView0 setNormalIcon:[UIImage imageNamed:@"titlebar_book_gray"] highlightIcon:[UIImage imageNamed:@"titlebar_book"] tabTitle:@"绘本"];
-    self.tabView1 = [[TabView alloc]initWithFrame:CGRectMake(0, 0,self.view.frame.size.width/3, 50.0)];
+    self.tabView1 = [[TabView alloc]initWithFrame:CGRectMake(0, 0,self.view.frame.size.width/4, 50.0)];
     [self.tabView1 setNormalIcon:[UIImage imageNamed:@"titlebar_toy_gray"] highlightIcon:[UIImage imageNamed:@"titlebar_toy"] tabTitle:@"玩具"];
-    self.tabView2 = [[TabView alloc]initWithFrame:CGRectMake(0, 0,self.view.frame.size.width/3, 50.0)];
+    self.tabView2 = [[TabView alloc]initWithFrame:CGRectMake(0, 0,self.view.frame.size.width/4, 50.0)];
     [self.tabView2 setNormalIcon:[UIImage imageNamed:@"titlebar_game_gray"] highlightIcon:[UIImage imageNamed:@"titlebar_game"] tabTitle:@"游戏"];
-    self.tabView3 = [[TabView alloc]initWithFrame:CGRectMake(0, 0,self.view.frame.size.width/3, 50.0)];
-    [self.tabView3 setNormalIcon:[UIImage imageNamed:@"titlebar_game_gray"] highlightIcon:[UIImage imageNamed:@"titlebar_game"] tabTitle:@"建议"];
+    self.tabView3 = [[TabView alloc]initWithFrame:CGRectMake(0, 0,self.view.frame.size.width/4, 50.0)];
+    [self.tabView3 setNormalIcon:[UIImage imageNamed:@"titlebar_advice_gray"] highlightIcon:[UIImage imageNamed:@"titlebar_advice"] tabTitle:@"建议"];
     
 }
 
