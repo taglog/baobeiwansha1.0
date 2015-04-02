@@ -79,8 +79,8 @@
 
 -(void)initScrollView{
     if(!self.scrollView){
-        self.scrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 64, self.view.frame.size.width, self.view.frame.size.height - 64)];
-        self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, 800);
+        self.scrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 64, self.view.frame.size.width, self.view.frame.size.height - 114)];
+        self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width,self.view.frame.size.height);
         
         [self.view addSubview:self.scrollView];
     }
@@ -91,21 +91,15 @@
 
 -(void)initPostView{
     
-    self.postView = [[PostView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 700) dict:self.postDict];
-    
-    self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width,self.view.frame.size.height);
-    
+    self.postView = [[PostView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) dict:self.postDict];
+    self.postView.delegate = self;
     [self.scrollView addSubview:self.postView];
 
 }
 
 -(void)postWebViewDidFinishLoading:(CGFloat)height{
-    
-    self.postView.frame = CGRectMake(0, 0, self.view.frame.size.width, height);
-    if(height > self.view.frame.size.height){
-        self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width,height);
-    }
-    
+    [self dismissHUD];
+    self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width,height);
     
 }
 -(void)updateTextView{

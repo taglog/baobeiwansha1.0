@@ -17,10 +17,12 @@
 @property (nonatomic,retain) TabView *tabView0;
 @property (nonatomic,retain) TabView *tabView1;
 @property (nonatomic,retain) TabView *tabView2;
+@property (nonatomic,retain) TabView *tabView3;
 
 @property (nonatomic,retain) PostTableViewController *postTableViewController0;
 @property (nonatomic,retain) PostTableViewController *postTableViewController1;
 @property (nonatomic,retain) PostTableViewController *postTableViewController2;
+@property (nonatomic,retain) PostTableViewController *postTableViewController3;
 
 //指示层
 @property (nonatomic,strong)JGProgressHUD *HUD;
@@ -85,6 +87,8 @@
     [self.tabView1 setNormalIcon:[UIImage imageNamed:@"titlebar_toy_gray"] highlightIcon:[UIImage imageNamed:@"titlebar_toy"] tabTitle:@"玩具"];
     self.tabView2 = [[TabView alloc]initWithFrame:CGRectMake(0, 0,self.view.frame.size.width/3, 50.0)];
     [self.tabView2 setNormalIcon:[UIImage imageNamed:@"titlebar_game_gray"] highlightIcon:[UIImage imageNamed:@"titlebar_game"] tabTitle:@"游戏"];
+    self.tabView3 = [[TabView alloc]initWithFrame:CGRectMake(0, 0,self.view.frame.size.width/3, 50.0)];
+    [self.tabView3 setNormalIcon:[UIImage imageNamed:@"titlebar_game_gray"] highlightIcon:[UIImage imageNamed:@"titlebar_game"] tabTitle:@"建议"];
     
 }
 
@@ -96,6 +100,8 @@
     self.postTableViewController1.delegate = self;
     self.postTableViewController2 = [[PostTableViewController alloc]initWithURL:self.requestUrl type:3];
     self.postTableViewController2.delegate = self;
+    self.postTableViewController3 = [[PostTableViewController alloc]initWithURL:self.requestUrl type:4];
+    self.postTableViewController3.delegate = self;
     
 }
 -(void)initSlidePagerView{
@@ -117,7 +123,7 @@
 #pragma mark slidPagerDelegate
 -(NSUInteger)numberOfTabsForSlidePager:(SlidePagerViewController *)slideView{
     
-    return 3;
+    return 4;
 }
 
 -(UIView *)slidePager:(SlidePagerViewController *)slideView viewForTabAtIndex:(NSUInteger)index{
@@ -136,6 +142,9 @@
             tabView = self.tabView2;
             break;
             
+        case 3:
+            tabView = self.tabView3;
+            break;
         default:
             break;
     }
@@ -158,6 +167,9 @@
         case 2:
             vc = self.postTableViewController2;
             break;
+        case 3:
+            vc = self.postTableViewController3;
+            break;
         default:
             break;
     }
@@ -173,7 +185,7 @@
         case SlidePagerOptionTabHeight:
             return 50.0f;
         case SlidePagerOptionTabWidth:
-            return self.view.frame.size.width/3.0;
+            return self.view.frame.size.width/4.0;
         default:
             return value;
     }
@@ -194,6 +206,9 @@
         case 2:
             [self.tabView2 setTabToHighlight];
             break;
+        case 3:
+            [self.tabView3 setTabToHighlight];
+            break;
         default:
             break;
     }
@@ -206,6 +221,8 @@
     [self.tabView0 setTabToNormal];
     [self.tabView1 setTabToNormal];
     [self.tabView2 setTabToNormal];
+    [self.tabView3 setTabToNormal];
+
     
 }
 -(void)showHUD:(NSString*)text{

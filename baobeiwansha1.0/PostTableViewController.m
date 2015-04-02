@@ -211,16 +211,17 @@
             
         }
         
-        [post dismissHUD];
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         
     }
           failure:^(AFHTTPRequestOperation *operation, NSError *error) {
               NSLog(@"%@",error);
+              
+              [post showErrorHUD];
               [post dismissHUD];
+              
               [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
           }];
-    [post showHUD];
     
     [self.navigationController pushViewController:post animated:YES];
     

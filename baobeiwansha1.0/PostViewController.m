@@ -13,6 +13,8 @@
 #import "AppDelegate.h"
 #import "JGProgressHUD.h"
 #import "JGProgressHUDSuccessIndicatorView.h"
+#import "JGProgressHUDErrorIndicatorView.h"
+
 #import "PostViewTimeAnalytics.h"
 
 @interface PostViewController ()
@@ -75,6 +77,7 @@
 @property (nonatomic,assign)NSInteger p;
 
 @property (nonatomic,assign) CGFloat bottomBarHeight;
+@property (nonatomic,assign) BOOL isScrollToBottom;
 
 @end
 
@@ -86,7 +89,9 @@
     
     self.view.backgroundColor = [UIColor whiteColor];
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-
+    
+    [self showHUD];
+    self.isScrollToBottom = NO;
     [self initLeftBarButton];
     self.collectButtonEnabled = YES;
     //阻止自动调整滚轮位置，否则导航栏下会出现一段空间
@@ -108,35 +113,30 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-
+    
 }
 -(void)viewWillDisappear:(BOOL)animated{
     [PostViewTimeAnalytics endLogPageView:self.postID];
-
+    
 }
 
 //初始化Controlller的View
 -(void)initViewWithDict:(NSDictionary *)dict{
     
     self.p = 2;
-
+    
     _postDict = dict;
     _postID = [[dict valueForKey:@"ID"]integerValue];
     _frame = self.view.frame;
     
     [PostViewTimeAnalytics beginLogPageView:self.postID];
     
-    //初始化postScrollView
-    [self initScrollView];
-    
-    //初始化PostView
     [self initPostView];
-    
-    
 }
 
 
 -(void)initScrollView{
+    
     if(_postScrollView == nil){
         _postScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 64.0f, self.view.frame.size.width, self.view.frame.size.height - 64.0f)];
         _postScrollView.contentSize = CGSizeMake(self.view.frame.size.width, 1000);
@@ -144,6 +144,8 @@
         [self.view addSubview:_postScrollView];
         
     }
+    [_postScrollView addSubview:self.postView];
+    
 }
 
 
@@ -152,11 +154,15 @@
     
     self.postView = [[PostView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 700) dict:self.postDict];
     self.postView.delegate = self;
-    [_postScrollView addSubview:self.postView];
-
+    
     
 }
 -(void)postWebViewDidFinishLoading:(CGFloat)height{
+    
+    [self dismissHUD];
+    
+    //初始化postScrollView
+    [self initScrollView];
     
     self.postViewHeight = height;
     
@@ -183,9 +189,10 @@
     [_commentTableView setFrame:CGRectMake(0, self.postViewHeight + d, self.view.frame.size.width, commentTableHeight)];
     
     [_refreshFooterView setFrame:CGRectMake(0, _postScrollView.contentSize.height + d, self.view.frame.size.width, 100.0f)];
-
+    
 }
 -(void)initBottomBar{
+    
     self.bottomBarHeight = 50.0f;
     //初始化底部的bar
     if(!self.bottomBar){
@@ -389,7 +396,7 @@
 -(void)initCommentTableView{
     
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-
+    
     
     //初始化homeTableViewCell
     self.commentTableViewCell = [[NSMutableArray alloc]init];
@@ -398,7 +405,7 @@
     
     NSDictionary *postParam = [[NSDictionary alloc]initWithObjectsAndKeys:self.appDelegate.generatedUserID,@"userIdStr",[NSNumber numberWithInteger:1],@"p",[NSNumber numberWithInteger:self.postID],@"id",nil];
     NSString *commentRequestUrl = [self.appDelegate.rootURL stringByAppendingString:commentRouter];
-
+    
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     manager.requestSerializer.timeoutInterval = 20;
     [manager POST:commentRequestUrl parameters:postParam  success:^(AFHTTPRequestOperation *operation,id responseObject) {
@@ -436,7 +443,7 @@
 //初始化tableView
 -(void)initTableView{
     
-
+    
     //初始化tableView
     if(_commentTableView == nil){
         _commentTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, self.postViewHeight + 60, self.view.frame.size.width, 100.0)];
@@ -522,10 +529,10 @@
     if([[[self.commentTableViewCell objectAtIndex:indexPath.row]valueForKey:@"canDeleteComment"]integerValue]==1){
         
         UIActionSheet *deleteCommentSheet = [[UIActionSheet alloc] initWithTitle:nil
-                                                               delegate:self
-                                                      cancelButtonTitle:@"取消"
-                                                 destructiveButtonTitle:nil
-                                                      otherButtonTitles:@"删除评论",  nil];
+                                                                        delegate:self
+                                                               cancelButtonTitle:@"取消"
+                                                          destructiveButtonTitle:nil
+                                                               otherButtonTitles:@"删除评论",  nil];
         
         [deleteCommentSheet showInView:self.view];
     }
@@ -540,13 +547,13 @@
         
         [self.commentTableViewCell removeObjectAtIndex:self.commentTapIndexPath.row];
         [self.commentTableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:self.commentTapIndexPath]
-                         withRowAnimation:UITableViewRowAnimationAutomatic];
+                                     withRowAnimation:UITableViewRowAnimationAutomatic];
         
         [[NSNotificationCenter defaultCenter] postNotificationName:@"commentDelete" object:nil];
-
+        
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
         
-
+        
         NSString *commentRouter = @"/comment/delete";
         
         
@@ -558,7 +565,7 @@
         manager.requestSerializer.timeoutInterval = 20;
         [manager POST:commentRequestUrl parameters:postParam success:^(AFHTTPRequestOperation *operation, id responseObject) {
             
-
+            
             NSArray *responseArray = [responseObject valueForKey:@"data"];
             
             if(responseArray != (id)[NSNull null]){
@@ -568,7 +575,7 @@
                 
                 
             }
-
+            
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             
         }];
@@ -580,7 +587,7 @@
 - (void)reloadTableViewDataSource{
     
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-
+    
     
     //上拉刷新的数据处理
     if(_refreshFooterView.pullUp){
@@ -592,7 +599,7 @@
         AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
         manager.requestSerializer.timeoutInterval = 20;
         [manager POST:commentRequestUrl parameters:postParam success:^(AFHTTPRequestOperation *operation,id responseObject) {
-
+            
             NSArray *responseArray = [responseObject valueForKey:@"data"];
             if(responseArray != (id)[NSNull null]){
                 for(NSString *responseDict in responseArray){
@@ -602,7 +609,7 @@
                 _reloading = YES;
                 [_commentTableView reloadData];
                 [self relayoutCommentTableView];
-
+                
                 
             }else{
                 
@@ -617,7 +624,7 @@
             [self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:0.0f];
             
             [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-
+            
         }failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             NSLog(@"%@",error);
             
@@ -627,7 +634,7 @@
             [self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:0.0f];
             
             [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-
+            
         }];
         
         
@@ -644,46 +651,59 @@
 #pragma mark - _postScrollViewDelegate
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
+    
     self.lastContentOffset = scrollView.contentOffset.y;
 }
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
     
     //没滚到底部之前
-    if((scrollView.contentOffset.y + self.view.frame.size.height - 64) <= (_postScrollView.contentSize.height - 50)){
+    if((scrollView.contentOffset.y + self.view.frame.size.height) <= (_postScrollView.contentSize.height)){
         
+        self.isScrollToBottom = NO;
+        
+        scrollView.frame = CGRectMake(0, 64.0f, self.view.frame.size.width, self.view.frame.size.height - 64.0f);
+        
+        //向下拉
         if(self.lastContentOffset > (int)scrollView.contentOffset.y){
             
             [self.view bringSubviewToFront:self.bottomBar];
             [UIView animateWithDuration:0.3 animations:^{
                 self.bottomBar.frame = CGRectMake(0,self.view.frame.size.height - self.bottomBarHeight, self.view.frame.size.width, self.bottomBarHeight);
                 //如果更改scrollView的frame，那么就会发生底部的抖动，这该怎么办
-                //            scrollView.frame = CGRectMake(0, 64.0f, self.view.frame.size.width, self.view.frame.size.height - 124.0f);
+                //scrollView.frame = CGRectMake(0, 64.0f, self.view.frame.size.width, self.view.frame.size.height - 124.0f);
             }  completion:^(BOOL finished){
                 
             }];
             
         }else{
             
-            
+            //向上拉
             [UIView animateWithDuration:0.3 animations:^{
                 
                 self.bottomBar.frame = CGRectMake(0, self.view.frame.size.height , self.view.frame.size.width, self.bottomBarHeight);
                 
             }  completion:^(BOOL finished){
                 
-                
             }];
             
-        }
-    }else{
-        //如果到了底部，就始终显示
-        [UIView animateWithDuration:0.3 animations:^{
-            self.bottomBar.frame = CGRectMake(0,self.view.frame.size.height - self.bottomBarHeight, self.view.frame.size.width, self.bottomBarHeight);
-            //如果更改scrollView的frame，那么就会发生底部的抖动，这该怎么办
-            //            scrollView.frame = CGRectMake(0, 64.0f, self.view.frame.size.width, self.view.frame.size.height - 124.0f);
-        }  completion:^(BOOL finished){
             
-        }];
+        }
+        
+    }else{
+        
+        if(self.isScrollToBottom == NO){
+            
+            scrollView.frame = CGRectMake(0, 64.0f, self.view.frame.size.width, self.view.frame.size.height - 114.0f);
+
+            //如果到了底部，就始终显示
+            [UIView animateWithDuration:0.3 animations:^{
+                self.bottomBar.frame = CGRectMake(0,self.view.frame.size.height - self.bottomBarHeight, self.view.frame.size.width, self.bottomBarHeight);
+                
+            }  completion:^(BOOL finished){
+                self.isScrollToBottom = YES;
+                
+            }];
+        }
     }
     
     [_refreshFooterView egoRefreshScrollViewDidScroll:scrollView];
@@ -773,7 +793,14 @@
     [self.HUD dismiss];
 }
 
-
+-(void)showErrorHUD{
+    
+    self.HUD.textLabel.text = @"网络连接失败，请重试一下吧~";
+    self.HUD.detailTextLabel.text = nil;
+    self.HUD.layoutChangeAnimationDuration = 0.4;
+    self.HUD.indicatorView = [[JGProgressHUDErrorIndicatorView alloc] init];
+    
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

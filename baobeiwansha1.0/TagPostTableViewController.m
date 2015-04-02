@@ -257,7 +257,6 @@
         }else{
             [post noDataAlert];
         }
-        [post dismissHUD];
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 
     }failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -266,7 +265,6 @@
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 
     }];
-    [post showHUD];
     [self.navigationController pushViewController:post animated:YES];
     
 }

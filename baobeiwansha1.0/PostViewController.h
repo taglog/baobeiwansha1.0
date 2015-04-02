@@ -24,5 +24,6 @@
 -(void)noDataAlert;
 -(void)showHUD;
 -(void)dismissHUD;
+-(void)showErrorHUD;
 
 @end

@@ -159,6 +159,7 @@
     
 
     if([dict objectForKey:@"post_taxonomy"]){
+        
         self.type = [[dict objectForKey:@"post_taxonomy"]integerValue];
         if(self.type == 1){
             self.typeLabel.text = @"绘本";
