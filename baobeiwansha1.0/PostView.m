@@ -36,6 +36,7 @@
     NSLog(@"%@",htmlPostContent);
     self.postWebView.delegate = self;
     self.postWebView.scrollView.scrollEnabled = NO;
+    self.postWebView.autoresizesSubviews = YES;
     [self.postWebView loadHTMLString:htmlPostContent baseURL:nil];
     
     [self addSubview:self.postWebView];
@@ -45,8 +46,8 @@
     
     CGFloat documentWidth = [[self.postWebView stringByEvaluatingJavaScriptFromString:@"document.getElementById('content').offsetWidth"] floatValue];
     CGFloat documentHeight = [[self.postWebView stringByEvaluatingJavaScriptFromString:@"document.getElementById(\"content\").offsetHeight;"] floatValue];
-    NSLog(@"%f",documentWidth);
-    NSLog(@"%f",documentHeight);
+    NSLog(@"documentWidth %f",documentWidth);
+    NSLog(@"documentHeight %f",documentHeight);
    
     //有20的高度差
     self.postWebView.frame = CGRectMake(0, 0, self.frame.size.width, documentHeight + 20);
