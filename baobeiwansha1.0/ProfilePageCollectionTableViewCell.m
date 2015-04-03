@@ -147,6 +147,7 @@
     self.image.layer.masksToBounds = YES;
     self.image.layer.borderWidth = 1.0f;
     self.image.layer.borderColor = [UIColor colorWithRed:222.0/255.0f green:222.0/255.0f blue:222.0/255.0f alpha:1.0f].CGColor;
+    self.image.contentMode = UIViewContentModeScaleAspectFit;
     
     self.title.frame = CGRectMake(self.image.frame.size.width + 2*paddingLeft, paddingTop - 7, self.aframe.size.width - self.image.frame.size.width - 2*paddingLeft - paddingRight - 35, 45);
     self.title.numberOfLines = 2;

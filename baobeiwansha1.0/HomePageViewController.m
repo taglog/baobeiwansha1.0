@@ -305,6 +305,9 @@
             self.responseDict = [responseObject valueForKey:@"data"];
             self.abilityDict = [self.responseDict objectForKey:@"dailyMessage"];
             self.locationArray = [self.responseDict objectForKey:@"taglist"];
+
+                NSLog(@"locationArray is null, exceptioning with %@", [self.responseDict objectForKey:@"taglist"]);
+
             self.postArray = [self.responseDict objectForKey:@"postlist"];
             NSLog(@"%@",self.responseDict);
             self.userInfo = [self.responseDict objectForKey:@"appUser"];
