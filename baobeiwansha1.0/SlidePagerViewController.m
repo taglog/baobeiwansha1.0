@@ -2,7 +2,7 @@
 //  SlidePagerViewController.m
 //  
 //
-//  Created by 刘昕 on 15/3/6.
+//  Created by 上海震渊信息技术有限公司 on 15/3/6.
 //
 //
 
