@@ -576,7 +576,6 @@
         NSString *postRouter = @"post/post_remove_slash_in_title";
         
         [post initWithRequestURL:postRouter requestParam:requestParam];
-
         
         [self.navigationController pushViewController:post animated:YES];
 

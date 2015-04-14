@@ -10,13 +10,14 @@
 @protocol PostViewDelegate <NSObject>
 
 -(void)postWebViewDidFinishLoading:(CGFloat)height;
+-(void)postWebViewBeganLoading:(CGFloat)height;
 
 @end
 @interface PostView : UIView<UIWebViewDelegate>
 
 @property (nonatomic,weak) id<PostViewDelegate> delegate;
 -(id)initWithFrame:(CGRect)frame dict:(NSDictionary *)dict;
-
+-(void)initViews;
 
 
 @end

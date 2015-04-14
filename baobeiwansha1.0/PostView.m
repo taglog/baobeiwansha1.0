@@ -19,7 +19,6 @@
     
     if(self){
         self.dict = dict;
-        [self initViews];
     }
     return self;
     
@@ -41,21 +40,29 @@
     [self.postWebView loadHTMLString:htmlPostContent baseURL:nil];
     
     [self addSubview:self.postWebView];
-    //[self.delegate postWebViewDidFinishLoading:(5000 + 20)];
+    
+    // estimate the height
+    float estimateHeight = htmlPostContent.length;
+    NSLog(@"UnderLoading: estimate height is %f", estimateHeight*1.2);
+    [self.delegate postWebViewBeganLoading:(estimateHeight*1.2)];
   
 }
 -(void)webViewDidFinishLoad:(UIWebView *)webView{
     
-    CGFloat documentWidth = [[self.postWebView stringByEvaluatingJavaScriptFromString:@"document.getElementById('content').offsetWidth"] floatValue];
+    //CGFloat documentWidth = [[self.postWebView stringByEvaluatingJavaScriptFromString:@"document.getElementById('content').offsetWidth"] floatValue];
     CGFloat documentHeight = [[self.postWebView stringByEvaluatingJavaScriptFromString:@"document.getElementById(\"content\").offsetHeight;"] floatValue];
-    NSLog(@"documentWidth %f",documentWidth);
-    NSLog(@"documentHeight %f",documentHeight);
-   
-    //有20的高度差
-    self.postWebView.frame = CGRectMake(0, 0, self.frame.size.width, documentHeight + 20);
+    //NSLog(@"documentWidth %f",documentWidth);
+    NSLog(@"DidFinishLoad documentHeight %f",documentHeight);
+    //CGSize mWebViewSize = [webView sizeThatFits:CGSizeMake(1.0f, 1.0f)];
+    //CGRect mWebViewFrame = webView.frame;
+    //mWebViewFrame.size.height = mWebViewSize.height+20;
+    //self.postWebView.frame = mWebViewFrame;
+    //NSLog(@"DidFinishLoad: height is %f", webView.frame.size.height);
+
     //加载完成后更新父view的frame
     if([self.delegate respondsToSelector:@selector(postWebViewDidFinishLoading:)]){
-        [self.delegate postWebViewDidFinishLoading:(documentHeight + 20)];
+        //self.postWebView.frame =
+        [self.delegate postWebViewDidFinishLoading:(documentHeight+20)];
     }
     
 }

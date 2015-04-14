@@ -185,11 +185,11 @@
 }
 
 
--(void)initScrollView{
+-(void)initScrollView:(CGFloat)height{
     
     if(_postScrollView == nil){
         _postScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 64.0f, self.view.frame.size.width, self.view.frame.size.height - 64.0f)];
-        _postScrollView.contentSize = CGSizeMake(self.view.frame.size.width, 1000);
+        _postScrollView.contentSize = CGSizeMake(self.view.frame.size.width, height);
         _postScrollView.delegate = self;
         [self.view addSubview:_postScrollView];
         
@@ -202,21 +202,15 @@
 //初始化textView
 -(void)initPostView{
     
-    self.postView = [[PostView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 700) dict:self.postDict];
+    self.postView = [[PostView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 3000) dict:self.postDict];
     self.postView.delegate = self;
-    
+    [self.postView initViews];
     
 }
 
-
-
-
 -(void)postWebViewDidFinishLoading:(CGFloat)height{
-    
-    [self dismissHUD];
-    
-    //初始化postScrollView
-    [self initScrollView];
+    // 更新高度 + 加入评论
+    _postScrollView.contentSize = CGSizeMake(self.view.frame.size.width, height);
     
     self.postViewHeight = height;
     
@@ -230,8 +224,17 @@
     
     [self relayoutCommentTableView];
     
+}
+
+
+-(void)postWebViewBeganLoading:(CGFloat)height{
+    [self dismissHUD];
+    
+    //初始化postScrollView
+    [self initScrollView:(CGFloat)height];
     
 }
+
 -(void)relayoutCommentTableView{
     
     CGFloat d = 40.0f;
