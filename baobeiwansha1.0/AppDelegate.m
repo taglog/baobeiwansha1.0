@@ -8,12 +8,12 @@
 
 #import "AppDelegate.h"
 #import "AFHTTPRequestOperationManager.h"
-#import <AVOSCloud/AVOSCloud.h>
 #import "PanPopNavigationController.h"
 #import "HomePageViewController.h"
 #import "CategoryPageViewController.h"
 #import "ProfilePageViewController.h"
 #import "Reachability.h"
+
 
 // umeng 渠道分析所需头文件
 //for mac
@@ -23,6 +23,7 @@
 #include <net/if_dl.h>
 //for idfa
 #import <AdSupport/AdSupport.h>
+#include <UMengAnalytics/MobClick.h>
 
 
 @interface AppDelegate ()
@@ -161,10 +162,11 @@
 
 -(void)thirdPartiesCode:(NSDictionary *)launchOptions{
 
-    //push notification setting
-    [AVOSCloud setApplicationId:@"zul2tbfbwbfhtzka27mea6ozakqg3m86v2dpk349e7hh9syv"
-                      clientKey:@"0mikvyvihrejfctvqarlhwvuet67pahni8fjvrse8sai4okj"];
-    [AVAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
+    // umeng 统计
+    [MobClick startWithAppkey:@"5487dc8ffd98c53799000ea9" reportPolicy:BATCH   channelId:@"App Store"];
+    
+    
+    
     
     // umeng 渠道分析
     NSString * appKey = @"5487dc8ffd98c53799000ea9";
@@ -245,12 +247,7 @@
 }
 
 - (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-    // 去掉了avos的代码
-    AVInstallation *currentInstallation = [AVInstallation currentInstallation];
-    NSLog(@"applicate device token is called with tocken:%@", deviceToken);
-    [currentInstallation setDeviceTokenFromData:deviceToken];
-    [currentInstallation saveInBackground];
-    
+
     // send token to our own user db
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         //TODO, update db

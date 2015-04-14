@@ -47,6 +47,9 @@
 @property (nonatomic,retain) NSArray *locationArray;
 @property (nonatomic,retain) NSArray *postArray;
 
+@property (nonatomic,retain) UIActivityIndicatorView * indicatorView;
+@property (nonatomic,retain) UILabel * indicatorLabel;
+
 @property (nonatomic,retain) AppDelegate *appDelegate;
 @property (nonatomic,assign) CGFloat navBarAlpha;
 
@@ -68,6 +71,7 @@
 -(void)viewWillAppear:(BOOL)animated{
     
     [super viewWillAppear:animated];
+    [MobClick beginLogPageView:@"HomePage"];
     if(self.isNavigationHidden == NO){
         [self setNavigationBarTransparent];
     }
@@ -89,7 +93,7 @@
 
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
-    
+    [MobClick endLogPageView:@"HomePage"];
     [self setNavigationBarColorWithAlpha:1.0f];
     
 }
@@ -135,7 +139,8 @@
     [self initNotification];
     [self initScrollView];
     [self initRefreshHeaderView];
-    [self simulatePullDownRefresh];
+    //[self simulatePullDownRefresh];
+    [self performPullDownRefresh];
 }
 
 -(void)initNotification{
@@ -176,6 +181,31 @@
         self.homeScrollView.contentSize = CGSizeMake(self.view.frame.size.width, 900);
         self.homeScrollView.canCancelContentTouches = YES;
         self.homeScrollView.delegate = self;
+        // add loading image
+        //UIImageView *loadingImage = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"atom"]];
+        //loadingImage.frame = CGRectMake(self.view.frame.size.width/2-60,self.view.frame.size.height/2-60, 120, 120);
+        //[self.homeScrollView addSubview:loadingImage];
+        if (!self.indicatorLabel) {
+            self.indicatorLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height/2-30, self.view.frame.size.width, 16)];
+            self.indicatorLabel.textColor = [UIColor grayColor];
+            self.indicatorLabel.font = [UIFont systemFontOfSize:14.0f];;
+            self.indicatorLabel.text = @"努力加载中,请稍候...";
+            self.indicatorLabel.textAlignment = NSTextAlignmentCenter;
+        }
+        [self.homeScrollView addSubview:self.indicatorLabel];
+        
+        
+        if (!self.indicatorView) {
+            self.indicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+            self.indicatorView.color = [UIColor grayColor];
+            self.indicatorView.frame = CGRectMake(self.view.frame.size.width/2-30,self.view.frame.size.height/2-90, 60, 60);
+            //self.indicatorView.hidesWhenStopped = NO;
+        }
+        
+        [self.indicatorView startAnimating];
+        [self.homeScrollView addSubview:self.indicatorView];
+        
+        
     }
     
 }
@@ -273,6 +303,7 @@
     
 }
 
+
 -(void)simulatePullDownRefresh{
     
     [self.refreshHeaderView setState:EGOOPullRefreshLoading];
@@ -285,7 +316,12 @@
     
     [self initUserInfo];
     
-
+    //TODO update, this is ugly
+    if (self.initialized) {
+        [self.indicatorView startAnimating];
+        self.indicatorLabel.text = @"加载中";
+    }
+    
     _reloading = YES;
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
@@ -344,14 +380,20 @@
         [self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:0.3f];
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         
+        self.indicatorLabel.text = @"";
+        [self.indicatorView stopAnimating];
+        
     }
           failure:^(AFHTTPRequestOperation *operation, NSError *error) {
               
               NSLog(@"%@",error);
-              [self showHUD:@"没有网络连接哦~"];
-              [self dismissHUD];
+              //[self showHUD:@"没有网络连接哦~"];
+              //[self dismissHUD];
               [self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:0.3f];
               [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+              
+              self.indicatorLabel.text = @"网络连接出错了,下拉刷新一下吧~";
+              [self.indicatorView stopAnimating];
           }];
     
     

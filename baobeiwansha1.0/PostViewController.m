@@ -8,7 +8,6 @@
 
 #import "PostViewController.h"
 #import "CommentTableViewCell.h"
-#import "DTTiledLayerWithoutFade.h"
 #import "AFNetworking.h"
 #import "AppDelegate.h"
 #import "JGProgressHUD.h"
@@ -95,7 +94,7 @@
     [self initLeftBarButton];
     self.collectButtonEnabled = YES;
     //阻止自动调整滚轮位置，否则导航栏下会出现一段空间
-    self.automaticallyAdjustsScrollViewInsets = NO;
+    //self.automaticallyAdjustsScrollViewInsets = NO;
 }
 
 -(void)initLeftBarButton{
@@ -113,9 +112,12 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    [MobClick beginLogPageView:@"PostView"];
     
 }
 -(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    [MobClick endLogPageView:@"PostView"];
     [PostViewTimeAnalytics endLogPageView:self.postID];
     
 }
@@ -132,6 +134,7 @@
     [PostViewTimeAnalytics beginLogPageView:self.postID];
     
     [self initPostView];
+
 }
 
 
@@ -157,6 +160,10 @@
     
     
 }
+
+
+
+
 -(void)postWebViewDidFinishLoading:(CGFloat)height{
     
     [self dismissHUD];

@@ -10,7 +10,6 @@
 #import "TabView.h"
 #import "JGProgressHUD.h"
 #import "JGProgressHUDSuccessIndicatorView.h"
-#import "AFNetworking.h"
 #import "AppDelegate.h"
 #import "TagPageViewController.h"
 
@@ -34,6 +33,9 @@
 
 @property (nonatomic,assign) BOOL isFirstLoad;
 @property (nonatomic,assign) NSUInteger activeTabIndex;
+
+// 页面是否开始显示, 用于统计数据的判断
+@property (nonatomic,assign) BOOL isShowing;
 
 //记录上一次和下一次的月份
 @property (nonatomic,assign) NSInteger beforeMonth;
@@ -64,18 +66,38 @@
     
     self = [super init];
     self.isFirstLoad = YES;
+    self.isShowing = NO;
     self.view.backgroundColor = [UIColor whiteColor];
     self.isUserInfoChanged = NO;
     return self;
 }
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    [MobClick beginLogPageView:@"CategoryPage"];
+    // 页面打开默认开始active第一个页面
+    self.isShowing = YES;
+    NSLog(@"type1 begin");
+    [MobClick beginLogPageView:@"CategoryPageType1"];
+    
     if(self.isUserInfoChanged == YES){
         [self updateUserInfo];
         self.isUserInfoChanged = NO;
     }
     
 }
+
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    [MobClick endLogPageView:@"CategoryPage"];
+    self.isShowing = NO;
+    //NSLog(@"all type end");
+    [MobClick endLogPageView:@"CategoryPageType1"];
+    [MobClick endLogPageView:@"CategoryPageType2"];
+    [MobClick endLogPageView:@"CategoryPageType3"];
+
+}
+
+
 -(void)viewDidLoad{
     [super viewDidLoad];
 
@@ -266,12 +288,12 @@
 
 -(void)initTabViews{
     
-    self.tabView0 = [[TabView alloc]initWithFrame:CGRectMake(0, 0,self.view.frame.size.width/3, 50.0)];
-    [self.tabView0 setNormalIcon:[UIImage imageNamed:@"titlebar_book_gray"] highlightIcon:[UIImage imageNamed:@"titlebar_book"] tabTitle:@"绘本"];
+    self.tabView2 = [[TabView alloc]initWithFrame:CGRectMake(0, 0,self.view.frame.size.width/3, 50.0)];
+    [self.tabView2 setNormalIcon:[UIImage imageNamed:@"titlebar_book_gray"] highlightIcon:[UIImage imageNamed:@"titlebar_book"] tabTitle:@"绘本"];
     self.tabView1 = [[TabView alloc]initWithFrame:CGRectMake(0, 0,self.view.frame.size.width/3, 50.0)];
     [self.tabView1 setNormalIcon:[UIImage imageNamed:@"titlebar_toy_gray"] highlightIcon:[UIImage imageNamed:@"titlebar_toy"] tabTitle:@"玩具"];
-    self.tabView2 = [[TabView alloc]initWithFrame:CGRectMake(0, 0,self.view.frame.size.width/3, 50.0)];
-    [self.tabView2 setNormalIcon:[UIImage imageNamed:@"titlebar_game_gray"] highlightIcon:[UIImage imageNamed:@"titlebar_game"] tabTitle:@"游戏"];
+    self.tabView0 = [[TabView alloc]initWithFrame:CGRectMake(0, 0,self.view.frame.size.width/3, 50.0)];
+    [self.tabView0 setNormalIcon:[UIImage imageNamed:@"titlebar_game_gray"] highlightIcon:[UIImage imageNamed:@"titlebar_game"] tabTitle:@"游戏"];
     
 }
 
@@ -379,12 +401,20 @@
     switch (index) {
         case 0:
             [self.tabView0 setTabToHighlight];
+            if (self.isShowing) {
+                NSLog(@"type1 begin");
+                [MobClick beginLogPageView:@"CategoryPageType1"];
+            }
             break;
         case 1:
             [self.tabView1 setTabToHighlight];
+            NSLog(@"type2 begin");
+            [MobClick beginLogPageView:@"CategoryPageType2"];
             break;
         case 2:
             [self.tabView2 setTabToHighlight];
+            NSLog(@"type3 begin");
+            [MobClick beginLogPageView:@"CategoryPageType3"];
             break;
         default:
             break;
@@ -402,6 +432,10 @@
     [self.tabView0 setTabToNormal];
     [self.tabView1 setTabToNormal];
     [self.tabView2 setTabToNormal];
+    //NSLog(@"all type end");
+    [MobClick endLogPageView:@"CategoryPageType1"];
+    [MobClick endLogPageView:@"CategoryPageType2"];
+    [MobClick endLogPageView:@"CategoryPageType3"];
     
 }
 //重置状态为未刷新

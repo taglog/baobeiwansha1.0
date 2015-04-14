@@ -48,7 +48,8 @@
     
 }
 - (void)viewWillAppear:(BOOL)animated{
-    
+    [super viewWillAppear:animated];
+    [MobClick beginLogPageView:@"HomePageAdvice"];
     self.navigationController.navigationBarHidden = NO;
     self.navigationController.navigationBar.barTintColor = [UIColor whiteColor];
     
@@ -99,6 +100,7 @@
 
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
+    [MobClick endLogPageView:@"HomePageAdvice"];
     
 }
 
@@ -238,16 +240,16 @@
         }else{
             [post noDataAlert];
         }
-        [post dismissHUD];
+        //[post dismissHUD];
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         
     }failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"%@",error);
-        [post dismissHUD];
+        //[post dismissHUD];
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         
     }];
-    [post showHUD];
+    //[post showHUD];
     [self.navigationController pushViewController:post animated:YES];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     

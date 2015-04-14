@@ -67,6 +67,16 @@
     
 }
 
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [MobClick beginLogPageView:@"TagPage"];
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    [MobClick endLogPageView:@"TagPage"];
+}
+
 -(void)defaultSettings{
     
     self.view.backgroundColor = [UIColor whiteColor];

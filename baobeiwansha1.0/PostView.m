@@ -40,6 +40,7 @@
     [self.postWebView loadHTMLString:htmlPostContent baseURL:nil];
     
     [self addSubview:self.postWebView];
+    //[self.delegate postWebViewDidFinishLoading:(5000 + 20)];
   
 }
 -(void)webViewDidFinishLoad:(UIWebView *)webView{

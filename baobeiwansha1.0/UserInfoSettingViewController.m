@@ -65,13 +65,20 @@
 }
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    
+    [MobClick beginLogPageView:@"UserInfoSettingView"];
     self.navigationController.navigationBar.barTintColor = [UIColor whiteColor];
     NSDictionary * dict=[NSDictionary dictionaryWithObject:[UIColor colorWithRed:255.0/255.0f green:119/255.0f blue:119/255.0f alpha:1.0f] forKey:NSForegroundColorAttributeName];
     
     self.navigationController.navigationBar.titleTextAttributes = dict;
     
 }
+
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    [MobClick endLogPageView:@"UserInfoSettingView"];
+}
+
+
 -(void)viewDidLoad{
     [super viewDidLoad];
     

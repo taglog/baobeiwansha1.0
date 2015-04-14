@@ -61,7 +61,7 @@
             
             //箭头
             CALayer *layer = [CALayer layer];
-            layer.frame = CGRectMake(25.0f, frame.size.height - 65.0f, 20.0f, 40.0f);
+            layer.frame = CGRectMake(25.0f, frame.size.height - 45.0f, 20.0f, 40.0f);
             layer.contentsGravity = kCAGravityResizeAspect;
             layer.contents = (id)[UIImage imageNamed:@"grayArrow.png"].CGImage;
             
@@ -101,7 +101,7 @@
         //开始加载的指示
         UIActivityIndicatorView *view = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
         if(_position == EGORefreshHeader){
-            view.frame = CGRectMake(30.0f, frame.size.height - 38.0f, 20.0f, 20.0f);
+            view.frame = CGRectMake(30.0f, frame.size.height - 40.0f, 20.0f, 20.0f);
         }
         else{
             view.frame = CGRectMake(frame.size.width/2.0f - 10.0f, frame.size.height - 30.0f, 20.0f, 20.0f);

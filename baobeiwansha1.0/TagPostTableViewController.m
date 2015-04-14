@@ -66,7 +66,8 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated{
-    
+    [super viewWillAppear:animated];
+    [MobClick beginLogPageView:@"TagPostTableView"];
     self.navigationController.navigationBarHidden = NO;
     self.navigationController.navigationBar.barTintColor = [UIColor whiteColor];
     
@@ -112,7 +113,7 @@
 
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
-    
+    [MobClick endLogPageView:@"TagPostTableView"];
 }
 
 -(void)initViews{

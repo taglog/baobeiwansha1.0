@@ -55,11 +55,19 @@
 }
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    [MobClick beginLogPageView:@"ProfilePage"];
     if(self.isUserInfoChanged == YES){
         [self simulatePullDownRefresh];
         self.isUserInfoChanged = NO;
     }
 }
+
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    [MobClick endLogPageView:@"ProfilePage"];
+}
+
+
 -(void)viewDidLoad{
     [super viewDidLoad];
     
