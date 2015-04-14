@@ -226,30 +226,9 @@
     NSDictionary *requestParam = [NSDictionary dictionaryWithObjectsAndKeys:[self.adviceArray[indexPath.row] objectForKey:@"ID"],@"postID",self.appDelegate.generatedUserID,@"userIdStr",nil];
     
     NSString *postRouter = @"/post/post";
-    NSString *postRequestUrl = [self.appDelegate.rootURL stringByAppendingString:postRouter];
     
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    manager.requestSerializer.timeoutInterval = 20;
-    [manager POST:postRequestUrl parameters:requestParam success:^(AFHTTPRequestOperation *operation,id responseObject) {
-        
-        NSDictionary *responseDict = [responseObject valueForKey:@"data"];
-        
-        if(responseDict != (id)[NSNull null]){
-            [post initViewWithDict:responseDict];
-            post.indexPath = indexPath;
-        }else{
-            [post noDataAlert];
-        }
-        //[post dismissHUD];
-        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-        
-    }failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"%@",error);
-        //[post dismissHUD];
-        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-        
-    }];
-    //[post showHUD];
+    [post initWithRequestURL:postRouter requestParam:requestParam];
+    
     [self.navigationController pushViewController:post animated:YES];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     

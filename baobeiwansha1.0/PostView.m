@@ -25,6 +25,7 @@
     
 }
 
+
 -(void)initViews{
     
     self.postWebView = [[UIWebView alloc]initWithFrame:self.frame];

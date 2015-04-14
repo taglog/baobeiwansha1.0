@@ -20,10 +20,12 @@
 
 @property (nonatomic,retain) NSIndexPath *indexPath;
 @property (nonatomic,retain) id<PostViewControllerDelegate>delegate;
--(void)initViewWithDict:(NSDictionary *)dict;
--(void)noDataAlert;
--(void)showHUD;
--(void)dismissHUD;
--(void)showErrorHUD;
+//-(void)initViewWithDict:(NSDictionary *)dict;
+//-(void)noDataAlert;
+//-(void)showHUD;
+//-(void)dismissHUD;
+//-(void)showErrorHUD;
+
+-(void)initWithRequestURL:(NSString *) url requestParam:(NSDictionary *) requestParam;
 
 @end

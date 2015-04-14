@@ -17,4 +17,6 @@
 @property (nonatomic,weak) id<PostViewDelegate> delegate;
 -(id)initWithFrame:(CGRect)frame dict:(NSDictionary *)dict;
 
+
+
 @end

@@ -123,6 +123,53 @@
 }
 
 //初始化Controlller的View
+
+
+
+-(void)initWithRequestURL:(NSString *) url requestParam:(NSDictionary *) requestParam {
+    
+    if (!self.appDelegate) {
+        self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    }
+
+    NSString *postRequestUrl = [self.appDelegate.rootURL stringByAppendingString:url];
+
+    
+    NSString *urlString = [postRequestUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSLog(@"url string is %@ and %@", url, postRequestUrl);
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    manager.requestSerializer.timeoutInterval = 20;
+    [manager POST:urlString parameters:requestParam success:^(AFHTTPRequestOperation *operation,id responseObject) {
+        
+        NSDictionary *responseDict = [responseObject valueForKey:@"data"];
+        if(responseDict != (id)[NSNull null]){
+            
+            [self initViewWithDict:responseDict];
+            
+        }else{
+            
+            [self noDataAlert];
+            
+        }
+        
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+    }
+          failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+              NSLog(@"%@",error);
+              [self showErrorHUD];
+              [self dismissHUD];
+              [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+          }];
+
+
+}
+
+
+
+
+
 -(void)initViewWithDict:(NSDictionary *)dict{
     
     self.p = 2;
@@ -311,8 +358,10 @@
         [self.HUD showInView:self.view];
         
         //获取路径
+        if (!self.appDelegate) {
+            self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+        }
         
-        self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
         
         NSDictionary *collectParam =[NSDictionary dictionaryWithObjectsAndKeys:self.appDelegate.generatedUserID,@"userIdStr",[NSNumber numberWithInteger:self.postID],@"postID", nil];
         

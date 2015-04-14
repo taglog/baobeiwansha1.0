@@ -179,6 +179,53 @@
     
 }
 
+
+
+-(void)initWithRequestURL:(NSString *) url requestParam:(NSDictionary *) requestParam {
+    
+    if (!self.appDelegate) {
+        self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    }
+    
+    NSString *postRequestUrl = [self.appDelegate.rootURL stringByAppendingString:url];
+    
+    
+    NSString *urlString = [postRequestUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSLog(@"url string is %@ and %@", url, postRequestUrl);
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    manager.requestSerializer.timeoutInterval = 20;
+    [manager POST:urlString parameters:requestParam success:^(AFHTTPRequestOperation *operation,id responseObject) {
+        
+        NSDictionary *responseDict = [responseObject valueForKey:@"data"];
+        if(responseDict != (id)[NSNull null]){
+            
+            [self initViewWithDict:responseDict];
+            
+        }else{
+            
+            [self noDataAlert];
+            
+        }
+        
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+    }
+          failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+              NSLog(@"%@",error);
+              [self showErrorHUD];
+              [self dismissHUD];
+              [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+          }];
+    
+    
+}
+
+
+
+
+
+
 //每加载好一张图片，文章页面大小会变化
 -(void)relayoutPostTextView:(CGSize)textSize{
     
@@ -291,5 +338,16 @@
 -(void)dismissHUD{
     [self.HUD dismiss];
 }
+
+-(void)showErrorHUD{
+    
+    self.HUD.textLabel.text = @"网络连接失败，请重试一下吧~";
+    self.HUD.detailTextLabel.text = nil;
+    self.HUD.layoutChangeAnimationDuration = 0.4;
+    self.HUD.indicatorView = [[JGProgressHUDErrorIndicatorView alloc] init];
+    
+}
+
+
      
 @end

@@ -11,10 +11,12 @@
 #import "AFNetworking.h"
 
 @interface HomePagePostViewController : UIViewController<PostViewDelegate>
--(void)initViewWithDict:(NSDictionary *)dict;
--(void)noDataAlert;
--(void)showHUD;
--(void)dismissHUD;
+//-(void)initViewWithDict:(NSDictionary *)dict;
+//-(void)noDataAlert;
+//-(void)showHUD;
+//-(void)dismissHUD;
+
+-(void)initWithRequestURL:(NSString *) url requestParam:(NSDictionary *) requestParam;
 
 @property (nonatomic) long currentPostID;
 @property (nonatomic) long originalDaysIndex;
