@@ -15,7 +15,7 @@
 @interface CommentCreateViewController : UIViewController<UITextViewDelegate,UITextFieldDelegate>
 
 -(id)initWithID:(NSInteger)postID;
--(void)addUserName:(NSArray *)userName;
+-(void)addUserName:(NSString *)userName;
 
 @property(nonatomic,retain)id<CommentCreateDelegate>delegate;
 

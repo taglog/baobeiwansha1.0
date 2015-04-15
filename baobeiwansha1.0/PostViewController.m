@@ -159,7 +159,7 @@
           failure:^(AFHTTPRequestOperation *operation, NSError *error) {
               NSLog(@"%@",error);
               [self showErrorHUD];
-              [self dismissHUD];
+              //[self dismissHUD];
               [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
           }];
 
@@ -208,6 +208,16 @@
     
 }
 
+
+-(void)postWebViewBeganLoading:(CGFloat)height{
+    [self dismissHUD];
+    
+    //初始化postScrollView
+    //self.postView.frame = CGRectMake(0, 0, self.view.frame.size.width, height);
+    [self initScrollView:(CGFloat)height];
+    
+}
+
 -(void)postWebViewDidFinishLoading:(CGFloat)height{
     // 更新高度 + 加入评论
     _postScrollView.contentSize = CGSizeMake(self.view.frame.size.width, height);
@@ -220,32 +230,25 @@
     //初始化底部的bar
     [self initBottomBar];
     
-    self.postView.frame = CGRectMake(0, 0, self.view.frame.size.width, height);
-    
     [self relayoutCommentTableView];
     
 }
 
 
--(void)postWebViewBeganLoading:(CGFloat)height{
-    [self dismissHUD];
-    
-    //初始化postScrollView
-    [self initScrollView:(CGFloat)height];
-    
-}
+
 
 -(void)relayoutCommentTableView{
     
-    CGFloat d = 40.0f;
+    CGFloat divHeigh = 40.0f;
+    CGFloat refreshBarHeight = 49.5f;
     
     CGFloat commentTableHeight = [self getCommentTableViewHeight:self.commentTableViewCell];
     
-    [_postScrollView setContentSize:CGSizeMake(self.view.frame.size.width, self.postViewHeight + commentTableHeight)];
+    [_postScrollView setContentSize:CGSizeMake(self.view.frame.size.width, self.postViewHeight + commentTableHeight + refreshBarHeight + divHeigh)];
     
-    [_commentTableView setFrame:CGRectMake(0, self.postViewHeight + d, self.view.frame.size.width, commentTableHeight)];
+    [_commentTableView setFrame:CGRectMake(0, self.postViewHeight + divHeigh, self.view.frame.size.width, commentTableHeight)];
     
-    [_refreshFooterView setFrame:CGRectMake(0, _postScrollView.contentSize.height + d, self.view.frame.size.width, 100.0f)];
+    [_refreshFooterView setFrame:CGRectMake(0, _postScrollView.contentSize.height - refreshBarHeight, self.view.frame.size.width, 50.0f)];
     
 }
 -(void)initBottomBar{
@@ -548,7 +551,8 @@
     
     _refreshFooterView = [[EGORefreshView alloc] initWithScrollView:_postScrollView position:EGORefreshFooter];
     _refreshFooterView.delegate = self;
-    _refreshFooterView.frame = CGRectMake(0, _postScrollView.contentSize.height + 30, self.view.frame.size.width, 100.0f);
+    // ugly 此处会在comment加载后再次调用
+    _refreshFooterView.frame = CGRectMake(0, _postScrollView.contentSize.height-50, self.view.frame.size.width, 50.0f);
     [_postScrollView addSubview:_refreshFooterView];
     
 }
@@ -608,6 +612,7 @@
         [self.commentTableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:self.commentTapIndexPath]
                                      withRowAnimation:UITableViewRowAnimationAutomatic];
         
+        [self relayoutCommentTableView];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"commentDelete" object:nil];
         
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
@@ -703,7 +708,7 @@
 - (void)doneLoadingTableViewData{
     
     _reloading = NO;
-    [_refreshFooterView egoRefreshScrollViewDataSourceDidFinishedLoading:_commentTableView];
+    [_refreshFooterView egoRefreshScrollViewDataSourceDidFinishedLoading:self.postScrollView];
     
 }
 
@@ -752,7 +757,7 @@
         
         if(self.isScrollToBottom == NO){
             
-            scrollView.frame = CGRectMake(0, 64.0f, self.view.frame.size.width, self.view.frame.size.height - 114.0f);
+            //scrollView.frame = CGRectMake(0, 64.0f, self.view.frame.size.width, self.view.frame.size.height - 114.0f);
 
             //如果到了底部，就始终显示
             [UIView animateWithDuration:0.3 animations:^{
@@ -782,6 +787,7 @@
     
     [self reloadTableViewDataSource];
     
+    
 }
 
 - (BOOL)egoRefreshTableHeaderDataSourceIsLoading:(EGORefreshView *)view{
@@ -803,23 +809,38 @@
     CommentCreateViewController *commentCreateView = [[CommentCreateViewController alloc]initWithID:self.postID];
     commentCreateView.delegate =self;
     
-    NSString *commentRouter = @"comment/getName";
-    NSString *commentRequestUrl = [self.appDelegate.rootURL stringByAppendingString:commentRouter];
-    NSDictionary *postParam = [NSDictionary dictionaryWithObjectsAndKeys:self.appDelegate.generatedUserID,@"userIdStr", nil];
+//    NSString *commentRouter = @"comment/getName";
+//    NSString *commentRequestUrl = [self.appDelegate.rootURL stringByAppendingString:commentRouter];
+//    NSDictionary *postParam = [NSDictionary dictionaryWithObjectsAndKeys:self.appDelegate.generatedUserID,@"userIdStr", nil];
+//    
+//    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+//    [manager POST:commentRequestUrl parameters:postParam success:^(AFHTTPRequestOperation *operation,id responseObject) {
+//        NSLog(@"%@",responseObject);
+//        NSArray *responseArray = [responseObject valueForKey:@"data"];
+//        if(responseArray != (id)[NSNull null]&&responseArray != nil){
+//            [commentCreateView addUserName:responseArray];
+//        }
+//        app.networkActivityIndicatorVisible=!app.networkActivityIndicatorVisible;
+//    }failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+//        NSLog(@"%@",error);
+//        app.networkActivityIndicatorVisible=!app.networkActivityIndicatorVisible;
+//    }];
     
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager POST:commentRequestUrl parameters:postParam success:^(AFHTTPRequestOperation *operation,id responseObject) {
-        NSLog(@"%@",responseObject);
-        NSArray *responseArray = [responseObject valueForKey:@"data"];
-        if(responseArray != (id)[NSNull null]&&responseArray != nil){
-            [commentCreateView addUserName:responseArray];
-        }
-        app.networkActivityIndicatorVisible=!app.networkActivityIndicatorVisible;
-    }failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"%@",error);
-        app.networkActivityIndicatorVisible=!app.networkActivityIndicatorVisible;
-    }];
+    // 从本地获得用户名
+    NSString *filePath = [AppDelegate dataFilePath];
+    NSString *nickname = @"";
+    if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
+        NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
+        nickname = [dict valueForKey:@"nickName"];
+    }else{
+        NSLog(@"ERROR: create comment, but cannot find the user nickname!");
+    }
+    
+    [commentCreateView addUserName:nickname];
+    
     [self.navigationController pushViewController:commentCreateView animated:YES];
+    
+    
 }
 
 
@@ -837,6 +858,8 @@
     NSArray *commentAddRow = [NSArray arrayWithObject:[NSIndexPath indexPathForRow:0 inSection:0]];
     [_commentTableView insertRowsAtIndexPaths:commentAddRow withRowAnimation:UITableViewRowAnimationNone];
     [_commentTableView endUpdates];
+    //NSLog(@"comment create success!");
+    [self relayoutCommentTableView];
     [_postScrollView setContentOffset:CGPointMake(0, self.postViewHeight) animated:YES];
     
 }
@@ -844,6 +867,7 @@
 -(void)showHUD{
     //显示hud层
     self.HUD = [JGProgressHUD progressHUDWithStyle:JGProgressHUDStyleDark];
+    //self.HUD.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.2f];
     self.HUD.textLabel.text = @"正在加载";
     [self.HUD showInView:self.view];
 }
@@ -856,8 +880,9 @@
     
     self.HUD.textLabel.text = @"网络连接失败，请重试一下吧~";
     self.HUD.detailTextLabel.text = nil;
-    self.HUD.layoutChangeAnimationDuration = 0.4;
+    //self.HUD.layoutChangeAnimationDuration = 0.5;
     self.HUD.indicatorView = [[JGProgressHUDErrorIndicatorView alloc] init];
+    [self.HUD dismissAfterDelay:3.0];
     
 }
 - (void)didReceiveMemoryWarning {

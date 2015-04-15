@@ -23,6 +23,7 @@
 
 @property (nonatomic,retain)AppDelegate *appDelegate;
 @property (nonatomic,strong)JGProgressHUD *HUD;
+@property (nonatomic,retain)NSString *defaultUserName;
 @end
 
 @implementation CommentCreateViewController
@@ -57,8 +58,14 @@
     if(_commentTextField == nil){
         _commentTextField = [[UITextView alloc]initWithFrame:CGRectMake(15.0f, 15.0f, self.view.frame.size.width - 30.0f, 40.0f)];
         _commentTextField.tag = 1;
-        _commentTextField.text = @"请输入您评论的昵称";
-        _commentTextField.textColor = [UIColor colorWithRed:192.0/255.0f green:192.0/255.0f blue:192.0/255.0f alpha:1.0f];
+        if (self.defaultUserName) {
+            _commentTextField.text = self.defaultUserName;
+            _commentTextField.textColor = [UIColor blackColor];
+        } else {
+            _commentTextField.text = @"请输入您评论的昵称";
+            _commentTextField.textColor = [UIColor colorWithRed:192.0/255.0f green:192.0/255.0f blue:192.0/255.0f alpha:1.0f];
+        }
+        
         _commentTextField.delegate = self;
         _commentTextField.backgroundColor = [UIColor whiteColor];
         _commentTextField.scrollEnabled = NO;
@@ -66,7 +73,7 @@
         _commentTextField.returnKeyType = UIReturnKeyDefault;
         
         _commentTextField.keyboardType = UIKeyboardTypeDefault;
-        _commentTextField.font = [UIFont systemFontOfSize:14.0f];
+        _commentTextField.font = [UIFont systemFontOfSize:18.0f];
         //_commentTextField.autoresizingMask = UIViewAutoresizingFlexibleHeight;
         _commentTextField.layer.borderWidth = 0.5f;
         _commentTextField.layer.borderColor = [[UIColor colorWithRed:204.0f/255.0f green:204.0f/255.0f blue:204.0f/255.0f alpha:1.0f]CGColor];
@@ -82,7 +89,7 @@
         _commentTextView.returnKeyType = UIReturnKeyDefault;
         
         _commentTextView.keyboardType = UIKeyboardTypeDefault;
-        _commentTextView.font = [UIFont systemFontOfSize:14.0f];
+        _commentTextView.font = [UIFont systemFontOfSize:18.0f];
         
         _commentTextView.text = @"请在此输入您的评论";
         
@@ -100,6 +107,7 @@
     
     [self.view addSubview:_commentTextField];
     [self.view addSubview:_commentTextView];
+    
     
     self.edgesForExtendedLayout = UIRectEdgeNone;
 }
@@ -180,9 +188,10 @@
         [manager POST:commentCreateRequestUrl  parameters:self.commentPostParams success:^(AFHTTPRequestOperation *operation,id responseObject) {
             NSInteger status = [[responseObject valueForKey:@"status"]integerValue];
             if(status == 1){
-                
+                NSLog(@"comment commit response obj is %@", responseObject);
                 NSDictionary *commentToPostViewController = [NSDictionary dictionaryWithObjectsAndKeys:userNickName,@"comment_author",text,@"comment_content",[responseObject valueForKey:@"comment_date"],@"comment_date",[responseObject valueForKey:@"comment_id"],@"comment_ID",[NSNumber numberWithInteger:1],@"canDeleteComment", nil];
                 //输入完成，应该跳回到上一页，同时把上一页的tableView刷新
+                NSLog(@"comment dict is %@", commentToPostViewController);
                 [self.delegate commentCreateSuccess:commentToPostViewController];
                 [self.HUD dismiss];
                 
@@ -215,19 +224,9 @@
     
 }
 
--(void)addUserName:(NSArray *)userName{
-    
-    if([_commentTextField.text isEqualToString:@""] || [_commentTextField.text isEqualToString:@"请输入您评论的昵称"]){
-        
-        if([userName valueForKey:@"userNickName"] !=(id)[NSNull null]){
-            NSString *userNickName = [userName valueForKey:@"userNickName"];
-            //如果用户存得宝宝昵称不为空字符，就读出来显示
-            if(![[userName valueForKey:@"userNickName"]isEqualToString:@""]&&![[userName valueForKey:@"userNickName"]isEqualToString:@" "]){
-                _commentTextField.text = userNickName;
-                _commentTextField.textColor = [UIColor blackColor];
-            }
-        }
-           }
+-(void)addUserName:(NSString *)userName{
+    //NSLog(@"comment user name is %@", userName);
+    self.defaultUserName = userName;
     
 }
 - (void)didReceiveMemoryWarning {

@@ -27,7 +27,9 @@
 
 -(void)initViews{
     
-    self.postWebView = [[UIWebView alloc]initWithFrame:self.frame];
+    //self.postWebView = [[UIWebView alloc]initWithFrame:self.frame];
+    self.postWebView = [[UIWebView alloc]init];
+    self.postWebView.dataDetectorTypes = UIDataDetectorTypeNone;
     
     NSString *postTitle = [self.dict valueForKey:@"post_title"];
     NSString *postContent = [self.dict valueForKey:@"post_content"];
@@ -42,9 +44,10 @@
     [self addSubview:self.postWebView];
     
     // estimate the height
-    float estimateHeight = htmlPostContent.length;
-    NSLog(@"UnderLoading: estimate height is %f", estimateHeight*1.2);
-    [self.delegate postWebViewBeganLoading:(estimateHeight*1.2)];
+    float estimateHeight = htmlPostContent.length*1.2;
+    NSLog(@"UnderLoading: estimate height is %f", estimateHeight);
+    self.postWebView.frame = CGRectMake(0, 0, self.frame.size.width, estimateHeight);
+    [self.delegate postWebViewBeganLoading:(estimateHeight)];
   
 }
 -(void)webViewDidFinishLoad:(UIWebView *)webView{
@@ -61,7 +64,7 @@
 
     //加载完成后更新父view的frame
     if([self.delegate respondsToSelector:@selector(postWebViewDidFinishLoading:)]){
-        //self.postWebView.frame =
+        self.postWebView.frame = CGRectMake(0, 0, self.frame.size.width, documentHeight+20);
         [self.delegate postWebViewDidFinishLoading:(documentHeight+20)];
     }
     

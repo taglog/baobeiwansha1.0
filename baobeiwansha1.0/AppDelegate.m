@@ -14,6 +14,9 @@
 #import "ProfilePageViewController.h"
 #import "Reachability.h"
 
+#import <AVOSCloud/AVOSCloud.h>
+
+
 
 // umeng 渠道分析所需头文件
 //for mac
@@ -121,7 +124,7 @@
 
 -(void)globalSettings{
     
-    self.rootURL = @"http://blog.yhb360.com/baobaowansha1.1/";
+    self.rootURL = @"http://blogtest.yhb360.com/baobaowansha1.1/";
 
 }
 
@@ -161,6 +164,14 @@
 }
 
 -(void)thirdPartiesCode:(NSDictionary *)launchOptions{
+    
+    
+    // leancloud 统计
+    //push notification setting
+    [AVOSCloud setApplicationId:@"zul2tbfbwbfhtzka27mea6ozakqg3m86v2dpk349e7hh9syv"
+                      clientKey:@"0mikvyvihrejfctvqarlhwvuet67pahni8fjvrse8sai4okj"];
+    [AVAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
+
 
     // umeng 统计
     [MobClick startWithAppkey:@"5487dc8ffd98c53799000ea9" reportPolicy:BATCH   channelId:@"App Store"];
@@ -247,6 +258,12 @@
 }
 
 - (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    // avos的代码
+    AVInstallation *currentInstallation = [AVInstallation currentInstallation];
+    NSLog(@"applicate device token is called with tocken:%@", deviceToken);
+    [currentInstallation setDeviceTokenFromData:deviceToken];
+    [currentInstallation saveInBackground];
+
 
     // send token to our own user db
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{

@@ -40,6 +40,7 @@
     self.navigationItem.title = @"宝贝成长";
     self.pressCount = 0;
     [self defaultSettings];
+    [self showHUD];
     self.automaticallyAdjustsScrollViewInsets = NO;
 }
 
@@ -93,12 +94,19 @@
     
     self.postView = [[PostView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) dict:self.postDict];
     self.postView.delegate = self;
+    [self.postView initViews];
     [self.scrollView addSubview:self.postView];
 
 }
 
+
+-(void)postWebViewBeganLoading:(CGFloat)height{
+    //NSLog(@"postWebViewBeganLoading");
+}
+
 -(void)postWebViewDidFinishLoading:(CGFloat)height{
     [self dismissHUD];
+    //NSLog(@"postWebViewDidFinishLoading");
     self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width,height);
     
 }
@@ -198,6 +206,7 @@
     [manager POST:urlString parameters:requestParam success:^(AFHTTPRequestOperation *operation,id responseObject) {
         
         NSDictionary *responseDict = [responseObject valueForKey:@"data"];
+        NSLog(@"return data is %@", responseDict);
         if(responseDict != (id)[NSNull null]){
             
             [self initViewWithDict:responseDict];
@@ -207,14 +216,14 @@
             [self noDataAlert];
             
         }
-        
+        [self dismissHUD];
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         
     }
           failure:^(AFHTTPRequestOperation *operation, NSError *error) {
               NSLog(@"%@",error);
               [self showErrorHUD];
-              [self dismissHUD];
+              //[self dismissHUD];
               [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
           }];
     
@@ -343,8 +352,9 @@
     
     self.HUD.textLabel.text = @"网络连接失败，请重试一下吧~";
     self.HUD.detailTextLabel.text = nil;
-    self.HUD.layoutChangeAnimationDuration = 0.4;
+    //self.HUD.layoutChangeAnimationDuration = 0.4;
     self.HUD.indicatorView = [[JGProgressHUDErrorIndicatorView alloc] init];
+    [self.HUD dismissAfterDelay:3.0];
     
 }
 
