@@ -26,7 +26,6 @@
 #include <net/if_dl.h>
 //for idfa
 #import <AdSupport/AdSupport.h>
-#include <UMengAnalytics/MobClick.h>
 
 
 @interface AppDelegate ()
@@ -124,7 +123,8 @@
 
 -(void)globalSettings{
     
-    self.rootURL = @"http://blogtest.yhb360.com/baobaowansha1.1/";
+    //self.rootURL = @"http://blogtest.yhb360.com/baobaowansha1.1/";
+    self.rootURL = @"http://blog.yhb360.com/baobaowansha1.1/";
 
 }
 

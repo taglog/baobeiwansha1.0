@@ -94,7 +94,7 @@
     [self initLeftBarButton];
     self.collectButtonEnabled = YES;
     //阻止自动调整滚轮位置，否则导航栏下会出现一段空间
-    //self.automaticallyAdjustsScrollViewInsets = NO;
+    self.automaticallyAdjustsScrollViewInsets = NO;
 }
 
 -(void)initLeftBarButton{
