@@ -12,10 +12,12 @@
 
 @interface HomePageAdviceController : UIViewController <UITableViewDataSource,UITableViewDelegate,EGORefreshViewDelegate>
 
-@property (nonatomic,strong)NSDictionary *requestURL;
-@property (nonatomic,retain) NSString *tag;
+//@property (nonatomic,strong)NSDictionary *requestURL;
+//@property (nonatomic,retain) NSString *tag;
 
 -(id)initWithURL:(NSDictionary *)dict;
 -(void)simulatePullDownRefresh;
+
+@property (nonatomic,retain) NSMutableArray *adviceArray;
 
 @end

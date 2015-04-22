@@ -11,6 +11,6 @@
 @interface ProfilePageNoticeTableViewCell : UITableViewCell
 
 -(void)setDict:(NSDictionary *)dict frame:(CGRect)frame;
-;
+-(NSInteger)getPostID;
 
 @end

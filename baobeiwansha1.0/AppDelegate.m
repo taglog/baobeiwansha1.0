@@ -41,6 +41,9 @@
 @property (nonatomic,assign) NSInteger reachability;
 @property (nonatomic,retain) UILabel *reachabilitySign;
 
+@property (nonatomic,retain) UITabBarItem *profileTabbarItem;
+
+
 @end
 
 @implementation AppDelegate
@@ -48,6 +51,8 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    
+    NSLog(@"launchOptions: %@",launchOptions );
     
     
     //初始化网络监测
@@ -66,6 +71,7 @@
     //初始化主viewControllers
     [self initViewControllers];
     
+  
     //第一次启动
     if (![[NSUserDefaults standardUserDefaults] boolForKey:@"firstStart"]) {
         
@@ -78,21 +84,21 @@
         
     }
     
-    if (SYSTEM_VERSION_LESS_THAN(@"8.0")) {
-        
-        [application registerForRemoteNotificationTypes:
-         UIRemoteNotificationTypeBadge |
-         UIRemoteNotificationTypeAlert |
-         UIRemoteNotificationTypeSound];
+    
+    // 需要等到homepageviewcontroller 初始化完成之后才可以
+    //UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:[launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey] description] message:nil delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    //[alertView show];
+    NSDictionary* remoteNotification = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
+    if (remoteNotification) {
+        self.isLaunchedByNotification = YES;
     } else {
-        
-        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert
-                                                | UIUserNotificationTypeBadge
-                                                | UIUserNotificationTypeSound
-                                                                                 categories:nil];
-        [application registerUserNotificationSettings:settings];
-        [application registerForRemoteNotifications];
+        self.isLaunchedByNotification = NO;
     }
+    //[self handlePushNotify:remoteNotification];
+    self.remoteNotification = remoteNotification;
+    
+
+    
     
     [self.window makeKeyAndVisible];
     
@@ -124,7 +130,8 @@
 -(void)globalSettings{
     
     //self.rootURL = @"http://blogtest.yhb360.com/baobaowansha1.1/";
-    self.rootURL = @"http://blog.yhb360.com/baobaowansha1.1/";
+    self.rootURL = @"http://blogtest.yhb360.com/baobaowansha1.2/";
+    //self.rootURL = @"http://blog.yhb360.com/baobaowansha1.1/";
 
 }
 
@@ -171,7 +178,31 @@
     [AVOSCloud setApplicationId:@"zul2tbfbwbfhtzka27mea6ozakqg3m86v2dpk349e7hh9syv"
                       clientKey:@"0mikvyvihrejfctvqarlhwvuet67pahni8fjvrse8sai4okj"];
     [AVAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
-
+    
+    
+    // umeng 推送
+    [UMessage startWithAppkey:@"5487dc8ffd98c53799000ea9" launchOptions:launchOptions];
+    if (SYSTEM_VERSION_LESS_THAN(@"8.0")) {
+        
+        [UMessage registerForRemoteNotificationTypes:
+         UIRemoteNotificationTypeBadge |
+         UIRemoteNotificationTypeAlert |
+         UIRemoteNotificationTypeSound];
+    } else {
+        
+        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert
+                                                | UIUserNotificationTypeBadge
+                                                | UIUserNotificationTypeSound
+                                                                                 categories:nil];
+        //[application registerUserNotificationSettings:settings];
+        //[application registerForRemoteNotifications];
+        [UMessage registerRemoteNotificationAndUserNotificationSettings:settings];
+    }
+    
+    [UMessage setBadgeClear:NO];
+    [UMessage setLogEnabled:NO];
+    
+    
 
     // umeng 统计
     [MobClick startWithAppkey:@"5487dc8ffd98c53799000ea9" reportPolicy:BATCH   channelId:@"App Store"];
@@ -196,6 +227,8 @@
 
 -(void)initViewControllers{
     
+    //self.pushMessageID = [NSNumber numberWithInt:987];
+    
     if(!self.mainTabBarController){
         self.mainTabBarController = [[UITabBarController alloc]init];
     }
@@ -205,6 +238,8 @@
     UITabBarItem *mainTabFirst = [[UITabBarItem alloc]initWithTitle:@"首页" image:[UIImage imageNamed:@"tabbar_home_gray"] tag:0];
     UITabBarItem *mainTabSecond = [[UITabBarItem alloc]initWithTitle:@"分类" image:[UIImage imageNamed:@"tabbar_category_gray"] tag:1];
     UITabBarItem *mainTabThird = [[UITabBarItem alloc]initWithTitle:@"我的" image:[UIImage imageNamed:@"tabbar_aboutme_gray"] tag:2];
+    
+    self.profileTabbarItem = mainTabThird;
     
     HomePageViewController *homePageViewController = [[HomePageViewController alloc]init];
     UINavigationController *homePageNav = [[UINavigationController alloc]initWithRootViewController:homePageViewController];
@@ -220,6 +255,7 @@
     UINavigationController *profilePageNav = [[UINavigationController alloc]initWithRootViewController:profilePageViewController];
     profilePageViewController.tabBarItem = mainTabThird;
     profilePageViewController.tabBarItem.title = @"我的";
+    //profilePageViewController.tabBarItem.badgeValue = @"1";
     
     self.mainTabBarController.viewControllers = [NSArray arrayWithObjects:homePageNav,playPageNav,profilePageNav,nil];
     
@@ -263,6 +299,9 @@
     NSLog(@"applicate device token is called with tocken:%@", deviceToken);
     [currentInstallation setDeviceTokenFromData:deviceToken];
     [currentInstallation saveInBackground];
+    
+    // send token to Umessage
+    [UMessage registerDeviceToken:deviceToken];
 
 
     // send token to our own user db
@@ -287,6 +326,33 @@
     
     
 }
+
+
+
+// TODO:设置在程序运行时收到推送的操作
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+    
+    [self handlePushNotify:userInfo];
+}
+
+- (void)handlePushNotify:(NSDictionary *)userInfo {
+    //// 一般在应用运行状态下不做处理，或做特殊处理
+    //if (application.applicationState != UIApplicationStateActive)
+    //[UMessage didReceiveRemoteNotification:userInfo];
+    //NSLog(@"收到消息:%@", userInfo);
+    //UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"收到消息" message:nil delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
+    //[alert show];
+    //self.pushMessageID = [userInfo objectForKey:@"postID"];
+
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"AlertPushView" object:userInfo];
+    
+}
+
+
+
+
+
 - (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
     NSLog(@"register notification failed with code: %@", error);
 }
@@ -452,6 +518,13 @@
         
     }
     return string;
+}
+
+// 设置“我的”页面的红点
+-(void)setProfilePageNotificationNumber:(NSInteger)num{
+    NSString *badgevalue = [NSString stringWithFormat: @"%d", num];
+    self.profileTabbarItem.badgeValue = badgevalue;
+
 }
 
 

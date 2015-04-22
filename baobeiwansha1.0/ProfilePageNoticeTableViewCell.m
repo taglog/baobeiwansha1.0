@@ -10,9 +10,11 @@
 @interface ProfilePageNoticeTableViewCell ()
 
 @property (nonatomic,retain) UIView *unreadSign;
+@property (nonatomic) BOOL wasRead;
 @property (nonatomic,retain) UILabel *titleLabel;
 @property (nonatomic,retain) UILabel *timeLabel;
 @property (nonatomic,assign) CGRect aframe;
+@property (nonatomic,retain) NSDictionary *dict;
 @end
 
 @implementation ProfilePageNoticeTableViewCell
@@ -44,14 +46,31 @@
 
 -(void)setDict:(NSDictionary *)dict frame:(CGRect)frame;
 {
-    self.titleLabel.text = @"心理学家经过长期认为，儿童时期是培养健康心";
-    self.timeLabel.text = @"2015-10-10";
-    self.aframe = frame;
     
+    self.dict = dict;
+    self.titleLabel.text = [self.dict valueForKey:@"post_title"];
+    self.wasRead = [[self.dict valueForKey:@"did_read"] integerValue];
+    //self.timeLabel.text = @"2015-10-10";
+    self.aframe = frame;
+
     [self setNeedsLayout];
+    
 }
+
+-(NSInteger)getPostID{
+    return [[self.dict valueForKey:@"ID"] integerValue];
+}
+
+
+
 -(void)layoutSubviews{
     [super layoutSubviews];
+    NSLog(@"was read: %d", self.wasRead);
+    if(self.wasRead){
+        self.unreadSign.backgroundColor = [UIColor colorWithRed:158.0/255.0f green:158.0/255.0f blue:158.0/255.0f alpha:1.0f];
+    } else {
+        self.unreadSign.backgroundColor = [UIColor colorWithRed:33.0/255.0f green:147.0/255.0f blue:255.0/255.0f alpha:1.0f];
+    }
     
     self.titleLabel.frame = CGRectMake(30, 10, self.aframe.size.width - 40, 20);
     self.titleLabel.font = [UIFont fontWithName:@"STHeitiSC-Medium" size:14.5f];

@@ -15,7 +15,7 @@
 @interface HomePageAdviceController ()
 
 @property (nonatomic,retain) UITableView *homePageAdviceTableView;
-@property (nonatomic,retain) NSMutableArray *adviceArray;
+//@property (nonatomic,retain) NSMutableArray *adviceArray;
 
 @property (nonatomic,retain) UITableView *homeTableView;
 
@@ -36,8 +36,12 @@
 
 @property (nonatomic,assign) NSInteger p;
 
+@property (nonatomic,strong)NSDictionary *requestURL;
+
 @end
 @implementation HomePageAdviceController
+
+#define TABLECELLHEIGHT 60
 
 -(id)initWithURL:(NSDictionary *)dict{
     self = [super init];
@@ -72,7 +76,7 @@
 }
 -(void)defaultSettings{
     self.view.backgroundColor = [UIColor whiteColor];
-
+    self.automaticallyAdjustsScrollViewInsets = NO; // 否则indicator是不对的
     [self initLeftBarButton];
 }
 -(void)initLeftBarButton{
@@ -116,11 +120,10 @@
 
 //初始化tableView
 -(void)initTableView{
-    
-    
     if(_homeTableView == nil){
         _homeTableView = [[UITableView alloc] init];
-        _homeTableView.frame = CGRectMake(0, 64, self.view.frame.size.width,self.view.frame.size.height - 24);
+        //_homeTableView.frame = CGRectMake(0, 64, self.view.frame.size.width,self.view.frame.size.height - 24);
+        _homeTableView.frame = CGRectMake(0, 64, self.view.frame.size.width,self.view.frame.size.height -24 );
         _homeTableView.delegate = self;
         _homeTableView.dataSource = self;
         
@@ -131,8 +134,7 @@
         [_homeTableView setSeparatorInset:UIEdgeInsetsZero];
     }
     [self.view addSubview:_homeTableView];
-    
-    
+
 }
 
 //初始化下拉刷新header
@@ -212,7 +214,7 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    return 60;
+    return TABLECELLHEIGHT;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -270,7 +272,7 @@
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     manager.requestSerializer.timeoutInterval = 20;
     [manager POST:postRequestUrl parameters:postParam success:^(AFHTTPRequestOperation *operation,id responseObject) {
-        
+        NSLog(@"%@",responseObject);
         NSArray *responseArray = [responseObject valueForKey:@"data"];
         
         //如果存在数据，那么就初始化tableView
@@ -286,7 +288,7 @@
             for(NSDictionary *responseDict in responseArray){
                 [self.adviceArray addObject:responseDict];
             }
-            if([self.adviceArray count]>4){
+            if([self.adviceArray count]*TABLECELLHEIGHT > self.view.frame.size.height){
                 if(self.tableViewMask){
                     self.tableViewMask = nil;
                     [self.tableViewMask removeFromSuperview];

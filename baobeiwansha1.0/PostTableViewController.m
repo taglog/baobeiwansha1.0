@@ -86,7 +86,7 @@
     
     if(!self.postTableView){
         self.postTableView = [[UITableView alloc] init];
-        self.postTableView.frame = CGRectMake(0, 0, self.view.frame.size.width,self.view.frame.size.height - 64 - 50);
+        self.postTableView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - 64 - 50);
         self.postTableView.delegate = self;
         self.postTableView.dataSource = self;
         
@@ -272,7 +272,7 @@
             for(NSDictionary *responseDict in responseArray){
                 [self.postTableArray addObject:responseDict];
             }
-            if([self.postTableArray count]>4){
+            if([self.postTableArray count]>5){
                 if(self.tableViewMask){
                     self.tableViewMask = nil;
                     [self.tableViewMask removeFromSuperview];

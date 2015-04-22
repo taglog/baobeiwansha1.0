@@ -18,9 +18,13 @@
 
 @property (nonatomic, retain) NSString *generatedUserID;
 
+@property (nonatomic) BOOL isLaunchedByNotification;
+@property (nonatomic,retain) NSDictionary* remoteNotification;
+
 +(NSString *)dataFilePath;
 +(NSString *)birthdayMonthToString:(NSInteger)months;
 +(NSString *)birthdayToString:(NSInteger)days;
 
+-(void)setProfilePageNotificationNumber:(NSInteger)num;
 @end
 

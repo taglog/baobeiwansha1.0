@@ -17,6 +17,7 @@
 #import "ButtonCanDragScrollView.h"
 #import "HomePagePostViewController.h"
 #import "JGProgressHUD.h"
+#import <AudioToolbox/AudioToolbox.h>
 
 @interface HomePageViewController ()
 
@@ -79,6 +80,7 @@
         [self simulatePullDownRefresh];
         self.isUserInfoChanged = NO;
     }
+
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -126,10 +128,13 @@
 -(void)viewDidLoad{
     [super viewDidLoad];
     
+    
     self.navigationItem.title = @"宝贝玩啥";
     self.automaticallyAdjustsScrollViewInsets = NO;
     
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    
+    
     
     self.responseDict = [[NSDictionary alloc]init];
     self.locationArray = [[NSArray alloc]init];
@@ -141,12 +146,25 @@
     [self initRefreshHeaderView];
     //[self simulatePullDownRefresh];
     [self performPullDownRefresh];
+    // 处理推送打开的事情，不知道更好的方法，在这里做怪怪的
+    [self handleLaunchByNotification];
+    
 }
 
 -(void)initNotification{
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(needToRefreshWhenAppear) name:@"userInfoChanged" object:nil];
+    //订阅展示视图消息，将直接打开某个分支视图
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(PresentPushView:) name:@"PresentPushView" object:nil];
+    //弹出消息框提示用户有订阅通知消息。主要用于用户在使用应用时，弹出提示框
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(AlertPushView:) name:@"AlertPushView" object:nil];
     
+}
+
+-(void)handleLaunchByNotification{
+    if (self.appDelegate.isLaunchedByNotification) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"PresentPushView" object:self.appDelegate.remoteNotification];
+    }
 }
 
 
@@ -154,6 +172,25 @@
     
     self.isUserInfoChanged = YES;
 }
+
+
+-(void)PresentPushView:(NSNotification*) notification{
+    id obj = [notification object];
+    NSNumber *postID = [obj valueForKey:@"postID"];
+    //UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"PresentPushView" message:nil delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
+    //[alert show];
+    [self pushPostViewController:[postID integerValue]];
+}
+
+-(void)AlertPushView:(NSNotification*) notification{
+    id obj = [notification object];
+    NSNumber *postID = [obj valueForKey:@"postID"];
+    AudioServicesPlaySystemSound ( kSystemSoundID_Vibrate) ;
+    [self.appDelegate setProfilePageNotificationNumber:3];
+
+}
+
+
 
 -(void)initUserInfo{
     
@@ -374,6 +411,8 @@
             [self.homePageAbilityView setDict:self.abilityDict];
             [self.homePageLocationView setArray:self.locationArray];
             [self.homePageTableView setArray:self.postArray];
+            
+            
         }
         
 
@@ -582,26 +621,7 @@
     }
 }
 
--(void)pushPostViewController:(NSInteger)postID{
 
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-    
-    
-    PostViewController *post = [[PostViewController alloc] init];
-    post.hidesBottomBarWhenPushed = YES; 
-    
-
-    
-    NSDictionary *requestParam = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInteger:postID],@"postID",self.appDelegate.generatedUserID,@"userIdStr",nil];
-    
-    NSString *postRouter = @"post/post";
-    
-    
-    [post initWithRequestURL:postRouter requestParam:requestParam];
-    
-    [self.navigationController pushViewController:post animated:YES];
-
-}
 -(void)showHUD:(NSString *)text{
     //显示hud层
     self.HUD = [JGProgressHUD progressHUDWithStyle:JGProgressHUDStyleDark];
