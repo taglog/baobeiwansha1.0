@@ -16,7 +16,7 @@
 -(void)updateCollectionCount:(NSIndexPath *)indexPath type:(NSInteger)type;
 
 @end
-@interface PostViewController : UIViewController<UITableViewDelegate,UITableViewDataSource,EGORefreshViewDelegate,CommentCreateDelegate,UIActionSheetDelegate,PostViewDelegate>
+@interface PostViewController : UIViewController<UITableViewDelegate,UITableViewDataSource,EGORefreshViewDelegate,CommentCreateDelegate,UIActionSheetDelegate,PostViewDelegate, UMSocialUIDelegate>
 
 @property (nonatomic,retain) NSIndexPath *indexPath;
 @property (nonatomic,retain) id<PostViewControllerDelegate>delegate;

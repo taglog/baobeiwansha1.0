@@ -123,7 +123,7 @@
     if(_homeTableView == nil){
         _homeTableView = [[UITableView alloc] init];
         //_homeTableView.frame = CGRectMake(0, 64, self.view.frame.size.width,self.view.frame.size.height - 24);
-        _homeTableView.frame = CGRectMake(0, 64, self.view.frame.size.width,self.view.frame.size.height -24 );
+        _homeTableView.frame = CGRectMake(0, 64, self.view.frame.size.width, self.view.frame.size.height - 64 );
         _homeTableView.delegate = self;
         _homeTableView.dataSource = self;
         
@@ -150,6 +150,9 @@
     }
     
 }
+
+
+
 -(void)initRefreshFooterView{
     
     if(_refreshFooterView == nil){
@@ -160,6 +163,11 @@
         _homeTableView.tableFooterView = _refreshFooterView;
     }
     
+}
+
+
+-(void)offsetFooterviewSize:(NSInteger)offsetNum{
+    _homeTableView.frame = CGRectMake(0, 64, self.view.frame.size.width, self.view.frame.size.height - 24 );
 }
 
 //如果没有数据，那么要告诉用户表是空的
@@ -288,17 +296,17 @@
             for(NSDictionary *responseDict in responseArray){
                 [self.adviceArray addObject:responseDict];
             }
-            if([self.adviceArray count]*TABLECELLHEIGHT > self.view.frame.size.height){
+            if([self.adviceArray count]*TABLECELLHEIGHT > self.view.frame.size.height-64 && [self.adviceArray count] == 15){
                 if(self.tableViewMask){
                     self.tableViewMask = nil;
                     [self.tableViewMask removeFromSuperview];
                 }
                 [self initRefreshFooterView];
+                [self offsetFooterviewSize:40];
                 
             }else{
                 //去除分割线
                 _homeTableView.tableFooterView = self.tableViewMask;
-                
             }
             
             [_homeTableView reloadData];

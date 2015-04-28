@@ -146,26 +146,27 @@
     [self initRefreshHeaderView];
     //[self simulatePullDownRefresh];
     [self performPullDownRefresh];
-    // 处理推送打开的事情，不知道更好的方法，在这里做怪怪的
-    [self handleLaunchByNotification];
+    //// 处理推送打开的事情，不知道更好的方法，在这里做怪怪的
+    //[self handleLaunchByNotification];
     
 }
 
 -(void)initNotification{
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(needToRefreshWhenAppear) name:@"userInfoChanged" object:nil];
-    //订阅展示视图消息，将直接打开某个分支视图
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(PresentPushView:) name:@"PresentPushView" object:nil];
-    //弹出消息框提示用户有订阅通知消息。主要用于用户在使用应用时，弹出提示框
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(AlertPushView:) name:@"AlertPushView" object:nil];
+//    //订阅展示视图消息，将直接打开某个分支视图
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(PresentPushView:) name:@"PresentPushView" object:nil];
+//    //弹出消息框提示用户有订阅通知消息。主要用于用户在使用应用时，弹出提示框
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(AlertPushView:) name:@"AlertPushView" object:nil];
     
-}
 
--(void)handleLaunchByNotification{
-    if (self.appDelegate.isLaunchedByNotification) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"PresentPushView" object:self.appDelegate.remoteNotification];
-    }
 }
+//
+//-(void)handleLaunchByNotification{
+//    if (self.appDelegate.isLaunchedByNotification) {
+//        [[NSNotificationCenter defaultCenter] postNotificationName:@"PresentPushView" object:self.appDelegate.remoteNotification];
+//    }
+//}
 
 
 -(void)needToRefreshWhenAppear{
@@ -173,22 +174,40 @@
     self.isUserInfoChanged = YES;
 }
 
-
--(void)PresentPushView:(NSNotification*) notification{
-    id obj = [notification object];
-    NSNumber *postID = [obj valueForKey:@"postID"];
-    //UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"PresentPushView" message:nil delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
-    //[alert show];
-    [self pushPostViewController:[postID integerValue]];
-}
-
--(void)AlertPushView:(NSNotification*) notification{
-    id obj = [notification object];
-    NSNumber *postID = [obj valueForKey:@"postID"];
-    AudioServicesPlaySystemSound ( kSystemSoundID_Vibrate) ;
-    [self.appDelegate setProfilePageNotificationNumber:3];
-
-}
+//
+//// 通过push message点击打开app，直接展示该篇文章
+//-(void)PresentPushView:(NSNotification*) notification{
+//    id obj = [notification object];
+//    NSNumber *postID = [obj valueForKey:@"postID"];
+//    //UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"PresentPushView" message:nil delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
+//    //[alert show];
+//    if (postID && [postID integerValue] > 0) {
+//        [self pushPostViewController:[postID integerValue]];
+//    } else {
+//        NSLog(@"提醒用户打开");
+//    }
+//    
+//}
+//
+//-(void)AlertPushView:(NSNotification*) notification{
+//    id obj = [notification object];
+//    //NSNumber *postID = [obj valueForKey:@"postID"];
+//    NSNumber *postID = [obj valueForKey:@"postID"];
+//    // 如果用户正在使用，如果不是推送的文章，则不会提醒有新消息
+//    if (postID && [postID integerValue] > 0) {
+//        AudioServicesPlaySystemSound ( kSystemSoundID_Vibrate) ;
+//        id aps = [obj valueForKey:@"aps"];
+//        NSLog(@"notification is %@", aps);
+//        NSNumber *numberMessage = [aps valueForKey:@"badge"];
+//        [self.appDelegate setProfilePageNotificationNumber:[numberMessage integerValue]];
+//        // use collectionChanged which only update ui, without modify message status
+//        [[NSNotificationCenter defaultCenter] postNotificationName:@"collectionChanged" object:nil];
+//    } else {
+//        // 是否要清除 icon 上的badge?
+//    }
+//    
+//
+//}
 
 
 

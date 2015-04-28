@@ -12,8 +12,11 @@
 @property (nonatomic,retain) NSDictionary *dict;
 @property (nonatomic,retain) UIWebView *postWebView;
 
+
+
 @end
 @implementation PostView
+
 -(id)initWithFrame:(CGRect)frame dict:(NSDictionary *)dict{
     self = [super initWithFrame:frame];
     
@@ -30,6 +33,7 @@
     //self.postWebView = [[UIWebView alloc]initWithFrame:self.frame];
     self.postWebView = [[UIWebView alloc]init];
     self.postWebView.dataDetectorTypes = UIDataDetectorTypeNone;
+    
     
     NSString *postTitle = [self.dict valueForKey:@"post_title"];
     NSString *postContent = [self.dict valueForKey:@"post_content"];
@@ -48,6 +52,7 @@
     NSLog(@"UnderLoading: estimate height is %f", estimateHeight);
     self.postWebView.frame = CGRectMake(0, 0, self.frame.size.width, estimateHeight);
     [self.delegate postWebViewBeganLoading:(estimateHeight)];
+    
   
 }
 -(void)webViewDidFinishLoad:(UIWebView *)webView{
@@ -69,5 +74,6 @@
     }
     
 }
+
 
 @end

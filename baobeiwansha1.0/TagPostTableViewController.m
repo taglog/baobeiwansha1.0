@@ -96,6 +96,7 @@
     leftBarButton.tintColor = [UIColor colorWithRed:255.0/255.0f green:119.0/255.0f blue:119.0/255.0f alpha:1.0f];
     
     self.navigationItem.leftBarButtonItem = leftBarButton;
+    self.automaticallyAdjustsScrollViewInsets = NO; // 否则indicator是不对的
 
 }
 

@@ -63,6 +63,7 @@
         [self simulatePullDownRefresh];
         self.isUserInfoChanged = NO;
     }
+    
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -120,6 +121,9 @@
 
 
 -(void)updateRemoteMessageStatus:(NSInteger)operation postID:(NSInteger)postID {
+    //同时远程或者本地更新badge number，暂时使用本地更新的办法
+    [self.appDelegate decNotificationNumber];
+    
     //0:已读, 1:删除, 2:设置未读标记
     
     NSDictionary *requestParam = [NSDictionary dictionaryWithObjectsAndKeys:self.appDelegate.generatedUserID,@"userIdStr",[NSNumber numberWithInteger:operation], @"op", [NSNumber numberWithInteger:postID], @"postID", nil];
@@ -424,7 +428,7 @@
         case 0:
             if([self.responseMessage count] != 0){
                 if(indexPath.row != [self.responseMessage count]){
-                    // 更新数据model
+                    // 更新数据model 同时更新badge number
                     
                     NSMutableDictionary *dict = [[NSMutableDictionary alloc]initWithDictionary:
                                                  self.responseMessage[indexPath.row]];
@@ -441,6 +445,7 @@
                     }
                     [self.profilePageNoticeView.contentTableView reloadData];
                     [self updateRemoteMessageStatus:0 postID:[[dict valueForKey:@"ID"] integerValue]];
+                    
                     [self pushPostViewController:[[[self.responseMessage objectAtIndex:indexPath.row] valueForKey:@"ID"]integerValue]];
                 }else{
                     [self pushProfileTableViewController:[[tableView superview] tag]];
@@ -570,6 +575,8 @@
     
     _reloading = YES;
     
+    [self.appDelegate syncNotificationNumber];
+    
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
     self.responseDict = nil;
@@ -621,6 +628,8 @@
                 [self.profilePageCommentView.contentTableView reloadData];
                 
                 [self resetFrames];
+                
+                
             }
         }
         [self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:0.3f];

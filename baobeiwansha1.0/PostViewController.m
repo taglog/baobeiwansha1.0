@@ -15,6 +15,9 @@
 #import "JGProgressHUDErrorIndicatorView.h"
 
 #import "PostViewTimeAnalytics.h"
+#import "UIImageView+AFNetworking.h"
+
+
 
 @interface PostViewController ()
 {
@@ -58,6 +61,7 @@
 
 //postID
 @property(nonatomic,assign)NSUInteger postID;
+@property(nonatomic,retain)UIImageView *postCoverIV;
 
 //收藏button
 @property(nonatomic,retain)UIButton *collectionButton;
@@ -92,9 +96,13 @@
     [self showHUD];
     self.isScrollToBottom = NO;
     [self initLeftBarButton];
+    [self initRightBarButton];
     self.collectButtonEnabled = YES;
     //阻止自动调整滚轮位置，否则导航栏下会出现一段空间
     self.automaticallyAdjustsScrollViewInsets = NO;
+    
+
+
 }
 
 -(void)initLeftBarButton{
@@ -105,9 +113,186 @@
     
 }
 
+-(void)initRightBarButton{
+    UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"share.png"] style:UIBarButtonItemStylePlain target:self action:@selector(shareViewController)];
+
+    rightBarButton.tintColor = [UIColor colorWithRed:255.0/255.0f green:119.0/255.0f blue:119.0/255.0f alpha:1.0f];
+    self.navigationItem.rightBarButtonItem = rightBarButton;
+    
+    
+}
+
 -(void)popViewController{
     [self.navigationController popViewControllerAnimated:YES];
 }
+
+
+-(int)getRandomNumber:(int)from to:(int)to
+{
+    return (int)(from + (arc4random() % (to - from + 1)));
+}
+
+
+// 17
+-(NSString *)getEncodePostID:(NSInteger)postID{
+    int x;
+    int added = 0;
+    NSString * rs = @"";
+    for (int i=0; i<4; i++) {
+        x = [self getRandomNumber:1000 to:9999];
+        added += x;
+        rs = [NSString stringWithFormat:@"%@%@",rs,[NSString stringWithFormat:@"%d",x]];
+        NSLog(@"generate string: %@",rs);
+    }
+    added += postID;
+    
+    x = arc4random() % 10;
+    rs = [NSString stringWithFormat:@"%@%@",rs,[NSString stringWithFormat:@"%d",x]];
+    NSLog(@"generate string: %@",rs);
+    
+    rs = [NSString stringWithFormat:@"%@%@",rs,[NSString stringWithFormat:@"%ld",(long)postID]];
+    NSLog(@"encoded  string: %@",rs);
+    
+    added = added % 10000;
+    if (added < 1000) {
+        added += 1000;
+    }
+    rs = [NSString stringWithFormat:@"%@%@",rs,[NSString stringWithFormat:@"%d",added]];
+    NSLog(@"encoded  string: %@",rs);
+
+    return rs;
+}
+
+//-(UIImage *) getImageFromURL:(NSString *)fileURL {
+//    NSLog(@"get image from %@", fileURL);
+//    UIImage * result;
+//    
+//    NSURL *imgUrl = [NSURL URLWithString:[fileURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+//    NSData * data = [NSData dataWithContentsOfURL:imgUrl];
+//    result = [[UIImage alloc] initWithData:data];
+//    NSLog(@"result is %@", data);
+//    return result;
+//}
+
+
+-(void)getCoverImage{
+    NSString *imagePathOnServer = @"http://blog.yhb360.com/wp-content/uploads/";
+    NSString *imageGetFromServer = [self.postDict valueForKey:@"post_cover"];
+    self.postCoverIV = [[UIImageView alloc]init];
+
+    
+    if(imageGetFromServer != (id)[NSNull null] && imageGetFromServer != nil){
+        NSString *imageString = [imagePathOnServer stringByAppendingString:imageGetFromServer];
+        NSURL *imageUrl = [NSURL URLWithString:[imageString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+        [self.postCoverIV setImageWithURL:imageUrl placeholderImage:[UIImage imageNamed:@"icon120.png"]];
+    }else{
+        //没有特色图像的时候，怎么办
+        [self.postCoverIV setImageWithURL:[NSURL URLWithString:@""] placeholderImage:[UIImage imageNamed:@"icon120.png"]];
+        
+    }
+
+
+}
+
+
+-(void)shareViewController{
+
+    
+    NSString *linkurl = [@"http://admin.yhb360.com/www/index.php/Home/WXCategory/pdenx.html?id=" stringByAppendingString:[self getEncodePostID:self.postID]];
+    // 微信好友
+    [UMSocialData defaultData].extConfig.wechatSessionData.url = linkurl;
+    [UMSocialData defaultData].extConfig.wechatSessionData.title = [self.postDict objectForKey:@"post_title"];
+    
+    // 微信朋友圈
+    [UMSocialData defaultData].extConfig.wechatTimelineData.url = linkurl;
+    [UMSocialData defaultData].extConfig.wechatTimelineData.title = [self.postDict objectForKey:@"post_title"];
+    
+    // 微信收藏
+    [UMSocialData defaultData].extConfig.wechatFavoriteData.url = linkurl;
+    [UMSocialData defaultData].extConfig.wechatFavoriteData.title = [self.postDict objectForKey:@"post_title"];
+    
+    // QQ分享
+    [UMSocialData defaultData].extConfig.qqData.url = linkurl;
+    [UMSocialData defaultData].extConfig.qqData.title = [self.postDict objectForKey:@"post_title"];
+
+    
+    // QQzone分享
+    [UMSocialData defaultData].extConfig.qzoneData.url = linkurl;
+    [UMSocialData defaultData].extConfig.qzoneData.title = [self.postDict objectForKey:@"post_title"];
+    
+    // renren 分享
+    //[UMSocialData defaultData].extConfig.renrenData.url = linkurl;
+    //[UMSocialData defaultData].extConfig.renrenData.appName = @"宝贝玩啥";
+    
+    // sina weibo
+    //[[UMSocialData defaultData].urlResource setResourceType:UMSocialUrlResourceTypeImage url:@"http://www.baidu.com/img/bdlogo.gif"];
+    [UMSocialConfig setFollowWeiboUids:@{UMShareToSina:@"1005055426082208"}];
+    //[[UMSocialDataService defaultDataService] requestAddFollow:UMShareToSina followedUsid:@[@"1005055426082208"] completion:nil];
+    
+    // Email分享
+    [UMSocialData defaultData].extConfig.emailData.title = [self.postDict objectForKey:@"post_title"];
+    
+    
+    NSString *post_excerpt = @"";
+    post_excerpt = [self.postDict objectForKey:@"post_excerpt"];
+    NSLog(@"post excerpt %@", post_excerpt);
+    if (post_excerpt.length == 0) {
+        post_excerpt = @"宝贝玩啥:发现最有益的玩法";
+    }
+    
+    UIImage *image = [[UIImage alloc] init];
+    if (!self.postCoverIV) {
+        image = [UIImage imageNamed:@"icon120.png"];
+        //NSLog(@"icon 120");
+    } else {
+        image = self.postCoverIV.image;
+        //NSLog(@"postCoverIV 's image");
+    }
+    
+    
+    
+
+    [UMSocialSnsService presentSnsIconSheetView:self
+                                         appKey:nil
+                                      shareText:post_excerpt
+                                     shareImage:image
+                                shareToSnsNames:@[UMShareToWechatSession,UMShareToWechatTimeline,UMShareToWechatFavorite,UMShareToQQ,UMShareToQzone,UMShareToSina,UMShareToDouban,UMShareToEmail]
+                                       delegate:self];
+    
+    [UMSocialData defaultData].extConfig.emailData.shareText = [post_excerpt stringByAppendingString:@"</br><a href=\"https://itunes.apple.com/cn/app/id961562218\">下载连接: https://itunes.apple.com/cn/app/id961562218 </a>"];
+    
+    [UMSocialData defaultData].extConfig.sinaData.shareText = [[self.postDict objectForKey:@"post_title"] stringByAppendingFormat:@"\n%@...\n 查看全文:%@",post_excerpt, linkurl];
+    
+    [UMSocialData defaultData].extConfig.doubanData.shareText = [[self.postDict objectForKey:@"post_title"] stringByAppendingFormat:@"\n%@...\n 查看全文:%@",post_excerpt, linkurl];
+
+//    [[UMSocialDataService defaultDataService]  postSNSWithTypes:@[UMShareToWechatSession]
+//                                                        content:post_excerpt
+//                                                          image:image
+//                                                       location:nil
+//                                                    urlResource:nil
+//                                            presentedController:self
+//                                                     completion:^(UMSocialResponseEntity *response){
+//        if (response.responseCode == UMSResponseCodeSuccess) {
+//            NSLog(@"分享成功！");
+//        }
+//    }];
+    
+    
+    
+}
+
+//实现回调方法（可选）：
+-(void)didFinishGetUMSocialDataInViewController:(UMSocialResponseEntity *)response
+{
+    //根据`responseCode`得到发送结果,如果分享成功
+    if(response.responseCode == UMSResponseCodeSuccess)
+    {
+        //得到分享到的微博平台名
+        NSLog(@"share to sns name is %@",[[response.data allKeys] objectAtIndex:0]);
+    }
+}
+
+
 
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -119,6 +304,7 @@
     [super viewWillDisappear:animated];
     [MobClick endLogPageView:@"PostView"];
     [PostViewTimeAnalytics endLogPageView:self.postID];
+
     
 }
 
@@ -172,6 +358,8 @@
 
 -(void)initViewWithDict:(NSDictionary *)dict{
     
+    NSLog(@"init with dict %@", dict);
+    
     self.p = 2;
     
     _postDict = dict;
@@ -181,6 +369,8 @@
     [PostViewTimeAnalytics beginLogPageView:self.postID];
     
     [self initPostView];
+    
+    [self getCoverImage];
 
 }
 
@@ -889,7 +1079,6 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
 
 
 @end

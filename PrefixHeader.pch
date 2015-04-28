@@ -17,6 +17,7 @@
 #import <Foundation/Foundation.h>
 #import "UMengAnalytics/MobClick.h"
 #import "UMessage.h"
+#import "UMSocial.h"
 #endif
 
 
